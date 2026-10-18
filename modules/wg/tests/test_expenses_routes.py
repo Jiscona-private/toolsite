@@ -3,7 +3,7 @@ from datetime import date
 from fastapi.testclient import TestClient
 
 from app import auth
-from app.models import ExpenseCategory, Member, Setting
+from app.models import ActivityLog, ExpenseCategory, Member, Setting
 
 MEMBER_NAMES = ["Jakob", "Clara", "Daniel", "Bato"]
 
@@ -224,3 +224,38 @@ def test_expenses_all_page_lists_everything(client: TestClient) -> None:
     page = client.get("/wg/expenses/all").text
     assert "Eins" in page
     assert "Zwei" in page
+
+
+def test_expense_and_settlement_writes_write_activity_log_entries(client: TestClient) -> None:
+    seeded = _seed(client)
+    jakob = seeded["member_id"]["Jakob"]
+    clara = seeded["member_id"]["Clara"]
+    _login_as(client, jakob)
+    token = _csrf_for(client, jakob)
+
+    _create_expense(client, seeded, token)
+    client.post(
+        "/wg/settlements",
+        data={"csrf": token, "to_member_id": clara, "amount": "12.15"},
+        headers={"origin": "http://127.0.0.1:8000"},
+    )
+    client.post(
+        "/wg/settlements/1/delete",
+        data={"csrf": token},
+        headers={"origin": "http://127.0.0.1:8000"},
+    )
+    client.post(
+        "/wg/expenses/1/delete",
+        data={"csrf": token},
+        headers={"origin": "http://127.0.0.1:8000"},
+    )
+
+    with client.session_local() as db:
+        expense_keys = [
+            e.summary_key for e in db.query(ActivityLog).filter_by(entity="expense").all()
+        ]
+        settlement_keys = [
+            e.summary_key for e in db.query(ActivityLog).filter_by(entity="settlement").all()
+        ]
+    assert expense_keys == ["log.expense.create", "log.expense.delete"]
+    assert settlement_keys == ["log.settlement.create", "log.settlement.delete"]

@@ -11,7 +11,7 @@ from app.auth import require_csrf
 from app.config import settings
 from app.db import get_db
 from app.models import Member, ShoppingItem
-from app.services import shopping
+from app.services import activity, shopping
 from app.templating import base_context, templates
 
 
@@ -60,7 +60,19 @@ def add_shopping_item(
             f"{settings.base_path}/shopping?duplicate={quote(name)}", status_code=303
         )
 
-    shopping.add_item(db, name=name, quantity=quantity, note=note, added_by=request.state.member_id)
+    item = shopping.add_item(
+        db, name=name, quantity=quantity, note=note, added_by=request.state.member_id
+    )
+    db.flush()
+    activity.log(
+        db,
+        actor_member_id=request.state.member_id,
+        action="create",
+        entity="shopping_item",
+        entity_id=item.id,
+        summary_key="log.shopping.create",
+        summary_params={"name": item.name},
+    )
     db.commit()
     return RedirectResponse(f"{settings.base_path}/shopping", status_code=303)
 
@@ -69,7 +81,17 @@ def add_shopping_item(
 def toggle_item(item_id: int, request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
     item = db.get(ShoppingItem, item_id)
     if item is not None:
+        now_checked = item.checked_at is None
         shopping.toggle_checked(item, request.state.member_id)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="check" if now_checked else "uncheck",
+            entity="shopping_item",
+            entity_id=item.id,
+            summary_key="log.shopping.check" if now_checked else "log.shopping.uncheck",
+            summary_params={"name": item.name},
+        )
         db.commit()
 
     if request.headers.get("hx-request") == "true":
@@ -81,7 +103,16 @@ def toggle_item(item_id: int, request: Request, db: Session = Depends(get_db)) -
 
 
 @router.post("/clear-checked", dependencies=[Depends(require_csrf)])
-def clear_checked(db: Session = Depends(get_db)) -> RedirectResponse:
-    shopping.archive_checked(db)
+def clear_checked(request: Request, db: Session = Depends(get_db)) -> RedirectResponse:
+    count = shopping.archive_checked(db)
+    if count:
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="update",
+            entity="shopping_item",
+            summary_key="log.shopping.clear_checked",
+            summary_params={"count": count},
+        )
     db.commit()
     return RedirectResponse(f"{settings.base_path}/shopping", status_code=303)

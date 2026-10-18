@@ -10,8 +10,9 @@ from sqlalchemy.orm import Session
 from app.auth import require_csrf
 from app.config import settings
 from app.db import get_db
+from app.i18n import DEFAULT_LANGUAGE, money
 from app.models import Expense, ExpenseCategory, ExpenseShare, Member, Settlement, ShoppingItem
-from app.services import ledger, shopping
+from app.services import activity, ledger, shopping
 from app.templating import base_context, templates
 from app.timezone import berlin_today
 
@@ -253,6 +254,18 @@ def create_expense(
         item_ids = [int(i) for i in items.split(",") if i.strip().isdigit()]
         db.flush()
         shopping.mark_as_expense(db, item_ids, expense.id)
+    activity.log(
+        db,
+        actor_member_id=request.state.member_id,
+        action="create",
+        entity="expense",
+        entity_id=expense.id,
+        summary_key="log.expense.create",
+        summary_params={
+            "description": expense.description,
+            "amount": money(amount_cents, DEFAULT_LANGUAGE),
+        },
+    )
     db.commit()
     return RedirectResponse(f"{settings.base_path}/expenses", status_code=303)
 
@@ -309,15 +322,35 @@ def update_expense(
         participant_ids=participant_ids,
         updated_by=request.state.member_id,
     )
+    activity.log(
+        db,
+        actor_member_id=request.state.member_id,
+        action="update",
+        entity="expense",
+        entity_id=expense.id,
+        summary_key="log.expense.update",
+        summary_params={"description": expense.description},
+    )
     db.commit()
     return RedirectResponse(f"{settings.base_path}/expenses", status_code=303)
 
 
 @router.post("/{expense_id}/delete", dependencies=[Depends(require_csrf)])
-def delete_expense_route(expense_id: int, db: Session = Depends(get_db)) -> RedirectResponse:
+def delete_expense_route(
+    expense_id: int, request: Request, db: Session = Depends(get_db)
+) -> RedirectResponse:
     expense = db.get(Expense, expense_id)
     if expense is not None:
         ledger.delete_expense(expense)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="delete",
+            entity="expense",
+            entity_id=expense.id,
+            summary_key="log.expense.delete",
+            summary_params={"description": expense.description},
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/expenses", status_code=303)
 
@@ -334,7 +367,8 @@ def create_settlement(
     except ledger.AmountError:
         return RedirectResponse(f"{settings.base_path}/expenses?error=amount", status_code=303)
 
-    ledger.create_settlement(
+    to_member = db.get(Member, to_member_id)
+    settlement = ledger.create_settlement(
         db,
         from_member_id=request.state.member_id,
         to_member_id=to_member_id,
@@ -343,14 +377,37 @@ def create_settlement(
         note=None,
         created_by=request.state.member_id,
     )
+    db.flush()
+    activity.log(
+        db,
+        actor_member_id=request.state.member_id,
+        action="settle",
+        entity="settlement",
+        entity_id=settlement.id,
+        summary_key="log.settlement.create",
+        summary_params={
+            "amount": money(amount_cents, DEFAULT_LANGUAGE),
+            "to": to_member.name if to_member else "",
+        },
+    )
     db.commit()
     return RedirectResponse(f"{settings.base_path}/expenses", status_code=303)
 
 
 @settlements_router.post("/{settlement_id}/delete", dependencies=[Depends(require_csrf)])
-def delete_settlement_route(settlement_id: int, db: Session = Depends(get_db)) -> RedirectResponse:
+def delete_settlement_route(
+    settlement_id: int, request: Request, db: Session = Depends(get_db)
+) -> RedirectResponse:
     settlement = db.get(Settlement, settlement_id)
     if settlement is not None:
         ledger.delete_settlement(settlement)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="delete",
+            entity="settlement",
+            entity_id=settlement.id,
+            summary_key="log.settlement.delete",
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/expenses", status_code=303)

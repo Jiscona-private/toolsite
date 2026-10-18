@@ -3,7 +3,7 @@ from datetime import date
 from fastapi.testclient import TestClient
 
 from app import auth
-from app.models import Member, Setting
+from app.models import ActivityLog, Member, Setting
 
 
 def _seed(client: TestClient) -> dict:
@@ -206,3 +206,28 @@ def test_saving_expense_with_items_links_and_archives_shopping_items(client: Tes
 
     page = client.get("/wg/shopping").text
     assert "Eier" not in page
+
+
+def test_add_toggle_and_clear_checked_each_write_an_activity_log_entry(
+    client: TestClient,
+) -> None:
+    seeded = _seed(client)
+    jakob = seeded["jakob"]
+    _login_as(client, jakob)
+    token = _csrf_for(client, jakob)
+
+    origin = {"origin": "http://127.0.0.1:8000"}
+    client.post("/wg/shopping", data={"csrf": token, "name": "Seife"}, headers=origin)
+    client.post("/wg/shopping/1/toggle", data={"csrf": token}, headers=origin)
+    client.post("/wg/shopping/1/toggle", data={"csrf": token}, headers=origin)
+    client.post("/wg/shopping/clear-checked", data={"csrf": token}, headers=origin)
+
+    with client.session_local() as db:
+        keys = [
+            e.summary_key for e in db.query(ActivityLog).filter_by(entity="shopping_item").all()
+        ]
+    assert keys == [
+        "log.shopping.create",
+        "log.shopping.check",
+        "log.shopping.uncheck",
+    ]

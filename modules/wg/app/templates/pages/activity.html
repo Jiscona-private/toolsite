@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ t("settings.activity_title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <a class="btn secondary" href="{{ base_path }}/settings">{{ t("nav.back") }}</a>
+  <h1>{{ t("settings.activity_title") }}</h1>
+
+  <div class="card stack">
+    {% for entry in entries %}
+      <div class="settings-row">
+        <span class="flex-1">
+          <strong>
+            {{ members[entry.actor_member_id].name if entry.actor_member_id else t("log.system") }}
+          </strong>
+          {{ t(entry.summary_key, **entry.summary_params) }}
+          <br />
+          <span class="text-muted">{{ datetime_label(entry.at, lang) }}</span>
+        </span>
+      </div>
+    {% else %}
+      <p class="text-muted">{{ t("settings.activity.empty") }}</p>
+    {% endfor %}
+  </div>
+{% endblock %}

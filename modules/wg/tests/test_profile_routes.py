@@ -3,7 +3,7 @@ from datetime import date
 from fastapi.testclient import TestClient
 
 from app import auth
-from app.models import Member, Setting
+from app.models import ActivityLog, Member, Setting
 
 
 def _seed(client: TestClient) -> dict:
@@ -79,3 +79,21 @@ def test_settings_link_present(client: TestClient) -> None:
 
     page = client.get("/wg/profile").text
     assert 'href="/wg/settings"' in page
+
+
+def test_set_language_writes_an_activity_log_entry(client: TestClient) -> None:
+    seeded = _seed(client)
+    jakob = seeded["jakob"]
+    _login_as(client, jakob)
+    token = _csrf_for(client, jakob)
+
+    client.post(
+        "/wg/profile/language",
+        data={"csrf": token, "language": "en"},
+        headers={"origin": "http://127.0.0.1:8000"},
+    )
+
+    with client.session_local() as db:
+        entry = db.query(ActivityLog).filter_by(entity="member", entity_id=jakob).one()
+        assert entry.summary_key == "log.profile.language"
+        assert entry.summary_params == {"language": "Englisch"}

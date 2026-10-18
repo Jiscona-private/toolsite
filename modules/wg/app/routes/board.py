@@ -11,7 +11,7 @@ from app.auth import require_csrf
 from app.config import settings
 from app.db import get_db
 from app.models import InfoPage, Member, Note
-from app.services import board
+from app.services import activity, board
 from app.templating import base_context, templates
 
 router = APIRouter(prefix=f"{settings.base_path}/board")
@@ -47,22 +47,41 @@ def create_note(
 ) -> RedirectResponse:
     body = body.strip()
     if body:
-        board.create_note(
+        note = board.create_note(
             db,
             body=body,
             pinned=pinned,
             expires_on=date.fromisoformat(expires_on) if expires_on else None,
             created_by=request.state.member_id,
         )
+        db.flush()
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="create",
+            entity="note",
+            entity_id=note.id,
+            summary_key="log.note.create",
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/board", status_code=303)
 
 
 @router.post("/notes/{note_id}/delete", dependencies=[Depends(require_csrf)])
-def delete_note_route(note_id: int, db: Session = Depends(get_db)) -> RedirectResponse:
+def delete_note_route(
+    note_id: int, request: Request, db: Session = Depends(get_db)
+) -> RedirectResponse:
     note = db.get(Note, note_id)
     if note is not None:
         board.delete_note(note)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="delete",
+            entity="note",
+            entity_id=note.id,
+            summary_key="log.note.delete",
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/board", status_code=303)
 
@@ -86,5 +105,14 @@ def update_info(
     page = db.get(InfoPage, page_id)
     if page is not None:
         board.update_info_page(db, page, title=title, body=body, updated_by=request.state.member_id)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="update",
+            entity="info_page",
+            entity_id=page.id,
+            summary_key="log.info.update",
+            summary_params={"title": page.title},
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/board", status_code=303)

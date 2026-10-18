@@ -33,6 +33,10 @@ def delete_note(note: Note) -> None:
     note.deleted_at = datetime.now(UTC)
 
 
+def restore_note(note: Note) -> None:
+    note.deleted_at = None
+
+
 def list_info_pages(db: Session) -> list[InfoPage]:
     return list(db.scalars(select(InfoPage).order_by(InfoPage.position)))
 

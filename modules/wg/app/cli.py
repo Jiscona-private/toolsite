@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from app.config import settings
 from app.db import SessionLocal
 from app.models import Chore, ExpenseCategory, InfoPage, Member, RotaConfig, Setting
+from app.services.activity import run_daily_purge
 from app.services.backup import run_backup
 from app.services.members import create_member
 
@@ -140,6 +141,14 @@ def cmd_backup() -> None:
     print(f"Backup gespeichert: {target}")
 
 
+def cmd_purge_trash() -> None:
+    with SessionLocal() as db:
+        result = run_daily_purge(db)
+        db.commit()
+    print(f"{result['expired_notes']} abgelaufene Notizen entfernt.")
+    print(f"{result['purged']} Einträge endgültig aus dem Papierkorb gelöscht.")
+
+
 def cmd_add_member(name: str) -> None:
     with SessionLocal() as db:
         existing_positions = db.scalars(select(Member.position)).all()
@@ -167,6 +176,7 @@ def main(argv: list[str] | None = None) -> None:
     subparsers.add_parser("rotate-link", help="Beitrittslink erneuern")
     subparsers.add_parser("logout-all", help="Alle Geräte abmelden")
     subparsers.add_parser("backup", help="Sofortiges Backup")
+    subparsers.add_parser("purge-trash", help="Papierkorb (>30 Tage) und abgelaufene Notizen")
 
     add_member_parser = subparsers.add_parser("add-member", help="Notfall-Werkzeug")
     add_member_parser.add_argument("name")
@@ -183,6 +193,8 @@ def main(argv: list[str] | None = None) -> None:
         cmd_logout_all()
     elif args.command == "backup":
         cmd_backup()
+    elif args.command == "purge-trash":
+        cmd_purge_trash()
     elif args.command == "add-member":
         cmd_add_member(args.name)
 

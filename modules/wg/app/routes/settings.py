@@ -12,10 +12,11 @@ from sqlalchemy.orm import Session
 from app.auth import require_csrf
 from app.config import settings
 from app.db import get_db
+from app.i18n import DEFAULT_LANGUAGE, day
 from app.models import Chore, ExpenseCategory, Member, Setting
+from app.services import activity, rota
 from app.services import categories as categories_service
 from app.services import members as members_service
-from app.services import rota
 from app.templating import base_context, templates
 from app.timezone import berlin_today, week_start
 
@@ -65,12 +66,14 @@ def settings_page(request: Request, db: Session = Depends(get_db)) -> HTMLRespon
 
 
 @router.post("/members/new", dependencies=[Depends(require_csrf)])
-def add_member(name: str = Form(...), db: Session = Depends(get_db)) -> RedirectResponse:
+def add_member(
+    request: Request, name: str = Form(...), db: Session = Depends(get_db)
+) -> RedirectResponse:
     name = name.strip()
     if name:
         position = members_service.next_position(db)
         default_language_setting = db.get(Setting, "default_language")
-        members_service.create_member(
+        member = members_service.create_member(
             db,
             name=name,
             color=position % 8,
@@ -79,7 +82,16 @@ def add_member(name: str = Form(...), db: Session = Depends(get_db)) -> Redirect
             joined_on=berlin_today(),
         )
         db.flush()
-        _rebuild_next_week(db, None)
+        _rebuild_next_week(db, request.state.member_id)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="create",
+            entity="member",
+            entity_id=member.id,
+            summary_key="log.member.create",
+            summary_params={"name": member.name},
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/settings", status_code=303)
 
@@ -90,8 +102,18 @@ def toggle_member_active(
 ) -> RedirectResponse:
     member = db.get(Member, member_id)
     if member is not None:
-        members_service.set_active(member, not member.active, today=berlin_today())
+        new_active = not member.active
+        members_service.set_active(member, new_active, today=berlin_today())
         _rebuild_next_week(db, request.state.member_id)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="update",
+            entity="member",
+            entity_id=member.id,
+            summary_key="log.member.reactivate" if new_active else "log.member.deactivate",
+            summary_params={"name": member.name},
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/settings", status_code=303)
 
@@ -104,25 +126,57 @@ def toggle_chore_active(
     if chore is not None:
         chore.active = not chore.active
         _rebuild_next_week(db, request.state.member_id)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="update",
+            entity="chore",
+            entity_id=chore.id,
+            summary_key="log.chore.reactivate" if chore.active else "log.chore.deactivate",
+            summary_params={"chore": chore.name_de},
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/settings", status_code=303)
 
 
 @router.post("/categories/new", dependencies=[Depends(require_csrf)])
-def add_category(name: str = Form(...), db: Session = Depends(get_db)) -> RedirectResponse:
+def add_category(
+    request: Request, name: str = Form(...), db: Session = Depends(get_db)
+) -> RedirectResponse:
     name = name.strip()
     if name:
         key = members_service.slugify(name)
-        categories_service.create_category(db, key=key, name_de=name, name_en=name)
+        category = categories_service.create_category(db, key=key, name_de=name, name_en=name)
+        db.flush()
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="create",
+            entity="expense_category",
+            entity_id=category.id,
+            summary_key="log.category.create",
+            summary_params={"name": category.name_de},
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/settings", status_code=303)
 
 
 @router.post("/categories/{category_id}/toggle-active", dependencies=[Depends(require_csrf)])
-def toggle_category_active(category_id: int, db: Session = Depends(get_db)) -> RedirectResponse:
+def toggle_category_active(
+    category_id: int, request: Request, db: Session = Depends(get_db)
+) -> RedirectResponse:
     category = db.get(ExpenseCategory, category_id)
     if category is not None:
         categories_service.set_active(category, not category.active)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="update",
+            entity="expense_category",
+            entity_id=category.id,
+            summary_key="log.category.reactivate" if category.active else "log.category.deactivate",
+            summary_params={"name": category.name_de},
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/settings", status_code=303)
 
@@ -137,23 +191,87 @@ def rebuild_rota_route(
     rota.rebuild_for_current_membership(
         db, effective_from=effective_from, created_by=request.state.member_id
     )
+    activity.log(
+        db,
+        actor_member_id=request.state.member_id,
+        action="update",
+        entity="rota_config",
+        summary_key="log.rota.rebuild",
+        summary_params={"week": day(effective_from, DEFAULT_LANGUAGE)},
+    )
     db.commit()
     return RedirectResponse(f"{settings.base_path}/settings", status_code=303)
 
 
 @router.post("/rotate-link", dependencies=[Depends(require_csrf)])
-def rotate_link(db: Session = Depends(get_db)) -> RedirectResponse:
+def rotate_link(request: Request, db: Session = Depends(get_db)) -> RedirectResponse:
     setting = db.get(Setting, "join_token")
     if setting is not None:
         setting.value = secrets.token_urlsafe(32)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="rotate_link",
+            entity="access",
+            summary_key="log.access.rotate_link",
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/settings", status_code=303)
 
 
 @router.post("/logout-all", dependencies=[Depends(require_csrf)])
-def logout_all(db: Session = Depends(get_db)) -> RedirectResponse:
+def logout_all(request: Request, db: Session = Depends(get_db)) -> RedirectResponse:
     setting = db.get(Setting, "cookie_version")
     if setting is not None:
         setting.value = str(int(setting.value) + 1)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="logout_all",
+            entity="access",
+            summary_key="log.access.logout_all",
+        )
         db.commit()
     return RedirectResponse(f"{settings.base_path}/settings", status_code=303)
+
+
+@router.get("/activity")
+def activity_page(request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
+    members = {m.id: m for m in db.scalars(select(Member))}
+    context = base_context(request, db, active_nav=None)
+    context.update({"entries": activity.recent(db), "members": members})
+    return templates.TemplateResponse(request, "pages/activity.html", context)
+
+
+@router.get("/trash")
+def trash_page(request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
+    context = base_context(request, db, active_nav=None)
+    context.update({"items": activity.trash_items(db)})
+    return templates.TemplateResponse(request, "pages/trash.html", context)
+
+
+_RESTORE_SUMMARY_KEYS = {
+    "expense": "log.expense.restore",
+    "settlement": "log.settlement.restore",
+    "note": "log.note.restore",
+}
+
+
+@router.post("/trash/{entity}/{entity_id}/restore", dependencies=[Depends(require_csrf)])
+def restore_trash_item(
+    entity: str, entity_id: int, request: Request, db: Session = Depends(get_db)
+) -> RedirectResponse:
+    row = activity.restore(db, entity=entity, entity_id=entity_id)
+    if row is not None:
+        summary_params = {"description": row.description} if entity == "expense" else None
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="restore",
+            entity=entity,
+            entity_id=entity_id,
+            summary_key=_RESTORE_SUMMARY_KEYS.get(entity, "log.restore"),
+            summary_params=summary_params,
+        )
+        db.commit()
+    return RedirectResponse(f"{settings.base_path}/settings/trash", status_code=303)

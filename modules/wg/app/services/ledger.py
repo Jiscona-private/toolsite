@@ -133,6 +133,10 @@ def delete_settlement(settlement: Settlement) -> None:
     settlement.deleted_at = datetime.now(UTC)
 
 
+def restore_settlement(settlement: Settlement) -> None:
+    settlement.deleted_at = None
+
+
 def total_paid(db: Session, member_id: int) -> int:
     return db.scalar(
         select(func.coalesce(func.sum(Expense.amount_cents), 0)).where(

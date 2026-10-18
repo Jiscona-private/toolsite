@@ -3,7 +3,7 @@ from datetime import date
 from fastapi.testclient import TestClient
 
 from app import auth
-from app.models import InfoPage, Member, Setting
+from app.models import ActivityLog, InfoPage, Member, Setting
 
 
 def _seed(client: TestClient) -> dict:
@@ -120,3 +120,27 @@ def test_edit_info_page_updates_title_and_body(client: TestClient) -> None:
 
     edit_page = client.get("/wg/board/info/1/edit").text
     assert "geheim" in edit_page
+
+
+def test_note_and_info_writes_each_write_an_activity_log_entry(client: TestClient) -> None:
+    seeded = _seed(client)
+    jakob = seeded["jakob"]
+    _login_as(client, jakob)
+    token = _csrf_for(client, jakob)
+    origin = {"origin": "http://127.0.0.1:8000"}
+
+    client.post("/wg/board/notes/new", data={"csrf": token, "body": "Temporary"}, headers=origin)
+    client.post("/wg/board/notes/1/delete", data={"csrf": token}, headers=origin)
+    client.post(
+        "/wg/board/info/1/edit",
+        data={"csrf": token, "title": "WLAN", "body": "neu"},
+        headers=origin,
+    )
+
+    with client.session_local() as db:
+        note_keys = [e.summary_key for e in db.query(ActivityLog).filter_by(entity="note").all()]
+        info_keys = [
+            e.summary_key for e in db.query(ActivityLog).filter_by(entity="info_page").all()
+        ]
+    assert note_keys == ["log.note.create", "log.note.delete"]
+    assert info_keys == ["log.info.update"]

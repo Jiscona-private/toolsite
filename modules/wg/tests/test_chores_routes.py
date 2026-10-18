@@ -3,7 +3,7 @@ from datetime import date
 from fastapi.testclient import TestClient
 
 from app import auth
-from app.models import Chore, Member, RotaConfig, Setting
+from app.models import ActivityLog, Chore, Member, RotaConfig, Setting
 from app.timezone import berlin_today, week_start
 
 CHORE_KEYS = ["floor", "kitchen", "big_bath", "small_bath"]
@@ -294,3 +294,28 @@ def test_upcoming_table_columns_stay_aligned_to_the_header_across_weeks(
 
     week_44_row = page.split('scope="row">KW 44</th>')[1].split("</tr>")[0]
     assert week_44_row.index("Daniel") < week_44_row.index("Clara")  # floor col before kitchen col
+
+
+def test_done_skip_and_undo_each_write_an_activity_log_entry(client: TestClient) -> None:
+    seeded = _seed(client)
+    jakob = seeded["member_id"]["Jakob"]
+    _login_as(client, jakob)
+    token = _csrf_for(client, jakob)
+    week = seeded["week"].isoformat()
+    chore_id = seeded["chore_id"]["floor"]
+
+    origin = {"origin": "http://127.0.0.1:8000"}
+    client.post(f"/wg/chores/{week}/{chore_id}/done", data={"csrf": token}, headers=origin)
+    client.post(f"/wg/chores/{week}/{chore_id}/undo", data={"csrf": token}, headers=origin)
+    client.post(
+        f"/wg/chores/{week}/{chore_id}/skip",
+        data={"csrf": token, "reason": "im Urlaub"},
+        headers=origin,
+    )
+
+    with client.session_local() as db:
+        keys = [
+            e.summary_key
+            for e in db.query(ActivityLog).filter_by(entity="chore", entity_id=chore_id).all()
+        ]
+    assert keys == ["log.chore.done", "log.chore.undo", "log.chore.skip"]

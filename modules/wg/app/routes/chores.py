@@ -10,8 +10,8 @@ from sqlalchemy.orm import Session
 from app.auth import require_csrf
 from app.config import settings
 from app.db import get_db
-from app.models import Member
-from app.services import rota
+from app.models import Chore, Member
+from app.services import activity, rota
 from app.templating import base_context, templates
 from app.timezone import berlin_today, week_start
 
@@ -87,6 +87,16 @@ def chore_done(
         assigned_member_id=assigned_id,
         done_by=request.state.member_id,
     )
+    chore = db.get(Chore, chore_id)
+    activity.log(
+        db,
+        actor_member_id=request.state.member_id,
+        action="done",
+        entity="chore",
+        entity_id=chore_id,
+        summary_key="log.chore.done",
+        summary_params={"chore": chore.name_de if chore else ""},
+    )
     db.commit()
     return _redirect_to_week(week)
 
@@ -112,17 +122,39 @@ def chore_skip(
         done_by=request.state.member_id,
         reason=reason,
     )
+    chore = db.get(Chore, chore_id)
+    activity.log(
+        db,
+        actor_member_id=request.state.member_id,
+        action="skip",
+        entity="chore",
+        entity_id=chore_id,
+        summary_key="log.chore.skip",
+        summary_params={"chore": chore.name_de if chore else "", "reason": reason},
+    )
     db.commit()
     return _redirect_to_week(week)
 
 
 @router.post("/{week}/{chore_id}/undo", dependencies=[Depends(require_csrf)])
-def chore_undo(week: date, chore_id: int, db: Session = Depends(get_db)) -> RedirectResponse:
+def chore_undo(
+    week: date, chore_id: int, request: Request, db: Session = Depends(get_db)
+) -> RedirectResponse:
     # spec.md §3.2: undo only works for the current and the previous week.
     current = week_start(berlin_today())
     if week not in (current, current - timedelta(weeks=1)):
         return _redirect_to_week(week, error="undo_not_allowed")
 
-    rota.undo(db, week=week, chore_id=chore_id)
+    if rota.undo(db, week=week, chore_id=chore_id):
+        chore = db.get(Chore, chore_id)
+        activity.log(
+            db,
+            actor_member_id=request.state.member_id,
+            action="undo",
+            entity="chore",
+            entity_id=chore_id,
+            summary_key="log.chore.undo",
+            summary_params={"chore": chore.name_de if chore else ""},
+        )
     db.commit()
     return _redirect_to_week(week)

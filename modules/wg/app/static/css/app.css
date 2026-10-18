@@ -189,12 +189,21 @@ a {
   gap: 12px;
 }
 
+.flex-1 {
+  flex: 1;
+  min-width: 0;
+}
+
 .text-error {
   color: var(--money-minus);
 }
 
 .text-muted {
   color: var(--muted);
+}
+
+.break-all {
+  overflow-wrap: anywhere;
 }
 
 .btn {
@@ -391,6 +400,50 @@ a {
 .person-row .detail {
   font-size: 13px;
   color: var(--muted);
+}
+
+/* --- segmented control (design.md §2) --- */
+
+.segment {
+  display: inline-flex;
+  background: var(--segmented-bg);
+  border-radius: 12px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.segment button {
+  height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--ink-2);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.segment button.active {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* --- settings list rows --- */
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding: 6px 0;
+  border-top: 1px solid var(--divider);
+}
+
+.settings-row:first-child {
+  border-top: none;
 }
 
 .chip {

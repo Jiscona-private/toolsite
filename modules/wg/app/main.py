@@ -17,6 +17,8 @@ from app.routes.chores import router as chores_router
 from app.routes.expenses import router as expenses_router
 from app.routes.expenses import settlements_router
 from app.routes.home import router as home_router
+from app.routes.profile import router as profile_router
+from app.routes.settings import router as settings_router
 from app.routes.shopping import router as shopping_router
 from app.templating import base_context, templates
 
@@ -51,6 +53,8 @@ def create_app() -> FastAPI:
     app.include_router(settlements_router)
     app.include_router(shopping_router)
     app.include_router(board_router)
+    app.include_router(profile_router)
+    app.include_router(settings_router)
     return app
 
 

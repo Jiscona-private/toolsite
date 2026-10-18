@@ -36,7 +36,7 @@ Jeder Schritt endet mit grünen Tests, `ruff` und einem Commit.
 8. [x] **Einkaufsliste:** `/shopping`, Abhaken mit htmx-Fragment, „als Ausgabe eintragen“, erledigte entfernen.
 9. [x] **Pinnwand (Basis):** Notizen und WG-Infos (`/board`).
 10. [x] **Startseite komplett** nach `docs/design.md` §5.2.
-11. [ ] **Profil und Einstellungen:** Name wechseln, Sprache, Mitglieder, Aufgaben, Rotation neu festlegen (mit Vorschau), Kategorien, Zugang (Link + QR, erneuern, alle abmelden).
+11. [x] **Profil und Einstellungen:** Name wechseln, Sprache, Mitglieder, Aufgaben, Rotation neu festlegen (mit Vorschau), Kategorien, Zugang (Link + QR, erneuern, alle abmelden).
 12. [ ] **Protokoll und Papierkorb:** Anzeige, Wiederherstellen, Job zum endgültigen Löschen.
 13. [ ] **PWA:** Manifest, Icons, Service Worker, Offline-Seite.
 14. [ ] **Backup-Job** (03:30) + Admin-ntfy bei Fehlern.

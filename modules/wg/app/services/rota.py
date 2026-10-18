@@ -19,10 +19,14 @@ STATUS_OPEN = "open"
 
 
 def latest_rota_config(db: Session, week: date) -> RotaConfig | None:
+    # Tie-break on id too: two configs can share a valid_from (e.g. two
+    # membership changes before anyone looks at the preview, or "ab dieser
+    # Woche neu festlegen" clicked twice) - without this, ordering by
+    # valid_from alone leaves it to the database which one "wins".
     return db.scalars(
         select(RotaConfig)
         .where(RotaConfig.valid_from <= week)
-        .order_by(RotaConfig.valid_from.desc())
+        .order_by(RotaConfig.valid_from.desc(), RotaConfig.id.desc())
         .limit(1)
     ).first()
 
@@ -230,3 +234,24 @@ def rows_for_week(
     rows = rows_in_chore_order(db, chores, week, members, my_member_id)
     rows.sort(key=lambda row: row["is_mine"] is False)
     return rows
+
+
+def rebuild_for_current_membership(
+    db: Session, *, effective_from: date, created_by: int | None
+) -> RotaConfig:
+    """rebuild_rota() using whoever/whatever is active right now, in
+    position order - the common case per spec.md §3.3's trigger list
+    (member added/deactivated, chore added/deactivated, explicit
+    "Rotation neu festlegen")."""
+    member_ids = [
+        m.id
+        for m in db.scalars(select(Member).where(Member.active.is_(True)).order_by(Member.position))
+    ]
+    chore_ids = [c.id for c in active_chores(db)]
+    return rebuild_rota(
+        db,
+        effective_from=effective_from,
+        member_ids_in_position_order=member_ids,
+        chore_ids_in_order=chore_ids,
+        created_by=created_by,
+    )

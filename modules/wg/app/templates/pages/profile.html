@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ t("profile.title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <a class="btn secondary" href="{{ base_path }}/">{{ t("nav.back") }}</a>
+  <h1>{{ t("profile.title") }}</h1>
+
+  <div class="card stack">
+    <div class="align-between">
+      <span class="avatar color-{{ member.color }}" aria-hidden="true">{{ member.name[0] }}</span>
+      <div class="flex-1">
+        <div>{{ member.name }}</div>
+        <div class="text-muted">{{ t("profile.on_this_device") }}</div>
+      </div>
+      <a class="btn secondary" href="{{ base_path }}/welcome">{{ t("profile.switch") }}</a>
+    </div>
+    <div class="align-between">
+      <span>{{ t("profile.language") }}</span>
+      <div class="segment" role="group" aria-label="{{ t('profile.language') }}">
+        <form method="post" action="{{ base_path }}/profile/language">
+          <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+          <input type="hidden" name="language" value="de" />
+          <button type="submit" class="{{ 'active' if lang == 'de' else '' }}" aria-pressed="{{ 'true' if lang == 'de' else 'false' }}">Deutsch</button>
+        </form>
+        <form method="post" action="{{ base_path }}/profile/language">
+          <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+          <input type="hidden" name="language" value="en" />
+          <button type="submit" class="{{ 'active' if lang == 'en' else '' }}" aria-pressed="{{ 'true' if lang == 'en' else 'false' }}">English</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <nav class="card" aria-label="{{ t('nav.profile') }}">
+    <a class="sheet-option" href="{{ base_path }}/settings">
+      <span>
+        <span class="title">{{ t("profile.settings_link") }}</span><br />
+        <span class="hint">{{ t("profile.settings_hint") }}</span>
+      </span>
+    </a>
+  </nav>
+{% endblock %}

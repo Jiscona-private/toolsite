@@ -5,6 +5,7 @@ import secrets
 import unicodedata
 from datetime import date
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models import Member
@@ -47,3 +48,15 @@ def create_member(
     )
     db.add(member)
     return member
+
+
+def next_position(db: Session) -> int:
+    positions = list(db.scalars(select(Member.position)))
+    return max(positions, default=-1) + 1
+
+
+def set_active(member: Member, active: bool, *, today: date) -> None:
+    """spec.md members.active/left_on. Changing this is one of the §3.3
+    triggers for rebuilding the rota - callers do that separately."""
+    member.active = active
+    member.left_on = None if active else today

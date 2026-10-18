@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}{{ t("settings.title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <a class="btn secondary" href="{{ base_path }}/profile">{{ t("nav.back") }}</a>
+  <h1>{{ t("settings.title") }}</h1>
+
+  <div class="card stack">
+    <h2>{{ t("settings.members_title") }}</h2>
+    {% for m in all_members %}
+      <div class="settings-row">
+        <span class="flex-1">
+          <span class="avatar small color-{{ m.color }}" aria-hidden="true">{{ m.name[0] }}</span>
+          {{ m.name }}
+        </span>
+        <form method="post" action="{{ base_path }}/settings/members/{{ m.id }}/toggle-active">
+          <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+          <button type="submit" class="btn secondary">
+            {{ t("settings.members.deactivate") if m.active else t("settings.members.reactivate") }}
+          </button>
+        </form>
+      </div>
+    {% endfor %}
+    <form method="post" action="{{ base_path }}/settings/members/new" class="stack">
+      <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+      <input name="name" placeholder="{{ t('settings.members.add_placeholder') }}" required maxlength="40" />
+      <button type="submit" class="btn secondary full">{{ t("settings.members.add_submit") }}</button>
+    </form>
+  </div>
+
+  <div class="card stack">
+    <h2>{{ t("settings.chores_title") }}</h2>
+    {% for c in all_chores %}
+      <div class="settings-row">
+        <span class="flex-1">{{ c.name_de if lang == "de" else c.name_en }}</span>
+        <form method="post" action="{{ base_path }}/settings/chores/{{ c.id }}/toggle-active">
+          <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+          <button type="submit" class="btn secondary">
+            {{ t("settings.chores.deactivate") if c.active else t("settings.chores.reactivate") }}
+          </button>
+        </form>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="card stack">
+    <h2>{{ t("settings.rota_title") }}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">{{ t("settings.rota_title") }}</th>
+          {% for chore in chores %}
+            <th scope="col">{{ chore.name_de if lang == "de" else chore.name_en }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in preview %}
+          <tr>
+            <th scope="row">{{ week_label(entry.week, lang) }}</th>
+            {% for row in entry.rows %}
+              <td>{{ row.assigned_member.name if row.assigned_member else t("chores.free") }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <form method="post" action="{{ base_path }}/settings/rota/rebuild">
+      <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+      <input type="hidden" name="when" value="this" />
+      <button type="submit" class="btn secondary full">{{ t("settings.rota.rebuild_this_week") }}</button>
+    </form>
+    <form method="post" action="{{ base_path }}/settings/rota/rebuild">
+      <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+      <input type="hidden" name="when" value="next" />
+      <button type="submit" class="btn secondary full">{{ t("settings.rota.rebuild_next_week") }}</button>
+    </form>
+  </div>
+
+  <div class="card stack">
+    <h2>{{ t("settings.categories_title") }}</h2>
+    {% for category in all_categories %}
+      <div class="settings-row">
+        <span class="flex-1">{{ category.name_de if lang == "de" else category.name_en }}</span>
+        <form method="post" action="{{ base_path }}/settings/categories/{{ category.id }}/toggle-active">
+          <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+          <button type="submit" class="btn secondary">
+            {{ t("settings.categories.deactivate") if category.active else t("settings.categories.reactivate") }}
+          </button>
+        </form>
+      </div>
+    {% endfor %}
+    <form method="post" action="{{ base_path }}/settings/categories/new" class="stack">
+      <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+      <input name="name" placeholder="{{ t('settings.categories.add_placeholder') }}" required maxlength="60" />
+      <button type="submit" class="btn secondary full">{{ t("settings.categories.add_submit") }}</button>
+    </form>
+  </div>
+
+  <div class="card stack">
+    <h2>{{ t("settings.access_title") }}</h2>
+    <p class="text-muted">{{ t("settings.access.link_label") }}</p>
+    <p class="break-all">{{ join_link }}</p>
+    {% if qr_data_uri %}<img src="{{ qr_data_uri }}" width="160" height="160" alt="{{ t('settings.access.link_label') }}" />{% endif %}
+    <details>
+      <summary class="btn secondary">{{ t("settings.access.rotate_link") }}</summary>
+      <p class="text-error">{{ t("settings.access.rotate_link_confirm") }}</p>
+      <form method="post" action="{{ base_path }}/settings/rotate-link">
+        <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+        <button type="submit" class="btn secondary full">{{ t("settings.access.rotate_link") }}</button>
+      </form>
+    </details>
+    <details>
+      <summary class="btn secondary">{{ t("settings.access.logout_all") }}</summary>
+      <p class="text-error">{{ t("settings.access.logout_all_confirm") }}</p>
+      <form method="post" action="{{ base_path }}/settings/logout-all">
+        <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+        <button type="submit" class="btn secondary full">{{ t("settings.access.logout_all") }}</button>
+      </form>
+    </details>
+  </div>
+{% endblock %}

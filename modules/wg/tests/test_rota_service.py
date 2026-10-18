@@ -283,3 +283,22 @@ def test_undo_removes_the_entry(seeded, session_local) -> None:
 def test_undo_on_missing_entry_returns_false(seeded, session_local) -> None:
     with session_local() as db:
         assert not rota.undo(db, week=date(2026, 10, 19), chore_id=seeded["chore_id"]["floor"])
+
+
+def test_latest_rota_config_breaks_ties_on_the_newer_row(seeded, session_local) -> None:
+    # Two configs can share a valid_from (e.g. a membership change rebuilt
+    # "this week" twice before anyone looked at the preview) - the one
+    # inserted later must win, not whichever the database happens to
+    # return first for an unordered tie.
+    with session_local() as db:
+        rota.rebuild_rota(
+            db,
+            effective_from=date(2026, 10, 19),
+            member_ids_in_position_order=[seeded["member_id"]["Clara"]],
+            chore_ids_in_order=[seeded["chore_id"]["floor"]],
+            created_by=None,
+        )
+        db.commit()
+
+        config = rota.latest_rota_config(db, date(2026, 10, 19))
+    assert config.slots == [seeded["member_id"]["Clara"]]

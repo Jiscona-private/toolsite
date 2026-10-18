@@ -1,0 +1,16 @@
+services:
+  landing:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ../modules:/modules:ro
+    environment:
+      - PORT=3000
+      - MODULES_DIR=/modules
+    networks:
+      - toolsite_net
+
+networks:
+  toolsite_net:
+    external: true
+    name: toolsite_net

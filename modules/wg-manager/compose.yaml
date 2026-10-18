@@ -1,0 +1,17 @@
+services:
+  wg-manager:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PORT=3000
+      - BASE_PATH=/wg
+      - DB_PATH=/app/data/wg.db
+    networks:
+      - toolsite_net
+
+networks:
+  toolsite_net:
+    external: true
+    name: toolsite_net

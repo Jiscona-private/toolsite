@@ -1,0 +1,12 @@
+node_modules/
+*.log
+.env
+.env.*
+!.env.example
+
+# module data (sqlite db files, caddy state)
+modules/*/data/*
+!modules/*/data/.gitkeep
+
+backups/
+.DS_Store

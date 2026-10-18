@@ -1,0 +1,17 @@
+services:
+  __MODULE_ID__:
+    build: .
+    restart: unless-stopped
+    # Uncomment if this module needs persistent storage (e.g. a sqlite file):
+    # volumes:
+    #   - ./data:/app/data
+    environment:
+      - PORT=3000
+      - BASE_PATH=/__MODULE_ID__
+    networks:
+      - toolsite_net
+
+networks:
+  toolsite_net:
+    external: true
+    name: toolsite_net

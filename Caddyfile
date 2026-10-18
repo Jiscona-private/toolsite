@@ -1,0 +1,29 @@
+{
+	email {$ACME_EMAIL}
+}
+
+{$DOMAIN} {
+	encode zstd gzip
+
+	# modules with personal/sensitive data get Basic Auth in front of them.
+	# note: `handle` (not `handle_path`) keeps the /wg prefix on the request
+	# forwarded upstream — the module itself is prefix-aware (BASE_PATH=/wg),
+	# so its own absolute links resolve correctly. Add one block per
+	# protected module here.
+	handle /wg* {
+		basic_auth {
+			{$WG_BASIC_AUTH_USER} {$WG_BASIC_AUTH_HASH}
+		}
+		reverse_proxy wg-manager:3000
+	}
+
+	# public landing page — lists every installed module.
+	handle {
+		reverse_proxy landing:3000
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

@@ -1,0 +1,34 @@
+name: toolsite
+
+# Each module brings its own compose fragment. Adding a tool to the site
+# means adding one line here — see docs/ADDING_MODULES.md.
+include:
+  - landing/compose.yaml
+  - modules/wg-manager/compose.yaml
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN}
+      - ACME_EMAIL=${ACME_EMAIL}
+      - WG_BASIC_AUTH_USER=${WG_BASIC_AUTH_USER}
+      - WG_BASIC_AUTH_HASH=${WG_BASIC_AUTH_HASH}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - toolsite_net
+
+networks:
+  toolsite_net:
+    name: toolsite_net
+
+volumes:
+  caddy_data:
+  caddy_config:

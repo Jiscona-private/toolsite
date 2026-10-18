@@ -1,0 +1,7 @@
+{
+  "id": "__MODULE_ID__",
+  "name": "__MODULE_NAME__",
+  "description": "__MODULE_DESCRIPTION__",
+  "path": "/__MODULE_ID__/",
+  "icon": "🧰"
+}

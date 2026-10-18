@@ -84,5 +84,22 @@
   "shopping.clear_checked": "Remove checked items",
   "shopping.duplicate": "already on the list",
   "shopping.empty": "Nothing on the list yet.",
-  "shopping.added_by": "by {name}"
+  "shopping.added_by": "by {name}",
+
+  "board.title": "Board",
+  "board.notes_card_title": "Board",
+  "board.add_note": "+ Note",
+  "board.empty_notes": "No notes yet.",
+  "board.author_and_date": "{name} · {date}",
+  "board.info_title": "Flat info",
+  "board.note.new_title": "New note",
+  "board.note.field.body": "Message",
+  "board.note.field.pinned": "Pin",
+  "board.note.field.expires": "Expires on (optional)",
+  "board.note.save": "Save",
+  "board.note.delete": "Delete",
+  "board.info.edit_title": "Edit flat info",
+  "board.info.field.title": "Title",
+  "board.info.field.body": "Text",
+  "board.info.save": "Save"
 }

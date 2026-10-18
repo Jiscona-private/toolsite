@@ -84,5 +84,22 @@
   "shopping.clear_checked": "Erledigte entfernen",
   "shopping.duplicate": "steht schon drauf",
   "shopping.empty": "Noch nichts auf der Liste.",
-  "shopping.added_by": "von {name}"
+  "shopping.added_by": "von {name}",
+
+  "board.title": "Pinnwand",
+  "board.notes_card_title": "Pinnwand",
+  "board.add_note": "+ Notiz",
+  "board.empty_notes": "Noch keine Notizen.",
+  "board.author_and_date": "{name} · {date}",
+  "board.info_title": "WG-Infos",
+  "board.note.new_title": "Neue Notiz",
+  "board.note.field.body": "Nachricht",
+  "board.note.field.pinned": "Anheften",
+  "board.note.field.expires": "Läuft ab am (optional)",
+  "board.note.save": "Speichern",
+  "board.note.delete": "Löschen",
+  "board.info.edit_title": "WG-Info bearbeiten",
+  "board.info.field.title": "Titel",
+  "board.info.field.body": "Text",
+  "board.info.save": "Speichern"
 }

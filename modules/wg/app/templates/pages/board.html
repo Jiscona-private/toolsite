@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ t("board.title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <a class="btn secondary" href="{{ base_path }}/">{{ t("nav.back") }}</a>
+  <h1>{{ t("board.title") }}</h1>
+
+  <div class="card stack">
+    <h2>{{ t("board.notes_card_title") }} · <a href="{{ base_path }}/board/notes/new">{{ t("board.add_note") }}</a></h2>
+    {% if notes %}
+      {% for note in notes %}
+        <div class="stack">
+          <p>{{ note.body }}</p>
+          <p class="text-muted">
+            {{ t("board.author_and_date", name=members[note.created_by].name, date=day(note.created_at.date(), lang)) }}
+          </p>
+          {% if note.created_by == member.id %}
+            <form method="post" action="{{ base_path }}/board/notes/{{ note.id }}/delete">
+              <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+              <button type="submit" class="btn secondary">{{ t("board.note.delete") }}</button>
+            </form>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">{{ t("board.empty_notes") }}</p>
+    {% endif %}
+  </div>
+
+  <div class="card stack">
+    <h2>{{ t("board.info_title") }}</h2>
+    {% for page in info_pages %}
+      <a class="sheet-option" href="{{ base_path }}/board/info/{{ page.id }}/edit">
+        <span class="title">{{ page.title }}</span>
+      </a>
+    {% endfor %}
+  </div>
+{% endblock %}

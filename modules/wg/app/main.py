@@ -12,6 +12,7 @@ from app.auth import access_gate
 from app.auth import router as auth_router
 from app.config import settings
 from app.db import get_db
+from app.routes.board import router as board_router
 from app.routes.chores import router as chores_router
 from app.routes.expenses import router as expenses_router
 from app.routes.expenses import settlements_router
@@ -47,6 +48,7 @@ def create_app() -> FastAPI:
     app.include_router(expenses_router)
     app.include_router(settlements_router)
     app.include_router(shopping_router)
+    app.include_router(board_router)
     return app
 
 

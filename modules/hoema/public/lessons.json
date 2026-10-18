@@ -13,7 +13,11 @@
     {
       "id": "LE02",
       "title": "Relationen, ℕ, Mächtigkeit, ℤ und ℚ",
-      "week": "Woche 2 · 19.–25.10."
+      "week": "Woche 2 · 19.–25.10.",
+      "file": "le02.html",
+      "sections": 16,
+      "storagePrefix": "homa1-le02-",
+      "updated": "2026-10-19"
     },
     {
       "id": "LE03",

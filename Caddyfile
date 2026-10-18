@@ -5,6 +5,12 @@
 {$DOMAIN} {
 	encode zstd gzip
 
+	# keep every page out of search engines (this site is not meant to be
+	# publicly discoverable, e.g. when searching the operator's name).
+	# Header applies even to reverse-proxied responses, so no module needs
+	# to set this itself.
+	header X-Robots-Tag "noindex, nofollow, noarchive, noimageindex"
+
 	# WG-Manager v1 — access is its own secret join-link (/wg/join/<token>),
 	# not Basic Auth; it 404s on any other request, logged in or not. Note:
 	# `handle` (not `handle_path`) keeps the /wg prefix on the request

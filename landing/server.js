@@ -57,6 +57,7 @@ function renderPage(modules) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
   <title>Toolsite</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -68,6 +69,49 @@ function renderPage(modules) {
   <main class="grid">
     ${cards || '<p class="empty">No modules installed yet.</p>'}
   </main>
+  <footer>toolsite · <a href="/impressum">Impressum</a></footer>
+</body>
+</html>`;
+}
+
+function renderImpressum() {
+  return `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Impressum – Toolsite</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>Impressum</h1>
+  </header>
+  <main class="legal">
+    <p>Angaben gem&auml;&szlig; &sect; 5 DDG</p>
+    <p>
+      Jakob Paridon<br>
+      Im Neuenheimer Feld 133<br>
+      69120 Heidelberg<br>
+      Deutschland
+    </p>
+    <p>
+      <strong>Kontakt</strong><br>
+      E-Mail: jakob.paridon@proton.me
+    </p>
+    <p>
+      <strong>Verantwortlich f&uuml;r den Inhalt nach &sect; 18 Abs. 2 MStV</strong><br>
+      Jakob Paridon, Anschrift wie oben
+    </p>
+    <p>
+      <strong>Haftungsausschluss</strong><br>
+      Trotz sorgf&auml;ltiger inhaltlicher Kontrolle wird keine Haftung f&uuml;r
+      die Inhalte externer Links &uuml;bernommen. F&uuml;r den Inhalt der
+      verlinkten Seiten sind ausschlie&szlig;lich deren Betreiber verantwortlich.
+    </p>
+    <p><a href="/">&larr; Zur&uuml;ck</a></p>
+  </main>
   <footer>toolsite</footer>
 </body>
 </html>`;
@@ -77,6 +121,14 @@ app.get("/", (req, res) => {
   res.send(renderPage(loadModules()));
 });
 
+app.get("/impressum", (req, res) => {
+  res.send(renderImpressum());
+});
+
 app.get("/healthz", (req, res) => res.send("ok"));
+
+app.get("/robots.txt", (req, res) => {
+  res.type("text/plain").send("User-agent: *\nDisallow: /\n");
+});
 
 app.listen(PORT, () => console.log(`landing listening on :${PORT}`));

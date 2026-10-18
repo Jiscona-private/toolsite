@@ -32,7 +32,7 @@ Jeder Schritt endet mit grünen Tests, `ruff` und einem Commit.
 4. [x] **Zugang:** Join-Link, signierte Cookies, 404-Gate-Middleware, `/welcome`, CSRF (Origin + Token), Rate-Limit, Security-Header/CSP. Tests aus Spec §10.3.
 5. [x] **Grundlayout:** i18n (`t()`, Babel), `base.html`, `app.css` mit Tokens, selbst gehostete Schriften, htmx lokal, Icon-Sprite, Bottom-Bar mit „+“-Sheet (`<dialog>` + Fallback `/new`), Profil-Avatar. i18n-Paritätstest.
 6. [x] **Putzplan:** (Hero-Karte folgt in Schritt 10 zusammen mit der Startseite, die sie trägt) `services/rota.py` + Tests aus Spec §10.1, Seite `/chores` (Woche blättern, erledigt/auslassen/rückgängig, nächste Wochen), Hero-Karte auf Start.
-7. [ ] **Ausgaben:** `services/ledger.py` + Tests aus Spec §10.2 (inkl. Eigenschaftstest), `/expenses`, `/expenses/new`, Bearbeiten, Löschen, Ausgleich, `/expenses/all`.
+7. [x] **Ausgaben:** (Formular noch unstyled - großes Betragsfeld, Avatar-Grid etc. kommen in der Qualitätsrunde) `services/ledger.py` + Tests aus Spec §10.2 (inkl. Eigenschaftstest), `/expenses`, `/expenses/new`, Bearbeiten, Löschen, Ausgleich, `/expenses/all`.
 8. [ ] **Einkaufsliste:** `/shopping`, Abhaken mit htmx-Fragment, „als Ausgabe eintragen“, erledigte entfernen.
 9. [ ] **Pinnwand (Basis):** Notizen und WG-Infos (`/board`).
 10. [ ] **Startseite komplett** nach `docs/design.md` §5.2.

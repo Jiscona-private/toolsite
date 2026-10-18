@@ -13,6 +13,8 @@ from app.auth import router as auth_router
 from app.config import settings
 from app.db import get_db
 from app.routes.chores import router as chores_router
+from app.routes.expenses import router as expenses_router
+from app.routes.expenses import settlements_router
 from app.templating import base_context, templates
 
 
@@ -41,6 +43,8 @@ def create_app() -> FastAPI:
     app.include_router(router)
     app.include_router(auth_router)
     app.include_router(chores_router)
+    app.include_router(expenses_router)
+    app.include_router(settlements_router)
     return app
 
 

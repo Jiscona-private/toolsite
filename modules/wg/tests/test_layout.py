@@ -1,4 +1,5 @@
 from datetime import date
+from pathlib import Path
 
 from fastapi.testclient import TestClient
 
@@ -99,3 +100,12 @@ def test_base_layout_has_no_active_nav_when_unset() -> None:
         active_nav=None,
     )
     assert "aria-current" not in html
+
+
+def test_icon_svgs_have_a_default_size() -> None:
+    # Regression test: an <svg> with no explicit width/height falls back to
+    # the browser default replaced-element size (300x150), which showed up
+    # as a large empty box next to the chores week-switcher before this css
+    # rule existed (every icon svg here is on a 24px grid and aria-hidden).
+    css = (Path(__file__).parent.parent / "app" / "static" / "css" / "app.css").read_text()
+    assert 'svg[aria-hidden="true"]' in css

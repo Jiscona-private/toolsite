@@ -310,9 +310,16 @@ a {
   font-weight: 700;
 }
 
-.bottom-bar svg {
+/* Every hand-drawn icon here is on a 24px grid (design.md §2) and marked
+   aria-hidden - so this one rule sizes all of them, everywhere, without
+   needing a per-container override like a `.bottom-bar svg` scope (which
+   left unstyled icons elsewhere at the SVG default 300x150 replaced-size,
+   visible as a big empty box next to the chores week-switcher). More
+   specific rules (e.g. the "+" button's 26px circle) still win. */
+svg[aria-hidden="true"] {
   width: 24px;
   height: 24px;
+  flex-shrink: 0;
 }
 
 .bottom-bar .add-button {

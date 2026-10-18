@@ -1,0 +1,104 @@
+{
+  "course": "HöMa I · Selbststudium WS 2026/27",
+  "lessons": [
+    {
+      "id": "LE01",
+      "title": "Logik, Beweistechniken, Mengen, Funktionen",
+      "week": "Woche 1 · 12.–18.10.",
+      "file": "le01.html",
+      "sections": 15,
+      "storagePrefix": "homa1-le01-",
+      "updated": "2026-10-18"
+    },
+    {
+      "id": "LE02",
+      "title": "Relationen, ℕ, Mächtigkeit, ℤ und ℚ",
+      "week": "Woche 2 · 19.–25.10."
+    },
+    {
+      "id": "LE03",
+      "title": "Reelle und komplexe Zahlen",
+      "week": "Woche 3 · 26.10.–01.11."
+    },
+    {
+      "id": "LE04",
+      "title": "Metrische Räume und Topologie",
+      "week": "Woche 4 · 02.–08.11."
+    },
+    {
+      "id": "LE05",
+      "title": "Folgen I: Konvergenz, Cauchy, Fixpunktsatz, Rekursionen",
+      "week": "Woche 5 · 09.–15.11."
+    },
+    {
+      "id": "LE06",
+      "title": "Folgen II: Grenzwertsätze, Monotonie, Bolzano–Weierstraß, Heine–Borel",
+      "week": "Woche 6 · 16.–22.11."
+    },
+    {
+      "id": "LE07",
+      "title": "Reihen, Potenzreihen, Exponentialfunktion",
+      "week": "Woche 7 · 23.–29.11."
+    },
+    {
+      "id": "LE08",
+      "title": "Vektorräume, lineare Abbildungen, Dualraum",
+      "week": "Woche 8 · 30.11.–06.12."
+    },
+    {
+      "id": "LE09",
+      "title": "Matrizen, Basiswechsel, Gauß-Verfahren",
+      "week": "Woche 9 · 07.–13.12."
+    },
+    {
+      "id": "LE10",
+      "title": "Permutationen und Determinante",
+      "week": "Woche 10 · 14.–20.12."
+    },
+    {
+      "id": "R1",
+      "title": "Weihnachts-Repetitorium LE01–LE10",
+      "week": "Pause · 21.12.–06.01."
+    },
+    {
+      "id": "LE11",
+      "title": "Stetigkeit, Zwischenwertsatz, Extremwertsatz",
+      "week": "Woche 11 · 04.–10.01."
+    },
+    {
+      "id": "LE12",
+      "title": "Differentialrechnung in einer Variablen",
+      "week": "Woche 12 · 11.–17.01."
+    },
+    {
+      "id": "LE13",
+      "title": "Projektoren, Eigenwerte, Diagonalisierung",
+      "week": "Woche 13 · 18.–24.01."
+    },
+    {
+      "id": "LE14",
+      "title": "Jordan-Normalform, Cayley–Hamilton",
+      "week": "Woche 14 · 25.–31.01."
+    },
+    {
+      "id": "LE15",
+      "title": "Gesamtwiederholung und Brücke zu HöMa II",
+      "week": "Woche 15 · 01.–06.02."
+    },
+    {
+      "id": "K1",
+      "title": "Probeklausur A",
+      "week": "ab 07.02."
+    },
+    {
+      "id": "K2",
+      "title": "Lückenschluss und Probeklausur B",
+      "week": "ab 07.02."
+    },
+    {
+      "id": "K3",
+      "title": "Speed-Training",
+      "week": "ab 07.02."
+    }
+  ]
+}

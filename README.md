@@ -7,6 +7,7 @@ without touching anything else.
 ```
 https://<your-domain>/        → landing page, lists every installed module
 https://<your-domain>/wg/     → WG Manager (shared expenses, chores, shopping list)
+https://<your-domain>/hoema/  → HöMa I lesson pages (static, public)
 ```
 
 A plain IPv4 address can't get a trusted HTTPS certificate on its own — see
@@ -30,6 +31,7 @@ landing/                 # public landing page (auto-lists modules)
 
 modules/
   wg-manager/             # shared expenses, chore rotation, shopping list
+  hoema/                  # HöMa I lesson pages (static, public)
   _template/              # starting point for new modules (never deployed)
 
 scripts/
@@ -59,6 +61,10 @@ development certificate instead of talking to Let's Encrypt, so
 production.
 
 ## What's included today
+
+**HöMa I – Lernprogramme** (`modules/hoema`, public at `/hoema/`) — static,
+interactive lesson pages for a maths self-study. No server-side state: answers
+and progress stay in each visitor's browser. See `modules/hoema/README.md`.
 
 **WG Manager** (`modules/wg-manager`) — for a shared flat:
 - Shared expenses, split evenly across residents, with running balances and

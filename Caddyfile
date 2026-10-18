@@ -17,6 +17,12 @@
 		reverse_proxy wg-manager:3000
 	}
 
+	# HöMa I lessons — public, static, no personal data. Answers and progress
+	# live only in each visitor's browser (localStorage); nothing is collected.
+	handle /hoema* {
+		reverse_proxy hoema:3000
+	}
+
 	# public landing page — lists every installed module.
 	handle {
 		reverse_proxy landing:3000

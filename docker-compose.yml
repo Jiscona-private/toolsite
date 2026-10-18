@@ -5,6 +5,7 @@ name: toolsite
 include:
   - landing/compose.yaml
   - modules/wg-manager/compose.yaml
+  - modules/hoema/compose.yaml
 
 services:
   caddy:

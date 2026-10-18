@@ -1,0 +1,18 @@
+services:
+  hoema:
+    # Static files only: a tiny Caddy file server, no build step, no app code.
+    # Files are bind-mounted, so publishing a new lesson only needs `git pull`
+    # on the server — no rebuild or restart.
+    image: caddy:2-alpine
+    restart: unless-stopped
+    command: ["caddy", "file-server", "--root", "/srv", "--listen", ":3000"]
+    volumes:
+      # Served under /srv/hoema so the /hoema prefix that the main Caddy
+      # forwards unchanged (handle, not handle_path) maps onto real paths.
+      - ./public:/srv/hoema:ro
+    networks:
+      - toolsite_net
+
+networks:
+  toolsite_net:
+    name: toolsite_net

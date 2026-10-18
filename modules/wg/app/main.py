@@ -1,7 +1,11 @@
-from fastapi import APIRouter, FastAPI
+from fastapi import APIRouter, Depends, FastAPI
 from fastapi.responses import PlainTextResponse
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
+from app import models  # noqa: F401  # registers every table with Base.metadata
 from app.config import settings
+from app.db import get_db
 
 
 def create_app() -> FastAPI:
@@ -12,7 +16,8 @@ def create_app() -> FastAPI:
     router = APIRouter(prefix=settings.base_path)
 
     @router.get("/healthz")
-    def healthz() -> PlainTextResponse:
+    def healthz(db: Session = Depends(get_db)) -> PlainTextResponse:
+        db.execute(text("SELECT 1"))
         return PlainTextResponse("ok")
 
     app.include_router(router)

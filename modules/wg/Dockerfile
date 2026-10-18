@@ -21,4 +21,4 @@ EXPOSE 3000
 # --forwarded-allow-ips="*" is safe here: the container has no published
 # port (see compose.yaml), so the only traffic it ever sees on PORT comes
 # from the toolsite Caddy inside the private toolsite_net network.
-CMD uv run uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-3000} --workers 1 --proxy-headers --forwarded-allow-ips="*"
+CMD uv run alembic upgrade head && exec uv run uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-3000} --workers 1 --proxy-headers --forwarded-allow-ips="*"

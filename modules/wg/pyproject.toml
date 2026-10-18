@@ -7,6 +7,8 @@ dependencies = [
     "fastapi>=0.115",
     "uvicorn[standard]>=0.32",
     "pydantic-settings>=2.6",
+    "sqlalchemy>=2.0,<2.1",
+    "alembic>=1.13",
 ]
 
 [dependency-groups]
@@ -29,6 +31,20 @@ target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's dependency injection relies on calling Depends()/Query()/... as
+# an argument default - that's the intended pattern, not the bug B008 looks for.
+extend-immutable-calls = [
+    "fastapi.Depends",
+    "fastapi.Query",
+    "fastapi.Path",
+    "fastapi.Body",
+    "fastapi.Header",
+    "fastapi.Cookie",
+    "fastapi.Form",
+    "fastapi.File",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

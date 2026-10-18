@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ t("sheet.title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <a class="btn secondary" href="{{ base_path }}/">{{ t("nav.cancel") }}</a>
+  <h1>{{ t("sheet.title") }}</h1>
+  <div class="card stack">
+    <a class="sheet-option" href="{{ base_path }}/expenses/new">
+      <span class="icon-tile">
+        <svg aria-hidden="true"><use href="{{ base_path }}/static/icons/sprite.svg#icon-expenses"></use></svg>
+      </span>
+      <span>
+        <span class="title">{{ t("sheet.expense.title") }}</span><br />
+        <span class="hint">{{ t("sheet.expense.hint") }}</span>
+      </span>
+    </a>
+    <a class="sheet-option" href="{{ base_path }}/shopping?focus=1">
+      <span class="icon-tile">
+        <svg aria-hidden="true"><use href="{{ base_path }}/static/icons/sprite.svg#icon-shopping"></use></svg>
+      </span>
+      <span>
+        <span class="title">{{ t("sheet.shopping.title") }}</span><br />
+        <span class="hint">{{ t("sheet.shopping.hint") }}</span>
+      </span>
+    </a>
+    <a class="sheet-option" href="{{ base_path }}/board/notes/new">
+      <span class="icon-tile">
+        <svg aria-hidden="true"><use href="{{ base_path }}/static/icons/sprite.svg#icon-note"></use></svg>
+      </span>
+      <span>
+        <span class="title">{{ t("sheet.note.title") }}</span><br />
+        <span class="hint">{{ t("sheet.note.hint") }}</span>
+      </span>
+    </a>
+  </div>
+{% endblock %}

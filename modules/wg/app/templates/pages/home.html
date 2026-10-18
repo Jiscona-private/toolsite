@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}{{ wg_name }}{% endblock %}
+{% block content %}
+  <header class="align-between">
+    <div>
+      <h1>{{ t("home.greeting", name=member.name) }}</h1>
+      <p class="text-muted">{{ week_label(week, lang) }} · {{ week_range(week, lang) }}</p>
+    </div>
+    <a class="avatar color-{{ member.color }}" href="{{ base_path }}/profile" aria-label="{{ t('nav.profile') }}">
+      {{ member.name[0] }}
+    </a>
+  </header>
+
+  <section class="card accent stack" aria-label="{{ t('hero.title') }}">
+    <p>{{ t("hero.title") }}</p>
+    {% if hero.state == "free" %}
+      <p class="display">{{ t("hero.free_message") }}</p>
+    {% elif hero.state == "done" %}
+      <p class="display">{{ hero.chore.name_de if lang == "de" else hero.chore.name_en }}</p>
+      <p>{{ t("hero.done_message") }}</p>
+      <form method="post" action="{{ base_path }}/chores/{{ week.isoformat() }}/{{ hero.chore.id }}/undo">
+        <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+        <button type="submit" class="btn outline-on-accent">{{ t("hero.undo") }}</button>
+      </form>
+    {% elif hero.state == "skipped" %}
+      <p class="display">{{ hero.chore.name_de if lang == "de" else hero.chore.name_en }}</p>
+      <p>{{ hero.reason }}</p>
+    {% else %}
+      <p class="display">{{ hero.chore.name_de if lang == "de" else hero.chore.name_en }}</p>
+      <p>{{ t("hero.due", date=weekday_date(hero.due_on, lang)) }}</p>
+      <div class="stack">
+        <form method="post" action="{{ base_path }}/chores/{{ week.isoformat() }}/{{ hero.chore.id }}/done">
+          <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+          <button type="submit" class="btn on-accent">{{ t("chores.action.done") }}</button>
+        </form>
+        <form method="post" action="{{ base_path }}/chores/{{ week.isoformat() }}/{{ hero.chore.id }}/skip">
+          <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+          <input type="hidden" name="reason" value="-" />
+          <button type="submit" class="btn outline-on-accent">{{ t("chores.action.skip") }}</button>
+        </form>
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="card" aria-label="{{ t('home.chores_card_title') }}">
+    <a class="link-card-header" href="{{ base_path }}/chores">
+      <span class="title">{{ t("home.chores_card_title") }}</span>
+      <span class="action">{{ t("home.all_weeks") }} ›</span>
+    </a>
+    {% for row in chore_rows %}
+      <div class="person-row">
+        <span class="avatar small color-{{ row.assigned_member.color if row.assigned_member else 0 }}" aria-hidden="true">
+          {{ row.assigned_member.name[0] if row.assigned_member else "–" }}
+        </span>
+        <div class="info">
+          <span class="name">
+            {{ row.assigned_member.name if row.assigned_member else t("chores.free") }}{% if row.is_mine %} {{ t("home.you_suffix") }}{% endif %}
+          </span>
+          <span class="detail">{{ row.chore.name_de if lang == "de" else row.chore.name_en }}</span>
+        </div>
+        <span class="chip {{ row.status }}">{{ t("chores.status." + row.status) }}</span>
+      </div>
+    {% endfor %}
+  </section>
+
+  <div class="tile-grid">
+    <a class="card tile" href="{{ base_path }}/expenses">
+      <svg class="tile-arrow" aria-hidden="true"><use href="{{ base_path }}/static/icons/sprite.svg#icon-chevron-left" transform="rotate(180 12 12)"></use></svg>
+      <span class="label">{{ t("home.balance_tile_label") }}</span>
+      <span class="value money {{ 'text-error' if balance_hint.balance < 0 else '' }}">{{ money(balance_hint.balance, lang) }}</span>
+      <span class="hint">
+        {% if balance_hint.balance == 0 %}{{ t("home.balance_hint_settled") }}
+        {% elif balance_hint.balance < 0 %}{{ t("home.balance_hint_owe", name=balance_hint.other.name if balance_hint.other else "") }}
+        {% else %}{{ t("home.balance_hint_owed", name=balance_hint.other.name if balance_hint.other else "") }}
+        {% endif %}
+      </span>
+    </a>
+    <a class="card tile" href="{{ base_path }}/shopping">
+      <svg class="tile-arrow" aria-hidden="true"><use href="{{ base_path }}/static/icons/sprite.svg#icon-chevron-left" transform="rotate(180 12 12)"></use></svg>
+      <span class="label">{{ t("home.shopping_tile_label") }}</span>
+      <span class="value">{{ t("home.shopping_tile_count", count=shopping_open|length) }}</span>
+      <span class="hint">{{ shopping_open[0].name if shopping_open else t("home.shopping_tile_empty") }}</span>
+    </a>
+  </div>
+
+  <a class="card stack" href="{{ base_path }}/board">
+    <span class="link-card-header">
+      <span class="title">{{ t("home.board_card_title") }}</span>
+      <span class="action">{{ t("home.board_open") }} ›</span>
+    </span>
+    {% for note in notes_preview %}
+      <span>{{ note.body }}</span>
+    {% endfor %}
+  </a>
+{% endblock %}

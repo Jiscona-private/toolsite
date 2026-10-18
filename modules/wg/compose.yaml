@@ -1,0 +1,22 @@
+services:
+  wg:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    environment:
+      - PORT=3000
+      - BASE_PATH=/wg
+      - APP_ENV=prod
+      - APP_BASE_URL=https://${DOMAIN}/wg
+      - SECRET_KEY=${WG_SECRET_KEY}
+      - DATABASE_PATH=/data/wg.db
+      - BACKUP_DIR=/data/backups
+      - NTFY_BASE_URL=https://ntfy.sh
+      - TZ=Europe/Berlin
+    networks:
+      - toolsite_net
+
+networks:
+  toolsite_net:
+    name: toolsite_net

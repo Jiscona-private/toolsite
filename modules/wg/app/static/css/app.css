@@ -1,0 +1,692 @@
+/* Design tokens from docs/design.md §1. No framework, no build step -
+   classes only (the CSP forbids inline styles). */
+
+:root {
+  --bg: #f4f5f1;
+  --surface: #ffffff;
+  --border: #e2e5df;
+  --divider: #eef0ec;
+  --control-border: #cdd2cb;
+  --ink: #1b1f1d;
+  --ink-2: #4a524e;
+  --muted: #5b635f;
+  --checkbox-border: #8e9690;
+
+  --accent: #1f6f5c;
+  --accent-text: #1f6f5c;
+  --accent-strong: #174f42;
+  --accent-soft: #dcebe5;
+  --on-accent-muted: #d6ede5;
+  --accent-outline: #9ccdbd;
+
+  --status-done-bg: #e1f0ea;
+  --status-done-fg: #1a6150;
+  --status-open-bg: #eef0ec;
+  --status-open-fg: #3f4743;
+  --status-skipped-bg: #fbebd6;
+  --status-skipped-fg: #8a4b07;
+  --status-empty-bg: #f7dcd2;
+  --status-empty-fg: #93300f;
+
+  --money-plus: #1a6150;
+  --money-minus: #a9480c;
+
+  --segmented-bg: #e7e9e3;
+  --overlay: rgba(27, 31, 29, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111513;
+    --surface: #1a1f1c;
+    --border: #2b322e;
+    --divider: #252b28;
+    --control-border: #3a423e;
+    --ink: #ecefec;
+    --ink-2: #c3cac5;
+    --muted: #a2aaa5;
+    --accent: #267a64;
+    --accent-text: #6cc4a6;
+    --accent-soft: #1e3b32;
+    --accent-strong: #8fd9be;
+    --status-done-bg: #1e3b32;
+    --status-done-fg: #8fd9be;
+    --status-open-bg: #2b312e;
+    --status-open-fg: #c9d0cb;
+    --status-skipped-bg: #3d2e17;
+    --status-skipped-fg: #f2c27e;
+    --status-empty-bg: #3f241b;
+    --status-empty-fg: #f4a88c;
+    --money-plus: #6fd0ae;
+    --money-minus: #f29b62;
+  }
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("../fonts/figtree-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("../fonts/figtree-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("../fonts/figtree-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("../fonts/figtree-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("../fonts/bricolage-grotesque-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("../fonts/bricolage-grotesque-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Figtree", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom));
+}
+
+h1,
+h2,
+.display {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Figtree", system-ui, sans-serif;
+}
+
+.money {
+  font-variant-numeric: tabular-nums;
+}
+
+a {
+  color: var(--accent-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Form controls: every page so far used the bare browser default here -
+   one pass now styles all of them consistently (Qualitätsrunde). */
+label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+textarea,
+select {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--control-border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* A <label> directly wrapping its checkbox/radio (the pattern every
+   template here uses) gets the same 44px touch target as everything
+   else, label text included - not just the input itself. */
+label:has(> input[type="checkbox"]),
+label:has(> input[type="radio"]) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.stack > * + * {
+  margin-top: 14px;
+}
+
+.card {
+  /* block by default so a <div class="card"> and an <a class="card">
+     (e.g. the Pinnwand link-card) size and paint identically - an <a> is
+     inline otherwise, which silently drops the background/border/padding
+     a card needs. */
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.card.accent {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+}
+
+.align-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.align-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.flex-1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.text-error {
+  color: var(--money-minus);
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.break-all {
+  overflow-wrap: anywhere;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn.secondary {
+  background: var(--surface);
+  color: var(--accent-text);
+  border: 1px solid var(--control-border);
+}
+
+.btn.outline-on-accent {
+  background: transparent;
+  color: #fff;
+  border: 1px solid var(--accent-outline);
+}
+
+.btn.on-accent {
+  background: #fff;
+  color: var(--accent-strong);
+}
+
+.btn.full {
+  width: 100%;
+  height: 52px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  font-family: "Figtree", system-ui, sans-serif;
+  font-weight: 700;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* Avatar palette, design.md §1.2 - member.color (0-7) picks the class. */
+.avatar.color-0 {
+  background: #dcebe5;
+  color: #1f6f5c;
+}
+.avatar.color-1 {
+  background: #e4e6f7;
+  color: #3b4a9e;
+}
+.avatar.color-2 {
+  background: #fbe7d3;
+  color: #8a4b07;
+}
+.avatar.color-3 {
+  background: #ede3f3;
+  color: #6b3f8a;
+}
+.avatar.color-4 {
+  background: #e3eef6;
+  color: #22577a;
+}
+.avatar.color-5 {
+  background: #f6e3e7;
+  color: #8e3049;
+}
+.avatar.color-6 {
+  background: #eef0d9;
+  color: #55601a;
+}
+.avatar.color-7 {
+  background: #eef0ec;
+  color: #3f4743;
+}
+
+.avatar.small {
+  width: 34px;
+  height: 34px;
+  font-size: 14px;
+}
+
+/* --- Start page: tiles, link-card headers, person rows (design.md §2/§5.2) --- */
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.tile .tile-arrow {
+  position: absolute;
+  top: 15px;
+  right: 14px;
+  color: var(--muted);
+}
+
+.tile .label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.tile .value {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.tile .hint {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.link-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 40px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.link-card-header .title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.link-card-header .action {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+
+.person-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--divider);
+}
+
+.person-row:first-child {
+  border-top: none;
+}
+
+.person-row .info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.person-row .name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.person-row .detail {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* --- segmented control (design.md §2) --- */
+
+.segment {
+  display: inline-flex;
+  background: var(--segmented-bg);
+  border-radius: 12px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.segment button {
+  height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--ink-2);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.segment button.active {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* --- settings list rows --- */
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding: 6px 0;
+  border-top: 1px solid var(--divider);
+}
+
+.settings-row:first-child {
+  border-top: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.chip.done {
+  background: var(--status-done-bg);
+  color: var(--status-done-fg);
+}
+.chip.open {
+  background: var(--status-open-bg);
+  color: var(--status-open-fg);
+}
+.chip.skipped {
+  background: var(--status-skipped-bg);
+  color: var(--status-skipped-fg);
+}
+.chip.empty {
+  background: var(--status-empty-bg);
+  color: var(--status-empty-fg);
+}
+
+/* --- checkbox row (docs/design.md §2 "Checkbox-Zeile") --- */
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 4px 0;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.checkbox-row .box {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 2px solid var(--checkbox-border);
+  flex-shrink: 0;
+}
+
+.checkbox-row.checked .box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox-row.checked .label {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+/* --- bottom navigation + "+" sheet (docs/design.md §3) --- */
+
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 76px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 10;
+}
+
+.bottom-bar a,
+.bottom-bar button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.bottom-bar a[aria-current="page"] {
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+/* Every hand-drawn icon here is on a 24px grid (design.md §2) and marked
+   aria-hidden - so this one rule sizes all of them, everywhere, without
+   needing a per-container override like a `.bottom-bar svg` scope (which
+   left unstyled icons elsewhere at the SVG default 300x150 replaced-size,
+   visible as a big empty box next to the chores week-switcher). More
+   specific rules (e.g. the "+" button's 26px circle) still win. */
+svg[aria-hidden="true"] {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.bottom-bar .add-button {
+  position: relative;
+  top: -26px;
+}
+
+.bottom-bar .add-button span.circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 5px var(--surface);
+}
+
+.bottom-bar .add-button span.circle svg {
+  width: 26px;
+  height: 26px;
+  stroke: #fff;
+}
+
+/* bottom sheet, rendered as <dialog> */
+
+dialog.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  border: none;
+  border-radius: 24px 24px 0 0;
+  padding: 20px;
+  background: var(--surface);
+}
+
+dialog.sheet::backdrop {
+  background: var(--overlay);
+}
+
+dialog.sheet .handle {
+  width: 40px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--control-border);
+  margin: 0 auto 16px;
+}
+
+.sheet-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.sheet-option .icon-tile {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--accent-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sheet-option .title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sheet-option .hint {
+  font-size: 13px;
+  color: var(--muted);
+}

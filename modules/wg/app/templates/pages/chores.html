@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}{{ t("chores.title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <h1>{{ t("chores.title") }}</h1>
+  <p class="text-muted">{{ t("chores.subtitle") }}</p>
+
+  {% if error == "reason_required" %}
+    <p class="card text-error" role="alert">{{ t("chores.error.reason_required") }}</p>
+  {% endif %}
+
+  <div class="card">
+    <div class="week-switcher">
+      <a class="btn secondary" href="{{ base_path }}/chores?week={{ prev_week.isoformat() }}" aria-label="{{ t('chores.week.previous') }}">
+        <svg aria-hidden="true"><use href="{{ base_path }}/static/icons/sprite.svg#icon-chevron-left"></use></svg>
+      </a>
+      <strong>{{ week_label(week, lang) }} · {{ week_range(week, lang) }}</strong>
+      <a class="btn secondary" href="{{ base_path }}/chores?week={{ next_week.isoformat() }}" aria-label="{{ t('chores.week.next') }}">
+        <svg aria-hidden="true"><use href="{{ base_path }}/static/icons/sprite.svg#icon-chevron-right"></use></svg>
+      </a>
+    </div>
+    {% if is_current_week %}<p class="text-muted">{{ t("chores.this_week") }}</p>{% endif %}
+  </div>
+
+  <div class="card stack">
+    {% for row in rows %}
+      <div class="stack">
+        <div>
+          <span class="title">
+            {{ row.chore.name_de if lang == "de" else row.chore.name_en }}
+          </span>
+          <span class="text-muted">
+            · {{ row.assigned_member.name if row.assigned_member else t("chores.free") }}
+          </span>
+          <span class="chip {{ row.status }}">{{ t("chores.status." + row.status) }}</span>
+        </div>
+
+        {% if row.status == "skipped" and row.entry %}
+          <p class="text-muted">{{ row.entry.reason }}</p>
+        {% endif %}
+
+        {% if row.is_mine %}
+          <div class="stack">
+            {% if row.status in ("open", "missed") %}
+              <form method="post" action="{{ base_path }}/chores/{{ week.isoformat() }}/{{ row.chore.id }}/done">
+                <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+                <button type="submit" class="btn primary">{{ t("chores.action.done") }}</button>
+              </form>
+              <details>
+                <summary>{{ t("chores.action.skip") }}</summary>
+                <form method="post" action="{{ base_path }}/chores/{{ week.isoformat() }}/{{ row.chore.id }}/skip" class="stack">
+                  <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+                  <label for="reason-{{ row.chore.id }}">{{ t("chores.action.reason_label") }}</label>
+                  <input id="reason-{{ row.chore.id }}" name="reason" required minlength="3" />
+                  <button type="submit" class="btn secondary">{{ t("chores.action.skip_submit") }}</button>
+                </form>
+              </details>
+            {% elif row.status in ("done", "skipped") %}
+              <form method="post" action="{{ base_path }}/chores/{{ week.isoformat() }}/{{ row.chore.id }}/undo">
+                <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+                <button type="submit" class="btn secondary">{{ t("chores.action.undo") }}</button>
+              </form>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <h2>{{ t("chores.upcoming_title") }}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">{{ week_label(week, lang) }}</th>
+          {% for chore in chores %}
+            <th scope="col">{{ chore.name_de if lang == "de" else chore.name_en }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in upcoming %}
+          <tr>
+            <th scope="row">{{ week_label(entry.week, lang) }}</th>
+            {% for row in entry.rows %}
+              <td class="{{ 'money' if row.is_mine else '' }}">
+                {{ row.assigned_member.name if row.assigned_member else t("chores.free") }}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="text-muted">{{ t("chores.hint") }}</p>
+{% endblock %}

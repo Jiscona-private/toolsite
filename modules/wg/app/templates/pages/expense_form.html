@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}{{ (t("expenses.edit_title") if expense else t("expenses.new_title")) }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <a class="btn secondary" href="{{ base_path }}/expenses">{{ t("nav.cancel") }}</a>
+  <h1>{{ t("expenses.edit_title") if expense else t("expenses.new_title") }}</h1>
+
+  {% if error %}
+    <p class="card text-error" role="alert">{{ t("expenses.error." + error) }}</p>
+  {% endif %}
+
+  <form
+    method="post"
+    action="{% if expense %}{{ base_path }}/expenses/{{ expense.id }}/edit{% else %}{{ base_path }}/expenses/new{% endif %}"
+    class="card stack"
+  >
+    <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+    {% if items_raw %}<input type="hidden" name="items" value="{{ items_raw }}" />{% endif %}
+
+    <label for="amount">{{ t("expenses.field.amount") }}</label>
+    <input
+      id="amount"
+      name="amount"
+      inputmode="decimal"
+      required
+      value="{{ '%.2f'|format(expense.amount_cents / 100) if expense else '' }}"
+    />
+
+    <label for="description">{{ t("expenses.field.description") }}</label>
+    <input
+      id="description"
+      name="description"
+      required
+      maxlength="120"
+      value="{{ expense.description if expense else (prefill_description or '') }}"
+    />
+
+    <label>{{ t("expenses.field.paid_by") }}</label>
+    <div class="stack">
+      {% for m in members %}
+        <label>
+          <input
+            type="radio"
+            name="paid_by_id"
+            value="{{ m.id }}"
+            {% if (expense and expense.paid_by_id == m.id) or (not expense and m.id == member.id) %}checked{% endif %}
+          />
+          {{ m.name }}
+        </label>
+      {% endfor %}
+    </div>
+
+    <label>{{ t("expenses.field.category") }}</label>
+    <div class="stack">
+      {% for c in categories %}
+        <label>
+          <input
+            type="radio"
+            name="category_id"
+            value="{{ c.id }}"
+            {% if expense and expense.category_id == c.id %}checked{% endif %}
+          />
+          {{ c.name_de if lang == "de" else c.name_en }}
+        </label>
+      {% endfor %}
+    </div>
+
+    <label>{{ t("expenses.field.participants") }}</label>
+    <div class="stack">
+      {% for m in members %}
+        <label>
+          <input
+            type="checkbox"
+            name="participants"
+            value="{{ m.id }}"
+            {% if m.id in selected_participants %}checked{% endif %}
+          />
+          {{ m.name }}
+        </label>
+      {% endfor %}
+    </div>
+
+    <label for="spent_on">{{ t("expenses.field.date") }}</label>
+    <input
+      id="spent_on"
+      name="spent_on"
+      type="date"
+      required
+      value="{{ expense.spent_on.isoformat() if expense else today.isoformat() }}"
+    />
+
+    <button type="submit" class="btn primary full">{{ t("expenses.save") }}</button>
+  </form>
+
+  {% if expense %}
+    <form method="post" action="{{ base_path }}/expenses/{{ expense.id }}/delete">
+      <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+      <button type="submit" class="btn secondary full">{{ t("expenses.delete") }}</button>
+    </form>
+  {% endif %}
+{% endblock %}

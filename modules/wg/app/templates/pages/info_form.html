@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ t("board.info.edit_title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <a class="btn secondary" href="{{ base_path }}/board">{{ t("nav.cancel") }}</a>
+  <h1>{{ t("board.info.edit_title") }}</h1>
+
+  <form method="post" action="{{ base_path }}/board/info/{{ page.id }}/edit" class="card stack">
+    <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+
+    <label for="title">{{ t("board.info.field.title") }}</label>
+    <input id="title" name="title" required maxlength="60" value="{{ page.title }}" />
+
+    <label for="body">{{ t("board.info.field.body") }}</label>
+    <textarea id="body" name="body" required maxlength="4000" rows="8">{{ page.body }}</textarea>
+
+    <button type="submit" class="btn primary full">{{ t("board.info.save") }}</button>
+  </form>
+{% endblock %}

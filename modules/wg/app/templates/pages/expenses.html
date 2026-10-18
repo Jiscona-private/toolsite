@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{ t("expenses.title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <h1>{{ t("expenses.title") }}</h1>
+
+  <div class="card stack">
+    <h2>{{ t("expenses.balance_title") }}</h2>
+    <p class="display money {{ 'text-error' if my_balance < 0 else '' }}">{{ money(my_balance, lang) }}</p>
+    <p class="text-muted">{{ t("expenses.balance_sentence", paid=money(my_paid, lang), share=money(my_share, lang)) }}</p>
+    <div class="stack">
+      {% for other_member, balance in other_balances %}
+        <div>
+          <span>{{ other_member.name }}</span>
+          <span class="money {{ 'text-error' if balance < 0 else '' }}">{{ money(balance, lang) }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card stack">
+    <h2>{{ t("expenses.transfers_title") }}</h2>
+    {% if transfer_rows %}
+      {% for row in transfer_rows %}
+        <div class="stack">
+          <div>
+            <span>{{ row.label }}</span>
+            <span class="money">{{ money(row.amount_cents, lang) }}</span>
+          </div>
+          {% if row.from_member.id == member.id %}
+            <form method="post" action="{{ base_path }}/settlements">
+              <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+              <input type="hidden" name="to_member_id" value="{{ row.to_member.id }}" />
+              <input type="hidden" name="amount" value="{{ '%.2f'|format(row.amount_cents / 100) }}" />
+              <button type="submit" class="btn secondary">{{ t("expenses.settle_action") }}</button>
+            </form>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">{{ t("expenses.all_settled") }}</p>
+    {% endif %}
+  </div>
+
+  <div class="card stack">
+    <h2>{{ t("expenses.recent_title") }} · <a href="{{ base_path }}/expenses/all">{{ t("expenses.all_link", count=recent_total_count) }}</a></h2>
+    {% if recent %}
+      {% for item in recent %}
+        <a class="sheet-option" href="{{ base_path }}/expenses/{{ item.expense.id }}/edit">
+          <span>
+            <span class="title">{{ item.expense.description }}</span><br />
+            <span class="hint">{{ item.participants_label }} · {{ day(item.expense.spent_on, lang) }}</span>
+          </span>
+          <span class="money">{{ money(item.expense.amount_cents, lang) }}</span>
+        </a>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">{{ t("expenses.none_yet") }}</p>
+    {% endif %}
+  </div>
+{% endblock %}

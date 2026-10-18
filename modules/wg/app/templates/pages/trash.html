@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ t("settings.trash_title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <a class="btn secondary" href="{{ base_path }}/settings">{{ t("nav.back") }}</a>
+  <h1>{{ t("settings.trash_title") }}</h1>
+  <p class="text-muted">{{ t("settings.trash.hint") }}</p>
+
+  <div class="card stack">
+    {% for item in items %}
+      <div class="settings-row">
+        <span class="flex-1">
+          {% if item.entity == "expense" %}
+            {{ item.row.description }} ({{ money(item.row.amount_cents, lang) }})
+          {% elif item.entity == "settlement" %}
+            {{ t("settings.trash.settlement_label", amount=money(item.row.amount_cents, lang)) }}
+          {% elif item.entity == "note" %}
+            {{ item.row.body[:60] }}
+          {% endif %}
+          <br />
+          <span class="text-muted">{{ datetime_label(item.deleted_at, lang) }}</span>
+        </span>
+        <form method="post" action="{{ base_path }}/settings/trash/{{ item.entity }}/{{ item.id }}/restore">
+          <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+          <button type="submit" class="btn secondary">{{ t("settings.trash.restore") }}</button>
+        </form>
+      </div>
+    {% else %}
+      <p class="text-muted">{{ t("settings.trash.empty") }}</p>
+    {% endfor %}
+  </div>
+{% endblock %}

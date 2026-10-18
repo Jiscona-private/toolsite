@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ t("board.note.new_title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <a class="btn secondary" href="{{ base_path }}/board">{{ t("nav.cancel") }}</a>
+  <h1>{{ t("board.note.new_title") }}</h1>
+
+  <form method="post" action="{{ base_path }}/board/notes/new" class="card stack">
+    <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+
+    <label for="body">{{ t("board.note.field.body") }}</label>
+    <textarea id="body" name="body" required maxlength="1000" rows="4"></textarea>
+
+    <label>
+      <input type="checkbox" name="pinned" value="true" />
+      {{ t("board.note.field.pinned") }}
+    </label>
+
+    <label for="expires_on">{{ t("board.note.field.expires") }}</label>
+    <input id="expires_on" name="expires_on" type="date" />
+
+    <button type="submit" class="btn primary full">{{ t("board.note.save") }}</button>
+  </form>
+{% endblock %}

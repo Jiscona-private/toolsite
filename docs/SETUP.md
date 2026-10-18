@@ -68,19 +68,11 @@ Fill in:
 
 - `DOMAIN` — the hostname you pointed at the VPS (e.g. `yourname.duckdns.org`).
 - `ACME_EMAIL` — your email, used only for Let's Encrypt expiry notices.
-- `WG_BASIC_AUTH_USER` — the username for logging into the WG Manager module.
-- `WG_BASIC_AUTH_HASH` — generate it **pre-escaped for `.env`** with:
+- `WG_SECRET_KEY` — signs WG-Manager v1's cookies and CSRF tokens:
 
   ```bash
-  docker run --rm caddy:2-alpine caddy hash-password --plaintext 'your-password' | sed 's/\$/\$\$/g'
+  python3 -c "import secrets; print(secrets.token_hex(32))"
   ```
-
-  Paste that output as-is into `.env`. The `sed` step matters: Compose's
-  `.env` parser treats an unescaped `$word` inside a value as a reference
-  to another variable and silently blanks it out, which corrupts a bcrypt
-  hash (they're full of `$`). Doubling each `$` to `$$` is how you tell it
-  to treat them literally — Compose un-escapes `$$` back to `$` before the
-  value reaches the container, so Caddy sees the real hash.
 
 ## 5. First launch
 
@@ -111,8 +103,10 @@ pipeline works without burning your production rate limit.)
 ## 6. Visit the site
 
 Open `https://<your-domain>/` — you should see the Toolsite landing page
-listing installed modules. `https://<your-domain>/wg/` is the WG Manager
-(prompts for the Basic Auth credentials from step 4).
+listing installed modules. `https://<your-domain>/wg/` without a join link
+is a plain "Not Found" by design (see `modules/wg/CLAUDE.md`); run
+`docker compose exec wg python -m app.cli init --seed deploy/seed.toml`
+once to seed the household and print that link.
 
 ## Ongoing operations
 
@@ -124,12 +118,12 @@ listing installed modules. `https://<your-domain>/wg/` is the WG Manager
   # 0 3 * * * /opt/toolsite/scripts/backup.sh >> /var/log/toolsite-backup.log 2>&1
   ```
 - **Add a new tool:** see `docs/ADDING_MODULES.md`.
-- **Logs:** `docker compose logs -f <service>` (e.g. `caddy`, `landing`, `wg-manager`).
+- **Logs:** `docker compose logs -f <service>` (e.g. `caddy`, `landing`, `wg`).
 
 ## Resource notes for a Pico-tier VPS
 
 This stack is intentionally light: Caddy (~20-30 MB RAM), the landing page
-(a few MB, no build step), and each module as a small Node process with
+(a few MB, no build step), and each module as a small single process with
 SQLite (file-based, no separate database server to run). Keep that pattern
 for new modules — avoid adding a full database server (Postgres/MySQL)
 unless you've checked the VPS has RAM to spare; SQLite covers nearly

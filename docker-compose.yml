@@ -4,7 +4,7 @@ name: toolsite
 # means adding one line here — see docs/ADDING_MODULES.md.
 include:
   - landing/compose.yaml
-  - modules/wg-manager/compose.yaml
+  - modules/wg/compose.yaml
   - modules/hoema/compose.yaml
 
 services:
@@ -17,8 +17,6 @@ services:
     environment:
       - DOMAIN=${DOMAIN}
       - ACME_EMAIL=${ACME_EMAIL}
-      - WG_BASIC_AUTH_USER=${WG_BASIC_AUTH_USER}
-      - WG_BASIC_AUTH_HASH=${WG_BASIC_AUTH_HASH}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

@@ -6,7 +6,7 @@ without touching anything else.
 
 ```
 https://<your-domain>/        → landing page, lists every installed module
-https://<your-domain>/wg/     → WG Manager (shared expenses, chores, shopping list)
+https://<your-domain>/wg/     → WG-Manager v1 (chores, shared expenses, shopping list, ...)
 https://<your-domain>/hoema/  → HöMa I lesson pages (static, public)
 ```
 
@@ -18,19 +18,19 @@ what Caddy uses to get automatic Let's Encrypt certificates.
 
 - **[Caddy](https://caddyserver.com/)** — reverse proxy, automatic HTTPS, the only container exposed to the internet.
 - **Docker Compose**, using the `include:` feature so every module ships its own `compose.yaml`.
-- **Node.js + Express** per module, **SQLite** (`better-sqlite3`) for anything that needs storage. No shared database server, no build pipeline — this runs on a netcup *Pico* tier VPS with very little RAM to spare.
+- Each module picks its own stack - mostly **Node.js + Express**, **SQLite** for anything that needs storage. `modules/wg` is Python/FastAPI (its own `CLAUDE.md`/`docs/` explain why). No shared database server, no build pipeline for the Node modules - this runs on a netcup *Pico* tier VPS with very little RAM to spare.
 
 ## Repository layout
 
 ```
 docker-compose.yml       # root — includes every active module
-Caddyfile                # routing + TLS + Basic Auth for sensitive modules
+Caddyfile                # routing + automatic TLS (Basic Auth available per-module, see Caddyfile)
 .env.example             # copy to .env on the server, fill in real values
 
 landing/                 # public landing page (auto-lists modules)
 
 modules/
-  wg-manager/             # shared expenses, chore rotation, shopping list
+  wg/                     # WG-Manager v1: chores, shared expenses, shopping list, ...
   hoema/                  # HöMa I lesson pages (static, public)
   _template/              # starting point for new modules (never deployed)
 
@@ -66,12 +66,16 @@ production.
 interactive lesson pages for a maths self-study. No server-side state: answers
 and progress stay in each visitor's browser. See `modules/hoema/README.md`.
 
-**WG Manager** (`modules/wg-manager`) — for a shared flat:
-- Shared expenses, split evenly across residents, with running balances and
-  a "who pays whom to settle up" suggestion.
-- Chores that rotate round-robin across residents as they're marked done.
-- A shared shopping list.
+**WG-Manager v1** (`modules/wg`, at `/wg/`) — for a shared flat:
+- A weekly rotating chore plan, with swaps, substitutions, and a "skipped"
+  state that always needs a reason.
+- Shared expenses with automatic, rounding-correct splitting and a "who
+  pays whom to settle up" suggestion.
+- A shared shopping list, a pinboard, and a protocol/trash with 30-day
+  undo for anything deleted.
+- Installable as a PWA.
 
-It sits behind HTTP Basic Auth (shared credentials for the household,
-configured in `.env`/`Caddyfile`) since it holds personal data; the landing
-page itself is public.
+No accounts or passwords: access is a secret join-link shared only within
+the household, after which every request without a valid session 404s
+(never a login prompt) - see `modules/wg/CLAUDE.md` for the full design.
+The landing page itself is public.

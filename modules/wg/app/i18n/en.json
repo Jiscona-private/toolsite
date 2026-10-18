@@ -186,5 +186,7 @@
   "log.profile.language": "set the language to {language}.",
   "log.restore": "restored an entry.",
   "offline.title": "No connection",
-  "offline.body": "This page isn't available offline. Please try again once you're back online."
+  "offline.body": "This page isn't available offline. Please try again once you're back online.",
+  "chores.week.previous": "Previous week",
+  "chores.week.next": "Next week"
 }

@@ -319,3 +319,18 @@ def test_done_skip_and_undo_each_write_an_activity_log_entry(client: TestClient)
             for e in db.query(ActivityLog).filter_by(entity="chore", entity_id=chore_id).all()
         ]
     assert keys == ["log.chore.done", "log.chore.undo", "log.chore.skip"]
+
+
+def test_week_switcher_arrows_have_distinct_correct_labels(client: TestClient) -> None:
+    # Regression test: the "next week" arrow used to carry a bare "›"
+    # character plus aria-label="nav.chores" ("Putzplan") instead of an
+    # icon and a label actually describing what the button does.
+    seeded = _seed(client)
+    _login_as(client, seeded["member_id"]["Jakob"])
+
+    page = client.get("/wg/chores").text
+    assert 'aria-label="Vorherige Woche"' in page
+    assert 'aria-label="Nächste Woche"' in page
+    assert "›" not in page
+    assert page.count("icon-chevron-left") == 1
+    assert page.count("icon-chevron-right") == 1

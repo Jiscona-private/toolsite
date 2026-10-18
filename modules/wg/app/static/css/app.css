@@ -149,6 +149,54 @@ a {
   outline-offset: 2px;
 }
 
+/* Form controls: every page so far used the bare browser default here -
+   one pass now styles all of them consistently (Qualitätsrunde). */
+label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+textarea,
+select {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--control-border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* A <label> directly wrapping its checkbox/radio (the pattern every
+   template here uses) gets the same 44px touch target as everything
+   else, label text included - not just the input itself. */
+label:has(> input[type="checkbox"]),
+label:has(> input[type="radio"]) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-weight: 400;
+  font-size: 15px;
+}
+
 .page {
   max-width: 480px;
   margin: 0 auto;

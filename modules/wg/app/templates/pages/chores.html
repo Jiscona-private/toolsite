@@ -10,11 +10,13 @@
 
   <div class="card">
     <div class="week-switcher">
-      <a class="btn secondary" href="{{ base_path }}/chores?week={{ prev_week.isoformat() }}" aria-label="{{ t('nav.back') }}">
+      <a class="btn secondary" href="{{ base_path }}/chores?week={{ prev_week.isoformat() }}" aria-label="{{ t('chores.week.previous') }}">
         <svg aria-hidden="true"><use href="{{ base_path }}/static/icons/sprite.svg#icon-chevron-left"></use></svg>
       </a>
       <strong>{{ week_label(week, lang) }} · {{ week_range(week, lang) }}</strong>
-      <a class="btn secondary" href="{{ base_path }}/chores?week={{ next_week.isoformat() }}" aria-label="{{ t('nav.chores') }}">›</a>
+      <a class="btn secondary" href="{{ base_path }}/chores?week={{ next_week.isoformat() }}" aria-label="{{ t('chores.week.next') }}">
+        <svg aria-hidden="true"><use href="{{ base_path }}/static/icons/sprite.svg#icon-chevron-right"></use></svg>
+      </a>
     </div>
     {% if is_current_week %}<p class="text-muted">{{ t("chores.this_week") }}</p>{% endif %}
   </div>

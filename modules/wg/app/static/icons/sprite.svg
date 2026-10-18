@@ -47,6 +47,9 @@
     <g id="icon-chevron-left" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 5l-7 7 7 7" />
     </g>
+    <g id="icon-chevron-right" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 5l7 7-7 7" />
+    </g>
     <g id="icon-close" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
       <path d="M6 6l12 12" />
       <path d="M18 6L6 18" />

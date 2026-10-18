@@ -40,7 +40,7 @@ Jeder Schritt endet mit grünen Tests, `ruff` und einem Commit.
 12. [x] **Protokoll und Papierkorb:** Anzeige, Wiederherstellen, Job zum endgültigen Löschen.
 13. [x] **PWA:** Manifest, Icons, Service Worker, Offline-Seite.
 14. [x] **Backup-Job** (03:30) + Admin-ntfy bei Fehlern.
-15. [ ] **Qualitätsrunde:** alle Seiten bei 360/390 px, Tastatur und Screenreader-Labels, Kontraste, DE/EN-Durchsicht, Smoke-Test aller GET-Routen.
+15. [x] **Qualitätsrunde:** alle Seiten bei 360/390 px, Tastatur und Screenreader-Labels, Kontraste, DE/EN-Durchsicht, Smoke-Test aller GET-Routen.
 16. [ ] **Umstieg in der Toolsite** nach `docs/module-integration.md`: Include-Zeile tauschen, Caddy-Block ohne Basic Auth, `module.json`, Dummy `modules/wg-manager/` entfernen, README/`.env.example` anpassen.
 17. [ ] Lokal testen (du), dann `./scripts/deploy.sh` auf dem VPS, `init`, Link in der WG-Gruppe teilen (du)
 18. [ ] Zwei Wochen Alltagstest mit allen vier

@@ -119,3 +119,12 @@ def test_card_class_is_block_so_a_link_card_keeps_its_background() -> None:
     css = (Path(__file__).parent.parent / "app" / "static" / "css" / "app.css").read_text()
     card_rule = css.split(".card {", 1)[1].split("}", 1)[0]
     assert "display: block" in card_rule
+
+
+def test_text_inputs_and_textareas_are_styled() -> None:
+    # Qualitätsrunde: every form up to this point relied on the bare
+    # browser default for <input>/<textarea>/<select> - this one CSS rule
+    # covers all of them at once instead of styling each template.
+    css = (Path(__file__).parent.parent / "app" / "static" / "css" / "app.css").read_text()
+    assert 'input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"])' in css
+    assert "min-height: 44px" in css  # touch target, CLAUDE.md rule 10

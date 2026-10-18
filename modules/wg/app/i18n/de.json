@@ -186,5 +186,7 @@
   "log.profile.language": "hat die Sprache auf {language} gestellt.",
   "log.restore": "hat einen Eintrag wiederhergestellt.",
   "offline.title": "Keine Verbindung",
-  "offline.body": "Diese Seite ist offline nicht verfügbar. Bitte versuch es erneut, sobald du wieder online bist."
+  "offline.body": "Diese Seite ist offline nicht verfügbar. Bitte versuch es erneut, sobald du wieder online bist.",
+  "chores.week.previous": "Vorherige Woche",
+  "chores.week.next": "Nächste Woche"
 }

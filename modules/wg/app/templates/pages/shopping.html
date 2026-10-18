@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ t("shopping.title") }} - {{ wg_name }}{% endblock %}
+{% block content %}
+  <h1>{{ t("shopping.title") }}</h1>
+  <p class="text-muted">{{ t("shopping.subtitle") }}</p>
+
+  {% if duplicate_name %}
+    <p class="card text-muted" role="status">{{ duplicate_name }} {{ t("shopping.duplicate") }}</p>
+  {% endif %}
+
+  <form method="post" action="{{ base_path }}/shopping" class="card stack">
+    <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+    <input
+      name="name"
+      placeholder="{{ t('shopping.add_placeholder') }}"
+      required
+      maxlength="80"
+      {% if focus %}autofocus{% endif %}
+    />
+    <input name="quantity" placeholder="{{ t('shopping.field.quantity') }}" maxlength="30" />
+    <input name="note" placeholder="{{ t('shopping.field.note') }}" maxlength="120" />
+    <button type="submit" class="btn primary full">{{ t("shopping.add_submit") }}</button>
+  </form>
+
+  <div class="card stack">
+    <h2>{{ t("shopping.list_title") }} · {{ t("shopping.open_count", count=open_items|length) }}</h2>
+    {% if open_items %}
+      {% for item in open_items %}
+        {% include "partials/shopping_item.html" %}
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">{{ t("shopping.empty") }}</p>
+    {% endif %}
+
+    {% if checked_items %}
+      <h2>{{ t("shopping.in_cart_title") }}</h2>
+      {% for item in checked_items %}
+        {% include "partials/shopping_item.html" %}
+      {% endfor %}
+
+      <a
+        class="btn secondary full"
+        href="{{ base_path }}/expenses/new?items={{ checked_items|map(attribute='id')|join(',') }}"
+      >
+        {{ t("shopping.mark_as_expense", count=checked_items|length) }}
+      </a>
+      <form method="post" action="{{ base_path }}/shopping/clear-checked">
+        <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+        <button type="submit" class="btn secondary full">{{ t("shopping.clear_checked") }}</button>
+      </form>
+    {% endif %}
+  </div>
+{% endblock %}

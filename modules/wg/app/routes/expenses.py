@@ -10,8 +10,8 @@ from sqlalchemy.orm import Session
 from app.auth import require_csrf
 from app.config import settings
 from app.db import get_db
-from app.models import Expense, ExpenseCategory, ExpenseShare, Member, Settlement
-from app.services import ledger
+from app.models import Expense, ExpenseCategory, ExpenseShare, Member, Settlement, ShoppingItem
+from app.services import ledger, shopping
 from app.templating import base_context, templates
 from app.timezone import berlin_today
 
@@ -166,10 +166,18 @@ def _form_context(
 
 
 @router.get("/new")
-def new_expense_form(request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
-    return templates.TemplateResponse(
-        request, "pages/expense_form.html", _form_context(request, db, expense=None, error=None)
-    )
+def new_expense_form(
+    request: Request, items: str | None = None, db: Session = Depends(get_db)
+) -> HTMLResponse:
+    context = _form_context(request, db, expense=None, error=None)
+    if items:
+        item_ids = [int(i) for i in items.split(",") if i.strip().isdigit()]
+        names = [
+            i.name for i in db.scalars(select(ShoppingItem).where(ShoppingItem.id.in_(item_ids)))
+        ]
+        context["prefill_description"] = ", ".join(names)
+        context["items_raw"] = items
+    return templates.TemplateResponse(request, "pages/expense_form.html", context)
 
 
 def _parse_expense_form(
@@ -210,6 +218,7 @@ def create_expense(
     category_id: int | None = Form(None),
     spent_on: str = Form(...),
     participants: list[int] = Form(default_factory=list),
+    items: str | None = Form(None),
     db: Session = Depends(get_db),
 ) -> Response:
     parsed = _parse_expense_form(
@@ -230,7 +239,7 @@ def create_expense(
         )
     amount_cents, spent_on_date, participant_ids = parsed
 
-    ledger.create_expense(
+    expense = ledger.create_expense(
         db,
         description=description.strip(),
         amount_cents=amount_cents,
@@ -240,6 +249,10 @@ def create_expense(
         participant_ids=participant_ids,
         created_by=request.state.member_id,
     )
+    if items:
+        item_ids = [int(i) for i in items.split(",") if i.strip().isdigit()]
+        db.flush()
+        shopping.mark_as_expense(db, item_ids, expense.id)
     db.commit()
     return RedirectResponse(f"{settings.base_path}/expenses", status_code=303)
 

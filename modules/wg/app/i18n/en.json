@@ -69,5 +69,20 @@
   "expenses.error.amount": "Please enter a valid amount between €0.01 and €10,000.",
   "expenses.error.participants": "Please pick at least one participant.",
   "expenses.error.date": "The date can be at most one year in the future.",
-  "settlements.delete": "Undo"
+  "settlements.delete": "Undo",
+
+  "shopping.title": "Shopping",
+  "shopping.subtitle": "Shopping list",
+  "shopping.add_placeholder": "Add an item …",
+  "shopping.add_submit": "Add",
+  "shopping.field.quantity": "Quantity (optional)",
+  "shopping.field.note": "Note (optional)",
+  "shopping.list_title": "Shopping list",
+  "shopping.open_count": "{count} open",
+  "shopping.in_cart_title": "In the cart",
+  "shopping.mark_as_expense": "Add {count} items as an expense",
+  "shopping.clear_checked": "Remove checked items",
+  "shopping.duplicate": "already on the list",
+  "shopping.empty": "Nothing on the list yet.",
+  "shopping.added_by": "by {name}"
 }

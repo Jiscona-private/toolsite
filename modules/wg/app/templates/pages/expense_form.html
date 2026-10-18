@@ -14,6 +14,7 @@
     class="card stack"
   >
     <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+    {% if items_raw %}<input type="hidden" name="items" value="{{ items_raw }}" />{% endif %}
 
     <label for="amount">{{ t("expenses.field.amount") }}</label>
     <input
@@ -30,7 +31,7 @@
       name="description"
       required
       maxlength="120"
-      value="{{ expense.description if expense else '' }}"
+      value="{{ expense.description if expense else (prefill_description or '') }}"
     />
 
     <label>{{ t("expenses.field.paid_by") }}</label>

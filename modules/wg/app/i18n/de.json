@@ -69,5 +69,20 @@
   "expenses.error.amount": "Bitte einen gültigen Betrag zwischen 0,01 € und 10.000 € angeben.",
   "expenses.error.participants": "Bitte mindestens einen Teilnehmer wählen.",
   "expenses.error.date": "Das Datum darf höchstens ein Jahr in der Zukunft liegen.",
-  "settlements.delete": "Zurücknehmen"
+  "settlements.delete": "Zurücknehmen",
+
+  "shopping.title": "Einkauf",
+  "shopping.subtitle": "Einkaufsliste",
+  "shopping.add_placeholder": "Artikel hinzufügen …",
+  "shopping.add_submit": "Hinzufügen",
+  "shopping.field.quantity": "Menge (optional)",
+  "shopping.field.note": "Notiz (optional)",
+  "shopping.list_title": "Einkaufsliste",
+  "shopping.open_count": "{count} offen",
+  "shopping.in_cart_title": "Im Wagen",
+  "shopping.mark_as_expense": "{count} Artikel als Ausgabe eintragen",
+  "shopping.clear_checked": "Erledigte entfernen",
+  "shopping.duplicate": "steht schon drauf",
+  "shopping.empty": "Noch nichts auf der Liste.",
+  "shopping.added_by": "von {name}"
 }

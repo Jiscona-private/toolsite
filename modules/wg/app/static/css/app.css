@@ -273,6 +273,41 @@ a {
   color: var(--status-empty-fg);
 }
 
+/* --- checkbox row (docs/design.md §2 "Checkbox-Zeile") --- */
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 4px 0;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.checkbox-row .box {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 2px solid var(--checkbox-border);
+  flex-shrink: 0;
+}
+
+.checkbox-row.checked .box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox-row.checked .label {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
 /* --- bottom navigation + "+" sheet (docs/design.md §3) --- */
 
 .bottom-bar {

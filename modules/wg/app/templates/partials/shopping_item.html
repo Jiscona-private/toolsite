@@ -1,0 +1,21 @@
+{# Standalone fragment: both the full /shopping page (looped) and the
+   htmx toggle response (swapped in via hx-target="this" hx-swap="outerHTML")
+   render this same partial, so a checked item never looks different
+   depending on whether JS is on. #}
+<form
+  method="post"
+  action="{{ base_path }}/shopping/{{ item.id }}/toggle"
+  hx-post="{{ base_path }}/shopping/{{ item.id }}/toggle"
+  hx-target="this"
+  hx-swap="outerHTML"
+>
+  <input type="hidden" name="csrf" value="{{ csrf_token }}" />
+  <button type="submit" class="checkbox-row {{ 'checked' if item.checked_at else '' }}">
+    <span class="box" aria-hidden="true"></span>
+    <span class="label">
+      {{ item.name }}{% if item.quantity %} · {{ item.quantity }}{% endif %}
+      <br />
+      <span class="text-muted">{{ t("shopping.added_by", name=members[item.added_by].name) }}</span>
+    </span>
+  </button>
+</form>

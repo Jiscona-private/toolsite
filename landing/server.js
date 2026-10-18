@@ -57,6 +57,7 @@ function renderPage(modules) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
   <title>Toolsite</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -78,5 +79,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/healthz", (req, res) => res.send("ok"));
+
+app.get("/robots.txt", (req, res) => {
+  res.type("text/plain").send("User-agent: *\nDisallow: /\n");
+});
 
 app.listen(PORT, () => console.log(`landing listening on :${PORT}`));

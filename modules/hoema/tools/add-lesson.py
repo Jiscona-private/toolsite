@@ -73,6 +73,10 @@ def main() -> int:
     # lang attribute
     html, n = re.subn(r"<html(?![^>]*\blang=)", '<html lang="de"', html, count=1, flags=re.I)
 
+    # keep lessons out of search engines (noindex), idempotent
+    if not re.search(r'<meta\s+name=["\']?robots["\']?', html, re.I):
+        html, n = re.subn(r"<head[^>]*>", lambda m: m.group(0) + '<meta name="robots" content="noindex, nofollow">', html, count=1, flags=re.I)
+
     # back link into the hero eyebrow (or right after <body> as fallback)
     if BACK_MARK not in html:
         html, n = re.subn(r'(<div class="eyebrow">)', r"\1" + BACK_LINK.replace("\\", "\\\\"), html, count=1)

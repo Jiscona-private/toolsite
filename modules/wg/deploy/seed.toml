@@ -1,0 +1,114 @@
+# Startdaten der WG – wird einmalig mit `python -m app.cli init --seed deploy/seed.toml` eingelesen.
+# Nur für eine leere Datenbank. Spätere Änderungen laufen über die Einstellungen in der App.
+
+[wg]
+name = "WG-App"                  # offener Punkt: Name der App
+timezone = "Europe/Berlin"
+default_language = "de"
+
+# Reihenfolge = Anzeigereihenfolge (position). color = Index der Avatar-Palette (docs/design.md 1.2).
+[[members]]
+name = "Jakob"
+color = 0
+language = "de"
+
+[[members]]
+name = "Clara"
+color = 1
+language = "de"
+
+[[members]]
+name = "Daniel"
+color = 2
+language = "de"
+
+[[members]]
+name = "Bato"
+color = 3
+language = "de"
+
+# Reihenfolge = Rotationsreihenfolge (Boden -> Küche & Müll -> Großes Bad -> Kleines Bad -> Boden)
+[[chores]]
+key = "floor"
+name_de = "Boden"
+name_en = "Floor"
+
+[[chores]]
+key = "kitchen"
+name_de = "Küche & Müll"
+name_en = "Kitchen & Trash"
+
+[[chores]]
+key = "big_bath"
+name_de = "Großes Bad"
+name_en = "Large Bathroom"
+
+[[chores]]
+key = "small_bath"
+name_de = "Kleines Bad"
+name_en = "Small Bathroom"
+
+# Startverteilung: abgestimmt am 18.10.2026
+[rota]
+start_week = "2026-10-19"        # Montag, KW 43
+
+[rota.start]
+floor = "Clara"
+kitchen = "Bato"
+big_bath = "Jakob"
+small_bath = "Daniel"
+
+# Ausgaben starten bei null (keine Altdaten).
+# Offener Punkt: Kategorien bestätigen lassen.
+[[expense_categories]]
+key = "groceries"
+name_de = "Lebensmittel"
+name_en = "Groceries"
+
+[[expense_categories]]
+key = "cleaning"
+name_de = "Putzmittel"
+name_en = "Cleaning supplies"
+
+[[expense_categories]]
+key = "household"
+name_de = "Haushalt"
+name_en = "Household"
+
+[[expense_categories]]
+key = "other"
+name_de = "Sonstiges"
+name_en = "Other"
+
+# Vorräte (Phase 2), Start-Status "ok"
+[[supplies]]
+name = "Klopapier"
+
+[[supplies]]
+name = "Spülmittel"
+
+[[supplies]]
+name = "Müllbeutel"
+
+[[supplies]]
+name = "Schwämme"
+
+[[supplies]]
+name = "Handseife"
+
+# WG-Infos mit Platzhaltern, in der App ausfüllen
+[[info_pages]]
+title = "WLAN"
+body = "Netz: [Name]\nPasswort: [Passwort]"
+
+[[info_pages]]
+title = "Hausmeister"
+body = "Name: [Name]\nTelefon: [Nummer]\nErreichbar: [Zeiten]"
+
+[[info_pages]]
+title = "Hausregeln"
+body = "[Regeln eintragen]"
+
+[[info_pages]]
+title = "Notfall"
+body = "Notruf 112\nGiftnotruf, Vermieter, Schlüsseldienst: [eintragen]"

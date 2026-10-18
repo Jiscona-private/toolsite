@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WG-App – Neue Ausgabe</title>
+<!-- Referenz-Mockup aus der Design-Vorschau (Planungsphase). Inline-Styles nur fuer das Mockup; in der App alles ueber Klassen in app/static/css/app.css. Google-Fonts-Link nur hier zur Ansicht; die App hostet Schriften selbst. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Figtree:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F6F5C}a:hover{color:#174F42}
+</style>
+<style>html{background:#D9DCD5}body{margin:0;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:24px 0;box-sizing:border-box}@media (max-width:420px){body{padding:0}}</style>
+</head>
+<body>
+<div style="width: 390px; height: 900px; position: relative; overflow: hidden; box-sizing: border-box; background: #F4F5F1; font-family: 'Figtree', sans-serif; color: #1B1F1D">
+<main style="padding: 12px 20px 24px; display: flex; flex-direction: column; gap: 16px">
+
+<header style="display: flex; flex-direction: column; gap: 6px">
+<a href="Ausgaben.html" style="align-self: flex-start; height: 44px; display: flex; align-items: center; gap: 4px; margin-left: -6px; padding: 0 6px; text-decoration: none; font-size: 15px; font-weight: 600"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M6 6l12 12M18 6L6 18"></path></svg>Abbrechen</a>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -0.01em">Neue Ausgabe</h1>
+</header>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="betrag" style="font-size: 14px; font-weight: 600; color: #4A524E">Betrag</label>
+<div style="display: flex; align-items: center; height: 68px; box-sizing: border-box; padding: 0 16px; background: #FFFFFF; border: 2px solid #1F6F5C; border-radius: 16px">
+<input id="betrag" inputmode="decimal" value="6,40" style="flex: 1; min-width: 0; border: 0; outline: none; background: transparent; font-family: 'Bricolage Grotesque', sans-serif; font-size: 34px; font-weight: 700; color: #1B1F1D; font-variant-numeric: tabular-nums">
+<span aria-hidden="true" style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700; color: #5B635F">€</span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="wofuer" style="font-size: 14px; font-weight: 600; color: #4A524E">Wofür?</label>
+<input id="wofuer" value="Backpapier &amp; Alufolie" style="height: 48px; box-sizing: border-box; padding: 0 14px; background: #FFFFFF; border: 1px solid #CDD2CB; border-radius: 12px; font-family: 'Figtree', sans-serif; font-size: 16px; color: #1B1F1D">
+</div>
+
+<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 8px">
+<legend style="padding: 0; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #4A524E">Bezahlt von</legend>
+<div style="display: flex; gap: 8px">
+<button type="button" aria-pressed="true" style="flex: 1; height: 44px; border: 0; border-radius: 12px; background: #1F6F5C; color: #FFFFFF; font-family: 'Figtree', sans-serif; font-size: 15px; font-weight: 700">Jakob</button>
+<button type="button" aria-pressed="false" style="flex: 1; height: 44px; border: 1px solid #CDD2CB; border-radius: 12px; background: #FFFFFF; color: #1B1F1D; font-family: 'Figtree', sans-serif; font-size: 15px; font-weight: 600">Clara</button>
+<button type="button" aria-pressed="false" style="flex: 1; height: 44px; border: 1px solid #CDD2CB; border-radius: 12px; background: #FFFFFF; color: #1B1F1D; font-family: 'Figtree', sans-serif; font-size: 15px; font-weight: 600">Daniel</button>
+<button type="button" aria-pressed="false" style="flex: 1; height: 44px; border: 1px solid #CDD2CB; border-radius: 12px; background: #FFFFFF; color: #1B1F1D; font-family: 'Figtree', sans-serif; font-size: 15px; font-weight: 600">Bato</button>
+</div>
+</fieldset>
+
+<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 8px">
+<legend style="padding: 0; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #4A524E">Kategorie</legend>
+<div style="display: flex; gap: 8px">
+<button type="button" aria-pressed="false" style="height: 40px; padding: 0 12px; border: 1px solid #CDD2CB; border-radius: 999px; background: #FFFFFF; color: #1B1F1D; font-family: 'Figtree', sans-serif; font-size: 14px; font-weight: 600">Essen</button>
+<button type="button" aria-pressed="false" style="height: 40px; padding: 0 12px; border: 1px solid #CDD2CB; border-radius: 999px; background: #FFFFFF; color: #1B1F1D; font-family: 'Figtree', sans-serif; font-size: 14px; font-weight: 600">Putzmittel</button>
+<button type="button" aria-pressed="true" style="height: 40px; padding: 0 12px; border: 1px solid #1F6F5C; border-radius: 999px; background: #DCEBE5; color: #174F42; font-family: 'Figtree', sans-serif; font-size: 14px; font-weight: 700">Haushalt</button>
+<button type="button" aria-pressed="false" style="height: 40px; padding: 0 12px; border: 1px solid #CDD2CB; border-radius: 999px; background: #FFFFFF; color: #1B1F1D; font-family: 'Figtree', sans-serif; font-size: 14px; font-weight: 600">Andere</button>
+</div>
+</fieldset>
+
+<fieldset style="margin: 0; padding: 14px 16px; border: 1px solid #E2E5DF; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+<legend style="float: left; width: 100%; padding: 0; font-size: 14px; font-weight: 600; color: #4A524E">Aufgeteilt auf</legend>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px">
+<button type="button" aria-pressed="true" style="height: 64px; border: 0; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 4px; font-family: 'Figtree', sans-serif; font-size: 13px; font-weight: 600; color: #1B1F1D; padding: 0"><span style="position: relative; width: 40px; height: 40px; border-radius: 20px; background: #DCEBE5; color: #1F6F5C; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; box-shadow: 0 0 0 2px #1F6F5C">J</span>Jakob</button>
+<button type="button" aria-pressed="true" style="height: 64px; border: 0; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 4px; font-family: 'Figtree', sans-serif; font-size: 13px; font-weight: 600; color: #1B1F1D; padding: 0"><span style="width: 40px; height: 40px; border-radius: 20px; background: #E4E6F7; color: #3B4A9E; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; box-shadow: 0 0 0 2px #1F6F5C">C</span>Clara</button>
+<button type="button" aria-pressed="true" style="height: 64px; border: 0; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 4px; font-family: 'Figtree', sans-serif; font-size: 13px; font-weight: 600; color: #1B1F1D; padding: 0"><span style="width: 40px; height: 40px; border-radius: 20px; background: #FBE7D3; color: #8A4B07; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; box-shadow: 0 0 0 2px #1F6F5C">D</span>Daniel</button>
+<button type="button" aria-pressed="true" style="height: 64px; border: 0; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 4px; font-family: 'Figtree', sans-serif; font-size: 13px; font-weight: 600; color: #1B1F1D; padding: 0"><span style="width: 40px; height: 40px; border-radius: 20px; background: #EDE3F3; color: #6B3F8A; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; box-shadow: 0 0 0 2px #1F6F5C">B</span>Bato</button>
+</div>
+<p style="margin: 0; padding-top: 10px; border-top: 1px solid #EEF0EC; font-size: 14px; display: flex; justify-content: space-between"><span style="color: #5B635F">Gleichmäßig auf 4 Personen</span><strong style="font-variant-numeric: tabular-nums">je 1,60 €</strong></p>
+</fieldset>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: end">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="datum" style="font-size: 14px; font-weight: 600; color: #4A524E">Datum</label>
+<input id="datum" value="19.10.2026" style="height: 48px; box-sizing: border-box; padding: 0 14px; background: #FFFFFF; border: 1px solid #CDD2CB; border-radius: 12px; font-family: 'Figtree', sans-serif; font-size: 16px; color: #1B1F1D; width: 100%">
+</div>
+<button type="button" role="switch" aria-checked="false" style="height: 48px; box-sizing: border-box; padding: 0 12px; border: 1px solid #CDD2CB; border-radius: 12px; background: #FFFFFF; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: 'Figtree', sans-serif; font-size: 14px; font-weight: 600; color: #1B1F1D">Monatlich<span aria-hidden="true" style="width: 40px; height: 24px; border-radius: 12px; background: #CDD2CB; position: relative; flex-shrink: 0"><span style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 9px; background: #FFFFFF"></span></span></button>
+</div>
+
+<a href="Ausgaben.html" style="margin-top: 4px; height: 52px; border-radius: 14px; background: #1F6F5C; color: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; font-weight: 700">Speichern</a>
+
+</main>
+</div>
+</body>
+</html>

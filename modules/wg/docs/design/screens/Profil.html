@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WG-App – Profil und Erinnerungen</title>
+<!-- Referenz-Mockup aus der Design-Vorschau (Planungsphase). Inline-Styles nur fuer das Mockup; in der App alles ueber Klassen in app/static/css/app.css. Google-Fonts-Link nur hier zur Ansicht; die App hostet Schriften selbst. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Figtree:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F6F5C}a:hover{color:#174F42}
+</style>
+<style>html{background:#D9DCD5}body{margin:0;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:24px 0;box-sizing:border-box}@media (max-width:420px){body{padding:0}}</style>
+</head>
+<body>
+<div style="width: 390px; height: 900px; position: relative; overflow: hidden; box-sizing: border-box; background: #F4F5F1; font-family: 'Figtree', sans-serif; color: #1B1F1D">
+<main style="padding: 12px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+
+<header style="display: flex; flex-direction: column; gap: 6px">
+<a href="Main.html" style="align-self: flex-start; height: 44px; display: flex; align-items: center; gap: 4px; margin-left: -6px; padding: 0 6px; text-decoration: none; font-size: 15px; font-weight: 600"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M15 5l-7 7 7 7"></path></svg>Start</a>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -0.01em">Mein Profil</h1>
+</header>
+
+<section aria-label="Wer bin ich" style="background: #FFFFFF; border: 1px solid #E2E5DF; border-radius: 20px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; gap: 12px">
+<span aria-hidden="true" style="width: 48px; height: 48px; border-radius: 24px; background: #DCEBE5; color: #1F6F5C; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 19px; flex-shrink: 0">J</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 18px; font-weight: 700">Jakob</span><span style="font-size: 13px; color: #5B635F">auf diesem Gerät</span></div>
+<a href="Beitreten.html" style="height: 40px; padding: 0 12px; border: 1px solid #CDD2CB; border-radius: 10px; display: flex; align-items: center; text-decoration: none; color: #1B1F1D; font-size: 14px; font-weight: 600">Wechseln</a>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid #EEF0EC">
+<span style="font-size: 15px; font-weight: 600">Sprache</span>
+<div role="group" aria-label="Sprache" style="display: flex; background: #EEF0EC; border-radius: 12px; padding: 3px; gap: 3px">
+<button type="button" aria-pressed="true" style="height: 40px; padding: 0 14px; border: 0; border-radius: 9px; background: #FFFFFF; color: #1B1F1D; font-family: 'Figtree', sans-serif; font-size: 14px; font-weight: 700">Deutsch</button>
+<button type="button" aria-pressed="false" style="height: 40px; padding: 0 14px; border: 0; border-radius: 9px; background: transparent; color: #4A524E; font-family: 'Figtree', sans-serif; font-size: 14px; font-weight: 600">English</button>
+</div>
+</div>
+</section>
+
+<section aria-label="Erinnerungen über ntfy" style="background: #FFFFFF; border: 1px solid #E2E5DF; border-radius: 20px; padding: 14px 16px 6px">
+<h2 style="margin: 0 0 10px; font-size: 16px; font-weight: 700">Erinnerungen über ntfy</h2>
+<div style="background: #F4F5F1; border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px">
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12.5px; color: #5B635F">Dein persönliches Topic</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 500">wg-7f3k9q-jakob</span></div>
+<button type="button" style="height: 40px; padding: 0 12px; border: 1.5px solid #1F6F5C; border-radius: 10px; background: #FFFFFF; color: #1F6F5C; font-family: 'Figtree', sans-serif; font-size: 14px; font-weight: 700">In ntfy öffnen</button>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; min-height: 56px; margin-top: 4px">
+<div id="r1" style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">Deine Aufgabe nächste Woche</span><span style="font-size: 13px; color: #5B635F">Sonntag, 18 Uhr</span></div>
+<button type="button" role="switch" aria-checked="true" aria-labelledby="r1" style="width: 52px; height: 44px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; justify-content: center"><span style="width: 44px; height: 26px; border-radius: 13px; background: #1F6F5C; position: relative"><span style="position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 10px; background: #FFFFFF"></span></span></button>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 56px; border-top: 1px solid #EEF0EC">
+<div id="r2" style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">Aufgabe noch offen</span><span style="font-size: 13px; color: #5B635F">Freitag, 18 Uhr</span></div>
+<button type="button" role="switch" aria-checked="true" aria-labelledby="r2" style="width: 52px; height: 44px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; justify-content: center"><span style="width: 44px; height: 26px; border-radius: 13px; background: #1F6F5C; position: relative"><span style="position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 10px; background: #FFFFFF"></span></span></button>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 56px; border-top: 1px solid #EEF0EC">
+<div id="r3" style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">Jemand hat dir Geld überwiesen</span><span style="font-size: 13px; color: #5B635F">sofort</span></div>
+<button type="button" role="switch" aria-checked="true" aria-labelledby="r3" style="width: 52px; height: 44px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; justify-content: center"><span style="width: 44px; height: 26px; border-radius: 13px; background: #1F6F5C; position: relative"><span style="position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 10px; background: #FFFFFF"></span></span></button>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 56px; border-top: 1px solid #EEF0EC">
+<div id="r4" style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">Neue Ausgabe, die dich betrifft</span><span style="font-size: 13px; color: #5B635F">sofort</span></div>
+<button type="button" role="switch" aria-checked="false" aria-labelledby="r4" style="width: 52px; height: 44px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; justify-content: center"><span style="width: 44px; height: 26px; border-radius: 13px; background: #CDD2CB; position: relative"><span style="position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 10px; background: #FFFFFF"></span></span></button>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 56px; border-top: 1px solid #EEF0EC">
+<div id="r5" style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">Vorrat leer oder neuer Artikel</span><span style="font-size: 13px; color: #5B635F">sofort</span></div>
+<button type="button" role="switch" aria-checked="false" aria-labelledby="r5" style="width: 52px; height: 44px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; justify-content: center"><span style="width: 44px; height: 26px; border-radius: 13px; background: #CDD2CB; position: relative"><span style="position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 10px; background: #FFFFFF"></span></span></button>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 56px; border-top: 1px solid #EEF0EC">
+<div id="r6" style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">Termin morgen</span><span style="font-size: 13px; color: #5B635F">Vorabend, 19 Uhr</span></div>
+<button type="button" role="switch" aria-checked="false" aria-labelledby="r6" style="width: 52px; height: 44px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; justify-content: center"><span style="width: 44px; height: 26px; border-radius: 13px; background: #CDD2CB; position: relative"><span style="position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 10px; background: #FFFFFF"></span></span></button>
+</div>
+</section>
+
+<nav aria-label="Weitere Einstellungen" style="background: #FFFFFF; border: 1px solid #E2E5DF; border-radius: 20px; padding: 0 16px">
+<a href="Profil.html" style="min-height: 56px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #1B1F1D">
+<span style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">Abwesenheit eintragen</span><span style="font-size: 13px; color: #5B635F">pausiert Putzplan und Erinnerungen</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="fill: none; stroke: #5B635F; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M9 5l7 7-7 7"></path></svg>
+</a>
+<a href="Profil.html" style="min-height: 56px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #1B1F1D; border-top: 1px solid #EEF0EC">
+<span style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">WG-Einstellungen</span><span style="font-size: 13px; color: #5B635F">Mitglieder, Aufgaben, geheimer Link</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="fill: none; stroke: #5B635F; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M9 5l7 7-7 7"></path></svg>
+</a>
+</nav>
+
+</main>
+</div>
+</body>
+</html>

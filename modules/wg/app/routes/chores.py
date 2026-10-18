@@ -36,40 +36,6 @@ def _parse_week(raw: str | None) -> date:
     return week_start(berlin_today())
 
 
-def _rows_in_chore_order(
-    db: Session, chores: list, week: date, members: dict[int, Member], my_member_id: int
-) -> list[dict]:
-    """One row per chore, in the fixed `chores` order - needed wherever
-    several weeks are shown side by side (the upcoming-weeks table), so a
-    column always means the same chore across every row."""
-    assignment_map = rota.assignment(db, week)
-    rows = []
-    for chore in chores:
-        assigned_id = assignment_map.get(chore.id)
-        status, entry = rota.chore_status(db, week, chore.id, assigned_id)
-        rows.append(
-            {
-                "chore": chore,
-                "assigned_member": members.get(assigned_id) if assigned_id else None,
-                "status": status,
-                "entry": entry,
-                "is_mine": assigned_id == my_member_id,
-            }
-        )
-    return rows
-
-
-def _build_rows(
-    db: Session, chores: list, week: date, members: dict[int, Member], my_member_id: int
-) -> list[dict]:
-    """Same rows, but with the viewer's own chore moved first - for the
-    single-week card, per design.md §5.4. Never use this for a table that
-    spans several weeks (see _rows_in_chore_order)."""
-    rows = _rows_in_chore_order(db, chores, week, members, my_member_id)
-    rows.sort(key=lambda row: row["is_mine"] is False)
-    return rows
-
-
 @router.get("")
 def chores_page(
     request: Request,
@@ -85,7 +51,7 @@ def chores_page(
     upcoming = [
         {
             "week": current_week + timedelta(weeks=offset),
-            "rows": _rows_in_chore_order(
+            "rows": rota.rows_in_chore_order(
                 db, chores, current_week + timedelta(weeks=offset), members, my_member_id
             ),
         }
@@ -101,7 +67,7 @@ def chores_page(
             "next_week": current_week + timedelta(weeks=1),
             "is_current_week": current_week == week_start(berlin_today()),
             "chores": chores,
-            "rows": _build_rows(db, chores, current_week, members, my_member_id),
+            "rows": rota.rows_for_week(db, chores, current_week, members, my_member_id),
             "upcoming": upcoming,
             "error": error,
         }

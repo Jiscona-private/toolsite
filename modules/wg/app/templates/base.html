@@ -13,10 +13,10 @@
   </head>
   <body hx-boost="true" hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'>
     <div class="page stack">
-      {% if member %}
+      {% if member and not own_avatar_header %}
         <div class="align-end">
           <a
-            class="avatar"
+            class="avatar color-{{ member.color }}"
             href="{{ base_path }}/profile"
             aria-label="{{ t('nav.profile') }}"
           >{{ member.name[0] }}</a>

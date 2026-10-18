@@ -109,3 +109,13 @@ def test_icon_svgs_have_a_default_size() -> None:
     # rule existed (every icon svg here is on a 24px grid and aria-hidden).
     css = (Path(__file__).parent.parent / "app" / "static" / "css" / "app.css").read_text()
     assert 'svg[aria-hidden="true"]' in css
+
+
+def test_card_class_is_block_so_a_link_card_keeps_its_background() -> None:
+    # Regression test: an <a class="card"> (e.g. the Start page's Pinnwand
+    # link-card) is `display: inline` by default, silently dropping the
+    # background/border/padding a card needs - only visible as a missing
+    # white box when screenshotting, not in the raw HTML.
+    css = (Path(__file__).parent.parent / "app" / "static" / "css" / "app.css").read_text()
+    card_rule = css.split(".card {", 1)[1].split("}", 1)[0]
+    assert "display: block" in card_rule

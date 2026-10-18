@@ -101,5 +101,24 @@
   "board.info.edit_title": "Edit flat info",
   "board.info.field.title": "Title",
   "board.info.field.body": "Text",
-  "board.info.save": "Save"
+  "board.info.save": "Save",
+
+  "home.greeting": "Hi {name}",
+  "home.you_suffix": "(you)",
+  "hero.title": "Your chore this week",
+  "hero.due": "Due by {date}",
+  "hero.done_message": "Done - thanks!",
+  "hero.undo": "Undo",
+  "hero.free_message": "Free this week",
+  "home.chores_card_title": "Chores this week",
+  "home.all_weeks": "All weeks",
+  "home.balance_tile_label": "Your balance",
+  "home.balance_hint_settled": "All settled up",
+  "home.balance_hint_owe": "transfer to {name}",
+  "home.balance_hint_owed": "receive from {name}",
+  "home.shopping_tile_label": "Shopping list",
+  "home.shopping_tile_count": "{count} open",
+  "home.shopping_tile_empty": "List is empty",
+  "home.board_card_title": "Board",
+  "home.board_open": "Open"
 }

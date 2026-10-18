@@ -16,6 +16,7 @@ from app.routes.board import router as board_router
 from app.routes.chores import router as chores_router
 from app.routes.expenses import router as expenses_router
 from app.routes.expenses import settlements_router
+from app.routes.home import router as home_router
 from app.routes.shopping import router as shopping_router
 from app.templating import base_context, templates
 
@@ -43,6 +44,7 @@ def create_app() -> FastAPI:
         return templates.TemplateResponse(request, "pages/new.html", base_context(request, db))
 
     app.include_router(router)
+    app.include_router(home_router)
     app.include_router(auth_router)
     app.include_router(chores_router)
     app.include_router(expenses_router)

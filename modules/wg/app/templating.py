@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.csrf import csrf_token
-from app.i18n import DEFAULT_LANGUAGE, day, money, t, week_label, week_range
+from app.i18n import DEFAULT_LANGUAGE, day, money, t, week_label, week_range, weekday_date
 from app.models import Member, Setting
 
 # A standalone module (rather than living in main.py) so both main.py and
@@ -18,6 +18,7 @@ templates.env.globals["week_label"] = week_label
 templates.env.globals["week_range"] = week_range
 templates.env.globals["money"] = money
 templates.env.globals["day"] = day
+templates.env.globals["weekday_date"] = weekday_date
 
 
 def base_context(request: Request, db: Session, *, active_nav: str | None = None) -> dict:

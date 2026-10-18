@@ -101,5 +101,24 @@
   "board.info.edit_title": "WG-Info bearbeiten",
   "board.info.field.title": "Titel",
   "board.info.field.body": "Text",
-  "board.info.save": "Speichern"
+  "board.info.save": "Speichern",
+
+  "home.greeting": "Hallo {name}",
+  "home.you_suffix": "(du)",
+  "hero.title": "Deine Aufgabe diese Woche",
+  "hero.due": "Fällig bis {date}",
+  "hero.done_message": "Erledigt – danke!",
+  "hero.undo": "Rückgängig",
+  "hero.free_message": "Diese Woche frei",
+  "home.chores_card_title": "Putzplan diese Woche",
+  "home.all_weeks": "Alle Wochen",
+  "home.balance_tile_label": "Dein Saldo",
+  "home.balance_hint_settled": "Alles ausgeglichen",
+  "home.balance_hint_owe": "an {name} überweisen",
+  "home.balance_hint_owed": "von {name} bekommen",
+  "home.shopping_tile_label": "Einkaufsliste",
+  "home.shopping_tile_count": "{count} offen",
+  "home.shopping_tile_empty": "Liste ist leer",
+  "home.board_card_title": "Pinnwand",
+  "home.board_open": "Öffnen"
 }

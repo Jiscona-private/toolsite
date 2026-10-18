@@ -21,6 +21,10 @@ _BABEL_LOCALE = {"de": "de_DE", "en": "en_GB"}
 # one of the named styles (short/medium/...).
 _DAY_PATTERN = {"de": "EEE, d.M.", "en": "EEE d MMM"}
 
+# design.md §2 Hero-Karte: "Sonntag, 25.10." - the full weekday name, not
+# the abbreviated one _DAY_PATTERN uses.
+_WEEKDAY_DATE_PATTERN = {"de": "EEEE, d.M.", "en": "EEEE, d MMM"}
+
 MINUS_SIGN = "−"  # spec.md §9.1: real minus sign, not a hyphen
 
 
@@ -51,6 +55,11 @@ def day(value: date, language: str = DEFAULT_LANGUAGE) -> str:
     # Babel's de_DE weekday abbreviations carry a period ("Mo."); spec.md
     # §9.1's own example ("Mo, 19.10.") doesn't want it before the comma.
     return text.replace(".,", ",")
+
+
+def weekday_date(value: date, language: str = DEFAULT_LANGUAGE) -> str:
+    pattern = _WEEKDAY_DATE_PATTERN.get(language, _WEEKDAY_DATE_PATTERN[DEFAULT_LANGUAGE])
+    return format_date(value, format=pattern, locale=_locale(language))
 
 
 def week_label(value: date, language: str = DEFAULT_LANGUAGE) -> str:

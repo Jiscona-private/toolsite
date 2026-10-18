@@ -5,7 +5,7 @@ from datetime import UTC, date, datetime
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models import Chore, ChoreEntry, ChoreSwap, RotaConfig
+from app.models import Chore, ChoreEntry, ChoreSwap, Member, RotaConfig
 from app.timezone import berlin_today, week_start
 
 # spec.md §3.2: a chore_entry beats everything else, so a real "done" by a
@@ -187,3 +187,46 @@ def undo(db: Session, *, week: date, chore_id: int) -> bool:
         return False
     db.delete(entry)
     return True
+
+
+def rows_in_chore_order(
+    db: Session,
+    chores: list[Chore],
+    week: date,
+    members: dict[int, Member],
+    my_member_id: int,
+) -> list[dict]:
+    """One row per chore, in the fixed `chores` order - needed wherever
+    several weeks are shown side by side (e.g. /chores' upcoming-weeks
+    table), so a column always means the same chore across every row.
+    Shared by /chores and the Start page's "Putzplan diese Woche" card."""
+    assignment_map = assignment(db, week)
+    rows = []
+    for chore in chores:
+        assigned_id = assignment_map.get(chore.id)
+        status, entry = chore_status(db, week, chore.id, assigned_id)
+        rows.append(
+            {
+                "chore": chore,
+                "assigned_member": members.get(assigned_id) if assigned_id else None,
+                "status": status,
+                "entry": entry,
+                "is_mine": assigned_id == my_member_id,
+            }
+        )
+    return rows
+
+
+def rows_for_week(
+    db: Session,
+    chores: list[Chore],
+    week: date,
+    members: dict[int, Member],
+    my_member_id: int,
+) -> list[dict]:
+    """Same rows, but with the viewer's own chore moved first - for a
+    single-week card, per design.md §5.2/§5.4. Never use this for a table
+    spanning several weeks (see rows_in_chore_order)."""
+    rows = rows_in_chore_order(db, chores, week, members, my_member_id)
+    rows.sort(key=lambda row: row["is_mine"] is False)
+    return rows

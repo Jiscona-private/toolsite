@@ -160,6 +160,11 @@ a {
 }
 
 .card {
+  /* block by default so a <div class="card"> and an <a class="card">
+     (e.g. the Pinnwand link-card) size and paint identically - an <a> is
+     inline otherwise, which silently drops the background/border/padding
+     a card needs. */
+  display: block;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 20px;
@@ -175,6 +180,13 @@ a {
 .align-end {
   display: flex;
   justify-content: flex-end;
+}
+
+.align-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
 .text-error {
@@ -245,6 +257,140 @@ a {
   background: var(--accent-soft);
   color: var(--accent-strong);
   text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* Avatar palette, design.md §1.2 - member.color (0-7) picks the class. */
+.avatar.color-0 {
+  background: #dcebe5;
+  color: #1f6f5c;
+}
+.avatar.color-1 {
+  background: #e4e6f7;
+  color: #3b4a9e;
+}
+.avatar.color-2 {
+  background: #fbe7d3;
+  color: #8a4b07;
+}
+.avatar.color-3 {
+  background: #ede3f3;
+  color: #6b3f8a;
+}
+.avatar.color-4 {
+  background: #e3eef6;
+  color: #22577a;
+}
+.avatar.color-5 {
+  background: #f6e3e7;
+  color: #8e3049;
+}
+.avatar.color-6 {
+  background: #eef0d9;
+  color: #55601a;
+}
+.avatar.color-7 {
+  background: #eef0ec;
+  color: #3f4743;
+}
+
+.avatar.small {
+  width: 34px;
+  height: 34px;
+  font-size: 14px;
+}
+
+/* --- Start page: tiles, link-card headers, person rows (design.md §2/§5.2) --- */
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.tile .tile-arrow {
+  position: absolute;
+  top: 15px;
+  right: 14px;
+  color: var(--muted);
+}
+
+.tile .label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.tile .value {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.tile .hint {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.link-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 40px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.link-card-header .title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.link-card-header .action {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+
+.person-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--divider);
+}
+
+.person-row:first-child {
+  border-top: none;
+}
+
+.person-row .info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.person-row .name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.person-row .detail {
+  font-size: 13px;
+  color: var(--muted);
 }
 
 .chip {

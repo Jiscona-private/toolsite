@@ -13,5 +13,4 @@ services:
 
 networks:
   toolsite_net:
-    external: true
     name: toolsite_net

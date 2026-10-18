@@ -63,7 +63,7 @@ include:
 
 Removing a module is deleting one line (and its directory); adding one is
 adding one line (see `docs/ADDING_MODULES.md`). No other file needs to
-change. All included services join the same external `toolsite_net` network
+change. All included services join the same shared `toolsite_net` network
 so Caddy can reach them by service name.
 
 ## Why SQLite instead of Postgres/MySQL

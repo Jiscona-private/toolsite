@@ -90,6 +90,13 @@ services:
       - DB_PATH=/app/data/book-club.db
 ```
 
+**Don't mark `toolsite_net` as `external: true`** in a module's `compose.yaml`.
+Every included file declares the network plainly (`name: toolsite_net`, no
+`external` flag), and Compose creates it once when you bring the stack up.
+Marking it external tells Compose "assume this already exists" — since
+nothing ever creates it that way, `docker compose up` fails with `network
+toolsite_net declared as external, but could not be found`.
+
 Add `modules/book-club/data/*` to version control exclusion (already
 covered by the root `.gitignore` pattern `modules/*/data/*`) and it's
 automatically picked up by `scripts/backup.sh`.
@@ -105,7 +112,7 @@ Plain JS-only dependencies can use the simpler single-stage Dockerfile in
 ## Checklist
 
 - [ ] `modules/<id>/module.json` with a unique `id` and matching `path`
-- [ ] `modules/<id>/compose.yaml` joining the external `toolsite_net` network
+- [ ] `modules/<id>/compose.yaml` joining the shared `toolsite_net` network (declare it plainly — `name: toolsite_net`, no `external: true`; see note below)
 - [ ] App reads `PORT` and `BASE_PATH` from the environment
 - [ ] Every link/redirect the app emits includes `BASE_PATH`
 - [ ] Added to `docker-compose.yml`'s `include:` list

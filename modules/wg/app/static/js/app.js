@@ -19,3 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
     closeButton.addEventListener("click", () => sheet.close());
   }
 });
+
+if ("serviceWorker" in navigator) {
+  const basePathMeta = document.querySelector('meta[name="base-path"]');
+  if (basePathMeta) {
+    const basePath = basePathMeta.content;
+    navigator.serviceWorker.register(`${basePath}/sw.js`, { scope: `${basePath}/` });
+  }
+}

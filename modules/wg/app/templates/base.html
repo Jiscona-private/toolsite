@@ -6,7 +6,11 @@
     <!-- stops htmx injecting an inline <style> for indicators, which the CSP's style-src 'self' blocks -->
     <meta name="htmx-config" content='{"includeIndicatorStyles": false}' />
     <meta name="csrf-token" content="{{ csrf_token }}" />
+    <meta name="theme-color" content="#1F6F5C" />
+    <meta name="base-path" content="{{ base_path }}" />
     <title>{% block title %}{{ wg_name }}{% endblock %}</title>
+    <link rel="manifest" href="{{ base_path }}/manifest.webmanifest" crossorigin="use-credentials" />
+    <link rel="icon" href="{{ base_path }}/static/icons/icon-192.png" />
     <link rel="stylesheet" href="{{ base_path }}/static/css/app.css" />
     <script src="{{ base_path }}/static/js/htmx.min.js" defer></script>
     <script src="{{ base_path }}/static/js/app.js" defer></script>

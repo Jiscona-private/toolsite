@@ -20,6 +20,7 @@ from app.routes.expenses import router as expenses_router
 from app.routes.expenses import settlements_router
 from app.routes.home import router as home_router
 from app.routes.profile import router as profile_router
+from app.routes.pwa import router as pwa_router
 from app.routes.settings import router as settings_router
 from app.routes.shopping import router as shopping_router
 from app.scheduler import start_scheduler
@@ -68,6 +69,7 @@ def create_app() -> FastAPI:
     app.include_router(board_router)
     app.include_router(profile_router)
     app.include_router(settings_router)
+    app.include_router(pwa_router)
     return app
 
 

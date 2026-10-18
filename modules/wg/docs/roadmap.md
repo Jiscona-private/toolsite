@@ -38,7 +38,7 @@ Jeder Schritt endet mit grünen Tests, `ruff` und einem Commit.
 10. [x] **Startseite komplett** nach `docs/design.md` §5.2.
 11. [x] **Profil und Einstellungen:** Name wechseln, Sprache, Mitglieder, Aufgaben, Rotation neu festlegen (mit Vorschau), Kategorien, Zugang (Link + QR, erneuern, alle abmelden).
 12. [x] **Protokoll und Papierkorb:** Anzeige, Wiederherstellen, Job zum endgültigen Löschen.
-13. [ ] **PWA:** Manifest, Icons, Service Worker, Offline-Seite.
+13. [x] **PWA:** Manifest, Icons, Service Worker, Offline-Seite.
 14. [ ] **Backup-Job** (03:30) + Admin-ntfy bei Fehlern.
 15. [ ] **Qualitätsrunde:** alle Seiten bei 360/390 px, Tastatur und Screenreader-Labels, Kontraste, DE/EN-Durchsicht, Smoke-Test aller GET-Routen.
 16. [ ] **Umstieg in der Toolsite** nach `docs/module-integration.md`: Include-Zeile tauschen, Caddy-Block ohne Basic Auth, `module.json`, Dummy `modules/wg-manager/` entfernen, README/`.env.example` anpassen.

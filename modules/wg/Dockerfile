@@ -11,15 +11,19 @@ RUN uv sync --locked --no-dev
 
 RUN useradd --create-home --uid 1000 wg \
     && mkdir -p /data \
-    && chown wg:wg /data \
     && chown -R wg:wg /app
-USER wg
+
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 3000
 
+# Stays root here on purpose - the entrypoint chowns the bind-mounted
+# /data, then drops to the unprivileged `wg` user before exec'ing this.
 # --forwarded-allow-ips="*" is safe here: the container has no published
 # port (see compose.yaml), so the only traffic it ever sees on PORT comes
 # from the toolsite Caddy inside the private toolsite_net network.
-CMD uv run alembic upgrade head && exec uv run uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-3000} --workers 1 --proxy-headers --forwarded-allow-ips="*"
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["uv run alembic upgrade head && exec uv run uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-3000} --workers 1 --proxy-headers --forwarded-allow-ips=\"*\""]

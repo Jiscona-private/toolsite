@@ -30,7 +30,7 @@ Jeder Schritt endet mit grünen Tests, `ruff` und einem Commit.
 2. [x] **Datenbank:** SQLAlchemy-Setup mit SQLite-Pragmas (WAL, `foreign_keys`), Alembic, Modelle für Phase 1 (members, settings, chores, rota_configs, chore_entries, chore_swaps, expense_categories, expenses, expense_shares, settlements, shopping_items, notes, info_pages, activity_log). Migration beim Containerstart.
 3. [x] **CLI:** `init --seed`, `show-link` (mit QR), `rotate-link`, `logout-all`, `backup`, `add-member`.
 4. [x] **Zugang:** Join-Link, signierte Cookies, 404-Gate-Middleware, `/welcome`, CSRF (Origin + Token), Rate-Limit, Security-Header/CSP. Tests aus Spec §10.3.
-5. [ ] **Grundlayout:** i18n (`t()`, Babel), `base.html`, `app.css` mit Tokens, selbst gehostete Schriften, htmx lokal, Icon-Sprite, Bottom-Bar mit „+“-Sheet (`<dialog>` + Fallback `/new`), Profil-Avatar. i18n-Paritätstest.
+5. [x] **Grundlayout:** i18n (`t()`, Babel), `base.html`, `app.css` mit Tokens, selbst gehostete Schriften, htmx lokal, Icon-Sprite, Bottom-Bar mit „+“-Sheet (`<dialog>` + Fallback `/new`), Profil-Avatar. i18n-Paritätstest.
 6. [ ] **Putzplan:** `services/rota.py` + Tests aus Spec §10.1, Seite `/chores` (Woche blättern, erledigt/auslassen/rückgängig, nächste Wochen), Hero-Karte auf Start.
 7. [ ] **Ausgaben:** `services/ledger.py` + Tests aus Spec §10.2 (inkl. Eigenschaftstest), `/expenses`, `/expenses/new`, Bearbeiten, Löschen, Ausgleich, `/expenses/all`.
 8. [ ] **Einkaufsliste:** `/shopping`, Abhaken mit htmx-Fragment, „als Ausgabe eintragen“, erledigte entfernen.

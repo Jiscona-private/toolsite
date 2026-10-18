@@ -1,0 +1,403 @@
+/* Design tokens from docs/design.md §1. No framework, no build step -
+   classes only (the CSP forbids inline styles). */
+
+:root {
+  --bg: #f4f5f1;
+  --surface: #ffffff;
+  --border: #e2e5df;
+  --divider: #eef0ec;
+  --control-border: #cdd2cb;
+  --ink: #1b1f1d;
+  --ink-2: #4a524e;
+  --muted: #5b635f;
+  --checkbox-border: #8e9690;
+
+  --accent: #1f6f5c;
+  --accent-text: #1f6f5c;
+  --accent-strong: #174f42;
+  --accent-soft: #dcebe5;
+  --on-accent-muted: #d6ede5;
+  --accent-outline: #9ccdbd;
+
+  --status-done-bg: #e1f0ea;
+  --status-done-fg: #1a6150;
+  --status-open-bg: #eef0ec;
+  --status-open-fg: #3f4743;
+  --status-skipped-bg: #fbebd6;
+  --status-skipped-fg: #8a4b07;
+  --status-empty-bg: #f7dcd2;
+  --status-empty-fg: #93300f;
+
+  --money-plus: #1a6150;
+  --money-minus: #a9480c;
+
+  --segmented-bg: #e7e9e3;
+  --overlay: rgba(27, 31, 29, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111513;
+    --surface: #1a1f1c;
+    --border: #2b322e;
+    --divider: #252b28;
+    --control-border: #3a423e;
+    --ink: #ecefec;
+    --ink-2: #c3cac5;
+    --muted: #a2aaa5;
+    --accent: #267a64;
+    --accent-text: #6cc4a6;
+    --accent-soft: #1e3b32;
+    --accent-strong: #8fd9be;
+    --status-done-bg: #1e3b32;
+    --status-done-fg: #8fd9be;
+    --status-open-bg: #2b312e;
+    --status-open-fg: #c9d0cb;
+    --status-skipped-bg: #3d2e17;
+    --status-skipped-fg: #f2c27e;
+    --status-empty-bg: #3f241b;
+    --status-empty-fg: #f4a88c;
+    --money-plus: #6fd0ae;
+    --money-minus: #f29b62;
+  }
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("../fonts/figtree-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("../fonts/figtree-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("../fonts/figtree-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("../fonts/figtree-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("../fonts/bricolage-grotesque-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("../fonts/bricolage-grotesque-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Figtree", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom));
+}
+
+h1,
+h2,
+.display {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Figtree", system-ui, sans-serif;
+}
+
+.money {
+  font-variant-numeric: tabular-nums;
+}
+
+a {
+  color: var(--accent-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.stack > * + * {
+  margin-top: 14px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.card.accent {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+}
+
+.align-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.text-error {
+  color: var(--money-minus);
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn.secondary {
+  background: var(--surface);
+  color: var(--accent-text);
+  border: 1px solid var(--control-border);
+}
+
+.btn.outline-on-accent {
+  background: transparent;
+  color: #fff;
+  border: 1px solid var(--accent-outline);
+}
+
+.btn.on-accent {
+  background: #fff;
+  color: var(--accent-strong);
+}
+
+.btn.full {
+  width: 100%;
+  height: 52px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  font-family: "Figtree", system-ui, sans-serif;
+  font-weight: 700;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  text-decoration: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.chip.done {
+  background: var(--status-done-bg);
+  color: var(--status-done-fg);
+}
+.chip.open {
+  background: var(--status-open-bg);
+  color: var(--status-open-fg);
+}
+.chip.skipped {
+  background: var(--status-skipped-bg);
+  color: var(--status-skipped-fg);
+}
+.chip.empty {
+  background: var(--status-empty-bg);
+  color: var(--status-empty-fg);
+}
+
+/* --- bottom navigation + "+" sheet (docs/design.md §3) --- */
+
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 76px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 10;
+}
+
+.bottom-bar a,
+.bottom-bar button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.bottom-bar a[aria-current="page"] {
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+.bottom-bar svg {
+  width: 24px;
+  height: 24px;
+}
+
+.bottom-bar .add-button {
+  position: relative;
+  top: -26px;
+}
+
+.bottom-bar .add-button span.circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 5px var(--surface);
+}
+
+.bottom-bar .add-button span.circle svg {
+  width: 26px;
+  height: 26px;
+  stroke: #fff;
+}
+
+/* bottom sheet, rendered as <dialog> */
+
+dialog.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  border: none;
+  border-radius: 24px 24px 0 0;
+  padding: 20px;
+  background: var(--surface);
+}
+
+dialog.sheet::backdrop {
+  background: var(--overlay);
+}
+
+dialog.sheet .handle {
+  width: 40px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--control-border);
+  margin: 0 auto 16px;
+}
+
+.sheet-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.sheet-option .icon-tile {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--accent-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sheet-option .title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sheet-option .hint {
+  font-size: 13px;
+  color: var(--muted);
+}

@@ -4,5 +4,22 @@
   "welcome.hint": "Kein Passwort nötig: Wer diesen Link hat, gehört zur WG. Teile ihn nur in eurer WG-Gruppe.",
   "welcome.language_label": "Sprache",
   "welcome.no_members": "Noch keine Mitglieder angelegt.",
-  "welcome.invalid_choice": "Das hat nicht geklappt. Bitte nochmal wählen."
+  "welcome.invalid_choice": "Das hat nicht geklappt. Bitte nochmal wählen.",
+
+  "nav.home": "Start",
+  "nav.chores": "Putzplan",
+  "nav.new": "Neu eintragen",
+  "nav.expenses": "Ausgaben",
+  "nav.shopping": "Einkauf",
+  "nav.profile": "Mein Profil",
+  "nav.cancel": "Abbrechen",
+  "nav.back": "Zurück",
+
+  "sheet.title": "Neu eintragen",
+  "sheet.expense.title": "Ausgabe",
+  "sheet.expense.hint": "Wer hat wofür bezahlt?",
+  "sheet.shopping.title": "Einkaufsliste",
+  "sheet.shopping.hint": "Einen Artikel hinzufügen",
+  "sheet.note.title": "Notiz an die Pinnwand",
+  "sheet.note.hint": "Kurze Nachricht an alle"
 }

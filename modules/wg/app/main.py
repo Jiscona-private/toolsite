@@ -1,14 +1,18 @@
-from fastapi import APIRouter, Depends, FastAPI
-from fastapi.responses import PlainTextResponse
+from pathlib import Path
+
+from fastapi import APIRouter, Depends, FastAPI, Request
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.staticfiles import StaticFiles
 
 from app import models  # noqa: F401  # registers every table with Base.metadata
 from app.auth import access_gate
 from app.auth import router as auth_router
 from app.config import settings
 from app.db import get_db
+from app.templating import base_context, templates
 
 
 def create_app() -> FastAPI:
@@ -16,6 +20,11 @@ def create_app() -> FastAPI:
     # CSP (no external resources, see CLAUDE.md rule 5) blocks anyway.
     app = FastAPI(title="WG-App", docs_url=None, redoc_url=None)
     app.add_middleware(BaseHTTPMiddleware, dispatch=access_gate)
+    app.mount(
+        f"{settings.base_path}/static",
+        StaticFiles(directory=str(Path(__file__).parent / "static")),
+        name="static",
+    )
 
     router = APIRouter(prefix=settings.base_path)
 
@@ -23,6 +32,10 @@ def create_app() -> FastAPI:
     def healthz(db: Session = Depends(get_db)) -> PlainTextResponse:
         db.execute(text("SELECT 1"))
         return PlainTextResponse("ok")
+
+    @router.get("/new")
+    def new_page(request: Request, db: Session = Depends(get_db)) -> HTMLResponse:
+        return templates.TemplateResponse(request, "pages/new.html", base_context(request, db))
 
     app.include_router(router)
     app.include_router(auth_router)

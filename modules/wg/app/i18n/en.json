@@ -4,5 +4,22 @@
   "welcome.hint": "No password needed: whoever has this link belongs to the flat. Only share it in your flat's group chat.",
   "welcome.language_label": "Language",
   "welcome.no_members": "No members have been set up yet.",
-  "welcome.invalid_choice": "That didn't work. Please choose again."
+  "welcome.invalid_choice": "That didn't work. Please choose again.",
+
+  "nav.home": "Home",
+  "nav.chores": "Chores",
+  "nav.new": "Add new",
+  "nav.expenses": "Expenses",
+  "nav.shopping": "Shopping",
+  "nav.profile": "My profile",
+  "nav.cancel": "Cancel",
+  "nav.back": "Back",
+
+  "sheet.title": "Add new",
+  "sheet.expense.title": "Expense",
+  "sheet.expense.hint": "Who paid for what?",
+  "sheet.shopping.title": "Shopping list",
+  "sheet.shopping.hint": "Add an item",
+  "sheet.note.title": "Note to the board",
+  "sheet.note.hint": "A short message to everyone"
 }

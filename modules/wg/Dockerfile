@@ -11,7 +11,8 @@ RUN uv sync --locked --no-dev
 
 RUN useradd --create-home --uid 1000 wg \
     && mkdir -p /data \
-    && chown wg:wg /data
+    && chown wg:wg /data \
+    && chown -R wg:wg /app
 USER wg
 
 ENV PATH="/app/.venv/bin:$PATH"

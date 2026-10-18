@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 from functools import lru_cache
 from pathlib import Path
@@ -56,3 +56,19 @@ def day(value: date, language: str = DEFAULT_LANGUAGE) -> str:
 def week_label(value: date, language: str = DEFAULT_LANGUAGE) -> str:
     prefix = "KW" if language == "de" else "Week"
     return f"{prefix} {value.isocalendar()[1]}"
+
+
+def week_range(start: date, language: str = DEFAULT_LANGUAGE) -> str:
+    """e.g. "19.-25. Okt" (de) / "19-25 Oct" (en), per design.md §5.4."""
+    end = start + timedelta(days=6)
+    locale = _locale(language)
+    end_month = format_date(end, format="MMM", locale=locale)
+    if language == "de":
+        if start.month == end.month:
+            return f"{start.day}.–{end.day}. {end_month}"
+        start_month = format_date(start, format="MMM", locale=locale)
+        return f"{start.day}. {start_month} – {end.day}. {end_month}"
+    if start.month == end.month:
+        return f"{start.day}–{end.day} {end_month}"
+    start_month = format_date(start, format="MMM", locale=locale)
+    return f"{start.day} {start_month} – {end.day} {end_month}"

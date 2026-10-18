@@ -1,6 +1,9 @@
 import time
 
+from starlette.requests import Request
+
 from app import auth
+from app.config import settings
 
 
 def test_auth_cookie_roundtrip() -> None:
@@ -47,3 +50,33 @@ def test_join_rate_limit_only_counts_recent_failures(monkeypatch) -> None:
     stale_moment = time.time() - auth.RATE_LIMIT_WINDOW_SECONDS - 1
     auth._join_failures[ip] = [stale_moment] * auth.RATE_LIMIT_MAX_FAILURES
     assert not auth.is_join_rate_limited(ip)
+
+
+def _request_with_headers(headers: dict[str, str]) -> Request:
+    scope = {
+        "type": "http",
+        "headers": [(k.lower().encode(), v.encode()) for k, v in headers.items()],
+    }
+    return Request(scope)
+
+
+def test_origin_is_trusted_for_a_real_browser_style_bare_origin() -> None:
+    # A real Origin header never carries a path, unlike APP_BASE_URL
+    # ("https://<domain>/wg") - this is the bug test_welcome_and_join.py's
+    # manual smoke test caught: comparing the two directly never matches.
+    bare_origin = "/".join(settings.app_base_url.split("/")[:3])
+    assert auth.origin_is_trusted(_request_with_headers({"origin": bare_origin}))
+
+
+def test_origin_is_trusted_rejects_a_different_host() -> None:
+    assert not auth.origin_is_trusted(_request_with_headers({"origin": "https://evil.example"}))
+
+
+def test_origin_is_trusted_falls_back_to_referer() -> None:
+    bare_origin = "/".join(settings.app_base_url.split("/")[:3])
+    request = _request_with_headers({"referer": f"{bare_origin}/wg/chores"})
+    assert auth.origin_is_trusted(request)
+
+
+def test_origin_is_trusted_rejects_missing_headers() -> None:
+    assert not auth.origin_is_trusted(_request_with_headers({}))

@@ -14,9 +14,11 @@ from app import auth
 from app.config import settings
 from app.models import Member, Setting
 
-# Business routes (chores, expenses, ...) don't exist yet in this step, so
-# the gate is exercised against a throwaway mini app with one dummy
-# protected route instead of a real one. See docs/roadmap.md step 4.
+# The 404 gate itself (this file) is plain Starlette, so it's exercised
+# against a throwaway mini app with a dummy protected route. CSRF enforcement
+# lives in app.auth.require_csrf, a *FastAPI* dependency (it needs Form()
+# parameter resolution) - that's tested through the real app and its real
+# routes instead, e.g. tests/test_chores_routes.py.
 
 
 async def _protected(request: Request) -> PlainTextResponse:
@@ -117,40 +119,12 @@ def test_valid_member_can_get_protected_route(gate_client: TestClient, session_l
     assert response.text == f"ok:{member_id}"
 
 
-def test_post_without_csrf_token_is_forbidden(gate_client: TestClient, session_local) -> None:
-    with session_local() as db:
-        member_id = db.query(Member).filter_by(name="Jakob").one().id
-
-    gate_client.cookies.set(auth.COOKIE_AUTH, auth.sign_auth_cookie(cookie_version=1))
-    gate_client.cookies.set(
-        auth.COOKIE_MEMBER, auth.sign_member_cookie(member_id, cookie_version=1)
-    )
-    response = gate_client.post(
-        f"{settings.base_path}/protected",
-        headers={"origin": settings.app_base_url},
-    )
-    assert response.status_code == 403
-
-
-def test_post_with_untrusted_origin_is_forbidden(gate_client: TestClient, session_local) -> None:
-    with session_local() as db:
-        member_id = db.query(Member).filter_by(name="Jakob").one().id
-
-    gate_client.cookies.set(auth.COOKIE_AUTH, auth.sign_auth_cookie(cookie_version=1))
-    gate_client.cookies.set(
-        auth.COOKIE_MEMBER, auth.sign_member_cookie(member_id, cookie_version=1)
-    )
-    token = auth.csrf_token(cookie_version=1, member_id=member_id)
-    response = gate_client.post(
-        f"{settings.base_path}/protected",
-        headers={"origin": "https://evil.example", "x-csrf-token": token},
-    )
-    assert response.status_code == 403
-
-
-def test_post_with_valid_origin_and_csrf_token_succeeds(
+def test_post_reaches_the_route_without_csrf_enforcement_here(
     gate_client: TestClient, session_local
 ) -> None:
+    # The mini app's plain route has no require_csrf dependency (it can't -
+    # that's FastAPI-only) - confirms the gate itself no longer blocks POSTs,
+    # now that CSRF moved to require_csrf. See the module docstring above.
     with session_local() as db:
         member_id = db.query(Member).filter_by(name="Jakob").one().id
 
@@ -158,11 +132,7 @@ def test_post_with_valid_origin_and_csrf_token_succeeds(
     gate_client.cookies.set(
         auth.COOKIE_MEMBER, auth.sign_member_cookie(member_id, cookie_version=1)
     )
-    token = auth.csrf_token(cookie_version=1, member_id=member_id)
-    response = gate_client.post(
-        f"{settings.base_path}/protected",
-        headers={"origin": settings.app_base_url, "x-csrf-token": token},
-    )
+    response = gate_client.post(f"{settings.base_path}/protected")
     assert response.status_code == 200
 
 

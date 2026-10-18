@@ -1,29 +1,34 @@
 from __future__ import annotations
 
-import hashlib
 import hmac
 import threading
 import time
 from datetime import UTC, datetime
+from urllib.parse import urlsplit
 
-from fastapi import APIRouter, Depends, Form, Request
+from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from itsdangerous import BadData, URLSafeSerializer
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from starlette.responses import PlainTextResponse, RedirectResponse, Response
 
 from app.config import settings
+from app.csrf import csrf_token, csrf_token_matches
 from app.db import SessionLocal, get_db
 from app.i18n import DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES, t
 from app.models import ActivityLog, Member, Setting
 from app.templating import templates
+
+__all__ = [  # re-exported for callers that used to import these from here
+    "csrf_token",
+    "csrf_token_matches",
+]
 
 COOKIE_AUTH = "wg_auth"
 COOKIE_MEMBER = "wg_member"
 COOKIE_LANG = "wg_lang"
 COOKIE_MAX_AGE = 400 * 24 * 60 * 60  # 400 days, spec.md §6.1
 
-UNSAFE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 NOT_FOUND = PlainTextResponse("Not Found", status_code=404)
 
 RATE_LIMIT_WINDOW_SECONDS = 15 * 60
@@ -100,25 +105,18 @@ def record_join_failure(ip: str) -> None:
         _join_failures.setdefault(ip, []).append(time.time())
 
 
-# --- CSRF ------------------------------------------------------------
-
-
-def csrf_token(cookie_version: int, member_id: int) -> str:
-    message = f"{cookie_version}:{member_id}".encode()
-    return hmac.new(settings.secret_key.encode(), message, hashlib.sha256).hexdigest()
-
-
-def csrf_token_matches(token: str | None, cookie_version: int, member_id: int) -> bool:
-    if not token:
-        return False
-    return hmac.compare_digest(token, csrf_token(cookie_version, member_id))
+def _origin_of(url: str) -> str:
+    """scheme://host[:port], with no path - what an Origin header actually
+    looks like (it never carries one), unlike settings.app_base_url."""
+    split = urlsplit(url)
+    return f"{split.scheme}://{split.netloc}"
 
 
 def origin_is_trusted(request: Request) -> bool:
     origin = request.headers.get("origin") or request.headers.get("referer")
     if not origin:
         return False
-    return origin.rstrip("/").startswith(settings.app_base_url.rstrip("/"))
+    return _origin_of(origin) == _origin_of(settings.app_base_url)
 
 
 # --- the 404 gate (plus CSRF + security headers) -------------------------
@@ -144,17 +142,6 @@ def _security_headers(response: Response) -> Response:
     if response.media_type in (None, "text/html"):
         response.headers["Cache-Control"] = "no-store"
     return response
-
-
-async def _csrf_token_from_form(request: Request) -> str | None:
-    content_type = request.headers.get("content-type", "")
-    is_form = "application/x-www-form-urlencoded" in content_type
-    is_multipart = "multipart/form-data" in content_type
-    if not is_form and not is_multipart:
-        return None
-    form = await request.form()
-    value = form.get("csrf")
-    return str(value) if value is not None else None
 
 
 async def access_gate(request: Request, call_next):
@@ -188,17 +175,28 @@ async def access_gate(request: Request, call_next):
                 RedirectResponse(f"{settings.base_path}/welcome", status_code=303)
             )
 
-        if request.method in UNSAFE_METHODS:
-            if not origin_is_trusted(request):
-                return _security_headers(PlainTextResponse("Forbidden", status_code=403))
-            token = request.headers.get("x-csrf-token") or await _csrf_token_from_form(request)
-            if not csrf_token_matches(token, cookie_version, member.id):
-                return _security_headers(PlainTextResponse("Forbidden", status_code=403))
-
+        # CSRF itself is *not* checked here: reading the body (for the
+        # no-JS hidden-field fallback) via request.form() in a
+        # BaseHTTPMiddleware drains the one-shot ASGI receive channel, and
+        # the real route then gets an empty body ("field required") when it
+        # parses its own Form(...) params - a classic Starlette gotcha. See
+        # require_csrf below, which every mutating route depends on instead,
+        # where FastAPI's own (single) body parse makes this safe.
         request.state.member_id = member.id
         request.state.cookie_version = cookie_version
 
     return _security_headers(await call_next(request))
+
+
+def require_csrf(request: Request, csrf: str | None = Form(None)) -> None:
+    """Depends() on every POST/PUT/PATCH/DELETE route. Checks the
+    X-CSRF-Token header (htmx, via hx-headers on <body>) or the hidden
+    "csrf" form field (the no-JS fallback, rule 11) - spec.md §6.2."""
+    if not origin_is_trusted(request):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    token = request.headers.get("x-csrf-token") or csrf
+    if not csrf_token_matches(token, request.state.cookie_version, request.state.member_id):
+        raise HTTPException(status_code=403, detail="Forbidden")
 
 
 # --- routes ---------------------------------------------------------

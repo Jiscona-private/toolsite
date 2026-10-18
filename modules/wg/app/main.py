@@ -12,6 +12,7 @@ from app.auth import access_gate
 from app.auth import router as auth_router
 from app.config import settings
 from app.db import get_db
+from app.routes.chores import router as chores_router
 from app.templating import base_context, templates
 
 
@@ -39,6 +40,7 @@ def create_app() -> FastAPI:
 
     app.include_router(router)
     app.include_router(auth_router)
+    app.include_router(chores_router)
     return app
 
 

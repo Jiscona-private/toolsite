@@ -21,5 +21,22 @@
   "sheet.shopping.title": "Shopping list",
   "sheet.shopping.hint": "Add an item",
   "sheet.note.title": "Note to the board",
-  "sheet.note.hint": "A short message to everyone"
+  "sheet.note.hint": "A short message to everyone",
+
+  "chores.title": "Chores",
+  "chores.subtitle": "Everyone moves up one chore each Monday",
+  "chores.upcoming_title": "Next weeks",
+  "chores.hint": "Skipping with a reason doesn't get made up later: the rotation just carries on.",
+  "chores.free": "free",
+  "chores.this_week": "this week",
+  "chores.action.done": "Done",
+  "chores.action.skip": "Skip …",
+  "chores.action.skip_submit": "Skip",
+  "chores.action.undo": "Undo",
+  "chores.action.reason_label": "Reason",
+  "chores.error.reason_required": "Please give a reason (at least 3 characters).",
+  "chores.status.open": "open",
+  "chores.status.done": "done",
+  "chores.status.skipped": "skipped",
+  "chores.status.missed": "not done"
 }

@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- stops htmx injecting an inline <style> for indicators, which the CSP's style-src 'self' blocks -->
     <meta name="htmx-config" content='{"includeIndicatorStyles": false}' />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
     <title>{% block title %}{{ wg_name }}{% endblock %}</title>
     <link rel="stylesheet" href="{{ base_path }}/static/css/app.css" />
     <script src="{{ base_path }}/static/js/htmx.min.js" defer></script>
     <script src="{{ base_path }}/static/js/app.js" defer></script>
   </head>
-  <body hx-boost="true">
+  <body hx-boost="true" hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'>
     <div class="page stack">
       {% if member %}
         <div class="align-end">

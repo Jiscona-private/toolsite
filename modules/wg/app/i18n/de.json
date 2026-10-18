@@ -21,5 +21,22 @@
   "sheet.shopping.title": "Einkaufsliste",
   "sheet.shopping.hint": "Einen Artikel hinzufügen",
   "sheet.note.title": "Notiz an die Pinnwand",
-  "sheet.note.hint": "Kurze Nachricht an alle"
+  "sheet.note.hint": "Kurze Nachricht an alle",
+
+  "chores.title": "Putzplan",
+  "chores.subtitle": "Jeden Montag rückt jeder weiter",
+  "chores.upcoming_title": "Nächste Wochen",
+  "chores.hint": "Wer mit Grund auslässt, bekommt nichts nachgetragen: Die Rotation läuft normal weiter.",
+  "chores.free": "frei",
+  "chores.this_week": "diese Woche",
+  "chores.action.done": "Erledigt",
+  "chores.action.skip": "Auslassen …",
+  "chores.action.skip_submit": "Auslassen",
+  "chores.action.undo": "Rückgängig",
+  "chores.action.reason_label": "Grund",
+  "chores.error.reason_required": "Bitte einen Grund angeben (mindestens 3 Zeichen).",
+  "chores.status.open": "offen",
+  "chores.status.done": "erledigt",
+  "chores.status.skipped": "ausgelassen",
+  "chores.status.missed": "nicht erledigt"
 }

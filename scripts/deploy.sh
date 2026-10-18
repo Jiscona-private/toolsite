@@ -11,6 +11,9 @@ if [ ! -f .env ]; then
   exit 1
 fi
 
+caddyfile_hash() { sha256sum Caddyfile 2>/dev/null | cut -d' ' -f1; }
+BEFORE_CADDY="$(caddyfile_hash)"
+
 echo "==> Pulling latest changes"
 git pull --ff-only
 
@@ -19,6 +22,14 @@ docker compose build
 
 echo "==> Starting/updating containers"
 docker compose up -d --remove-orphans
+
+# The Caddyfile is a single-file bind mount. `git pull` replaces the file
+# (new inode), so the running caddy container keeps seeing the old one.
+# Recreate caddy whenever the Caddyfile changed so new routes take effect.
+if [ "$BEFORE_CADDY" != "$(caddyfile_hash)" ]; then
+  echo "==> Caddyfile changed, recreating caddy"
+  docker compose up -d --force-recreate caddy
+fi
 
 echo "==> Current status"
 docker compose ps

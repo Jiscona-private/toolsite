@@ -9,6 +9,7 @@ dependencies = [
     "pydantic-settings>=2.6",
     "sqlalchemy>=2.0,<2.1",
     "alembic>=1.13",
+    "segno>=1.6",
 ]
 
 [dependency-groups]

@@ -4,6 +4,7 @@ Neue Entscheidungen oben anhängen. Format: Datum · Entscheidung · Begründung
 
 | Datum | Entscheidung | Begründung | Verworfen |
 | --- | --- | --- | --- |
+| 2026-10-18 | **App-Name „WG-Manager v1“** (`settings.wg_name`), **Ausgaben-Kategorien bestätigt** (Lebensmittel · Putzmittel · Haushalt · Sonstiges, siehe `deploy/seed.toml`), **Ausgleich braucht keine Bestätigung** durch den Empfänger (Standard bleibt) | Vom Nutzer entschieden (CLAUDE.md §12) | Bestätigungsfunktion für Ausgleiche |
 | 2026-10-18 | **WG-App wird Toolsite-Modul** `modules/wg/` unter `https://<DOMAIN>/wg/` und ersetzt den Dummy `wg-manager`. Kein eigenes Caddy, keine Basic Auth, Domain statt IP-Zertifikat | Toolsite (Landing + Module) läuft bereits mit Domain; ein Repo, ein Deploy-Skript; geheimer Link ersetzt Basic Auth (Nutzerwunsch: kein Login) | eigenes Repo `wg-app` mit eigenem Caddy (Konflikt um Ports 80/443) |
 | 2026-10-18 | Code-Entwicklung in **Claude Code** mit privatem GitHub-Repo, Planung/Design weiter im Claude-Chat | Versionsverlauf, Tests, Commits; der VPS holt Updates per `git pull` | Code nur im Chat erzeugen |
 | 2026-10-18 | **Navigation:** Bottom-Bar Start · Putzplan · (+) · Ausgaben · Einkauf; „+“ öffnet ein Sheet für alle Einträge; Profil über Avatar oben rechts; Pinnwand über eine Karte auf der Startseite | Vom Nutzer gewünscht: einfacher und intuitiver. Ein Ort zum Eintragen, vier klare Bereiche | 5 Tabs inkl. „WG“ (zu unklar), schwebender FAB (verdeckt Inhalte) |

@@ -30,3 +30,13 @@ def client(tmp_path: Path) -> Generator[TestClient]:
         yield TestClient(app)
     finally:
         app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def session_local(tmp_path: Path) -> sessionmaker:
+    """A sessionmaker bound to a throwaway SQLite file with every table
+    already created - for tests that drive app.cli directly rather than
+    through the FastAPI app (so the `client` override doesn't apply)."""
+    engine = create_sqlite_engine(f"sqlite:///{tmp_path / 'cli-test.db'}")
+    Base.metadata.create_all(engine)
+    return sessionmaker(engine, expire_on_commit=False)

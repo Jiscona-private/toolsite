@@ -230,11 +230,10 @@ Lokal ohne HTTPS: In der Entwicklung setzt `APP_ENV=dev` das Cookie-Flag `Secure
 
 ## 12. Offene Punkte (beim Nutzer nachfragen, sobald relevant)
 
-1. **Ausgaben-Kategorien:** Vorschlag Lebensmittel · Putzmittel · Haushalt · Sonstiges (so in `seed.toml`). Bestätigen lassen.
-2. **Ausgleich bestätigen:** Muss der Empfänger eine Überweisung bestätigen? Standard bis zur Antwort: nein.
-3. **Müll- und Containertermine** für den Kalender: gibt es feste Termine?
-4. **Ziel für die externe Backup-Kopie** (eigener Rechner, Cloudspeicher, Storage Box).
-5. **Name der App** (bis dahin „WG-App“; kommt aus `settings.wg_name`, nie hart kodiert).
+1. **Müll- und Containertermine** für den Kalender: gibt es feste Termine? (Phase 3, nicht dringend)
+2. **Ziel für die externe Backup-Kopie** (eigener Rechner, Cloudspeicher, Storage Box).
+
+Entschieden am 18.10.2026 (siehe `docs/decisions.md`): Ausgaben-Kategorien wie in `seed.toml` bestätigt; Ausgleich braucht keine Bestätigung durch den Empfänger; App-Name „WG-Manager v1“ (`settings.wg_name`).
 
 ## 13. Was Claude hier nicht tun soll
 

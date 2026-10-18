@@ -2,7 +2,7 @@
 # Nur für eine leere Datenbank. Spätere Änderungen laufen über die Einstellungen in der App.
 
 [wg]
-name = "WG-App"                  # offener Punkt: Name der App
+name = "WG-Manager v1"
 timezone = "Europe/Berlin"
 default_language = "de"
 
@@ -58,8 +58,7 @@ kitchen = "Bato"
 big_bath = "Jakob"
 small_bath = "Daniel"
 
-# Ausgaben starten bei null (keine Altdaten).
-# Offener Punkt: Kategorien bestätigen lassen.
+# Ausgaben starten bei null (keine Altdaten). Kategorien bestätigt (18.10.2026).
 [[expense_categories]]
 key = "groceries"
 name_de = "Lebensmittel"

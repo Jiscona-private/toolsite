@@ -1,0 +1,8 @@
+{
+  "welcome.title": "Willkommen in der WG",
+  "welcome.subtitle": "Wer bist du? Die App merkt sich deine Auswahl auf diesem Gerät.",
+  "welcome.hint": "Kein Passwort nötig: Wer diesen Link hat, gehört zur WG. Teile ihn nur in eurer WG-Gruppe.",
+  "welcome.language_label": "Sprache",
+  "welcome.no_members": "Noch keine Mitglieder angelegt.",
+  "welcome.invalid_choice": "Das hat nicht geklappt. Bitte nochmal wählen."
+}

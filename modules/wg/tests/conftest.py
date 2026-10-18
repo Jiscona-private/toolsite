@@ -5,15 +5,20 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session, sessionmaker
 
-from app import models  # noqa: F401  # registers every table with Base.metadata
+from app import auth, models  # noqa: F401  # models registers every table with Base.metadata
 from app.db import Base, create_sqlite_engine, get_db
 from app.main import app
 
 
 @pytest.fixture
-def client(tmp_path: Path) -> Generator[TestClient]:
+def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Generator[TestClient]:
     """TestClient against a throwaway SQLite file, never the dev database
-    in modules/wg/data/ (CLAUDE.md: tests use in-memory/tmp SQLite)."""
+    in modules/wg/data/ (CLAUDE.md: tests use in-memory/tmp SQLite).
+
+    Patches both the `get_db` dependency (used by route handlers) and
+    app.auth.SessionLocal (used directly by the access_gate middleware,
+    which runs outside FastAPI's DI) so both sides see the same data.
+    """
     engine = create_sqlite_engine(f"sqlite:///{tmp_path / 'test.db'}")
     Base.metadata.create_all(engine)
     testing_session_local = sessionmaker(engine, expire_on_commit=False)
@@ -26,8 +31,11 @@ def client(tmp_path: Path) -> Generator[TestClient]:
             session.close()
 
     app.dependency_overrides[get_db] = override_get_db
+    monkeypatch.setattr(auth, "SessionLocal", testing_session_local)
+    test_client = TestClient(app)
+    test_client.session_local = testing_session_local  # lets tests seed data directly
     try:
-        yield TestClient(app)
+        yield test_client
     finally:
         app.dependency_overrides.clear()
 

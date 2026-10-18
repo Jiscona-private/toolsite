@@ -1,0 +1,8 @@
+{
+  "welcome.title": "Welcome to the flat",
+  "welcome.subtitle": "Who are you? The app remembers your choice on this device.",
+  "welcome.hint": "No password needed: whoever has this link belongs to the flat. Only share it in your flat's group chat.",
+  "welcome.language_label": "Language",
+  "welcome.no_members": "No members have been set up yet.",
+  "welcome.invalid_choice": "That didn't work. Please choose again."
+}

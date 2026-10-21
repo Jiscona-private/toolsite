@@ -235,67 +235,6 @@ def test_undo_is_rejected_for_weeks_further_back_than_last_week(client: TestClie
     assert "error=undo_not_allowed" in response.headers["location"]
 
 
-def _seed_spec_table(client: TestClient) -> dict:
-    """The exact seed.toml configuration, so the upcoming-weeks table can
-    be checked against spec.md §10.1's own worked example."""
-    with client.session_local() as db:
-        db.add(Setting(key="cookie_version", value="1"))
-        members = {}
-        for position, name in enumerate(["Jakob", "Clara", "Daniel", "Bato"]):
-            member = Member(
-                name=name,
-                language="de",
-                color=position,
-                position=position,
-                active=True,
-                joined_on=date(2026, 10, 19),
-                ntfy_topic=f"wg-bbbbbbb{position}-{name.lower()}",
-                notify_prefs={},
-            )
-            db.add(member)
-            members[name] = member
-        db.flush()
-        chores = {}
-        for position, key in enumerate(CHORE_KEYS):
-            chore = Chore(key=key, name_de=key, name_en=key, position=position)
-            db.add(chore)
-            chores[key] = chore
-        db.flush()
-        db.add(
-            RotaConfig(
-                valid_from=date(2026, 10, 19),
-                chore_ids=[chores[k].id for k in CHORE_KEYS],
-                slots=[
-                    members["Clara"].id,
-                    members["Bato"].id,
-                    members["Jakob"].id,
-                    members["Daniel"].id,
-                ],
-                created_by=None,
-            )
-        )
-        db.commit()
-        return {"member_id": {name: m.id for name, m in members.items()}}
-
-
-def test_upcoming_table_columns_stay_aligned_to_the_header_across_weeks(
-    client: TestClient,
-) -> None:
-    # Regression test: the table header must list chores in a fixed order,
-    # and every week's row must follow that same order - not each week's
-    # own "my chore first" order (which differs week to week and broke the
-    # header/cell alignment in an earlier version of this page).
-    seeded = _seed_spec_table(client)
-    _login_as(client, seeded["member_id"]["Clara"])  # Clara: floor in KW43, kitchen in KW44
-
-    page = client.get("/wg/chores?week=2026-10-19").text
-    header_order = page.split("<thead>")[1].split("</thead>")[0]
-    assert header_order.index("floor") < header_order.index("kitchen")
-
-    week_44_row = page.split('scope="row">KW 44</th>')[1].split("</tr>")[0]
-    assert week_44_row.index("Daniel") < week_44_row.index("Clara")  # floor col before kitchen col
-
-
 def test_done_skip_and_undo_each_write_an_activity_log_entry(client: TestClient) -> None:
     seeded = _seed(client)
     jakob = seeded["member_id"]["Jakob"]

@@ -85,6 +85,19 @@ def test_welcome_lists_active_members_only(client: TestClient) -> None:
     assert "Ausgezogen" not in response.text
 
 
+def test_welcome_page_is_branded_with_an_icon_avatars_and_a_members_only_notice(
+    client: TestClient,
+) -> None:
+    _seed_settings(client)
+    _seed_member(client, name="Jakob", active=True)
+    client.cookies.set(auth.COOKIE_AUTH, auth.sign_auth_cookie(cookie_version=1))
+
+    page = client.get("/wg/welcome").text
+    assert "icon-app" in page  # branded app icon, not a bare heading
+    assert 'class="avatar color-0"' in page  # member choices show an avatar, not a plain name
+    assert "Nur Mitglieder dieser WG" in page  # join-only notice, per CLAUDE.md §7.3
+
+
 def test_welcome_post_sets_member_cookie_and_redirects_home(client: TestClient) -> None:
     _seed_settings(client)
     member_id = _seed_member(client)

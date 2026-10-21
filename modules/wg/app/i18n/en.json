@@ -1,7 +1,7 @@
 {
   "welcome.title": "Welcome to the flat",
   "welcome.subtitle": "Who are you? The app remembers your choice on this device.",
-  "welcome.hint": "No password needed: whoever has this link belongs to the flat. Only share it in your flat's group chat.",
+  "welcome.hint": "Only members of this flat should join here. Only share this link with them – whoever has it is treated as a flatmate.",
   "welcome.language_label": "Language",
   "welcome.no_members": "No members have been set up yet.",
   "welcome.invalid_choice": "That didn't work. Please choose again.",
@@ -22,7 +22,6 @@
   "sheet.note.hint": "A short message to everyone",
   "chores.title": "Chores",
   "chores.subtitle": "Everyone moves up one chore each Monday",
-  "chores.upcoming_title": "Next weeks",
   "chores.hint": "Skipping with a reason doesn't get made up later: the rotation just carries on.",
   "chores.free": "free",
   "chores.this_week": "this week",

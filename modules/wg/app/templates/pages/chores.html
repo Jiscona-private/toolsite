@@ -66,31 +66,5 @@
     {% endfor %}
   </div>
 
-  <div class="card">
-    <h2>{{ t("chores.upcoming_title") }}</h2>
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">{{ week_label(week, lang) }}</th>
-          {% for chore in chores %}
-            <th scope="col">{{ chore.name_de if lang == "de" else chore.name_en }}</th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for entry in upcoming %}
-          <tr>
-            <th scope="row">{{ week_label(entry.week, lang) }}</th>
-            {% for row in entry.rows %}
-              <td class="{{ 'money' if row.is_mine else '' }}">
-                {{ row.assigned_member.name if row.assigned_member else t("chores.free") }}
-              </td>
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
   <p class="text-muted">{{ t("chores.hint") }}</p>
 {% endblock %}

@@ -1,7 +1,7 @@
 {
   "welcome.title": "Willkommen in der WG",
   "welcome.subtitle": "Wer bist du? Die App merkt sich deine Auswahl auf diesem Gerät.",
-  "welcome.hint": "Kein Passwort nötig: Wer diesen Link hat, gehört zur WG. Teile ihn nur in eurer WG-Gruppe.",
+  "welcome.hint": "Nur Mitglieder dieser WG sollen hier beitreten. Gib diesen Link nur an sie weiter – wer ihn hat, gilt als Mitglied der WG.",
   "welcome.language_label": "Sprache",
   "welcome.no_members": "Noch keine Mitglieder angelegt.",
   "welcome.invalid_choice": "Das hat nicht geklappt. Bitte nochmal wählen.",
@@ -22,7 +22,6 @@
   "sheet.note.hint": "Kurze Nachricht an alle",
   "chores.title": "Putzplan",
   "chores.subtitle": "Jeden Montag rückt jeder weiter",
-  "chores.upcoming_title": "Nächste Wochen",
   "chores.hint": "Wer mit Grund auslässt, bekommt nichts nachgetragen: Die Rotation läuft normal weiter.",
   "chores.free": "frei",
   "chores.this_week": "diese Woche",

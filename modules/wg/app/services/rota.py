@@ -201,9 +201,9 @@ def rows_in_chore_order(
     my_member_id: int,
 ) -> list[dict]:
     """One row per chore, in the fixed `chores` order - needed wherever
-    several weeks are shown side by side (e.g. /chores' upcoming-weeks
-    table), so a column always means the same chore across every row.
-    Shared by /chores and the Start page's "Putzplan diese Woche" card."""
+    several weeks are shown side by side (e.g. /settings' rotation
+    preview table), so a column always means the same chore across every
+    row. rows_for_week() below is what single-week views use instead."""
     assignment_map = assignment(db, week)
     rows = []
     for chore in chores:

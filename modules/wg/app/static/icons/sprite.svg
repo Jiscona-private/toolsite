@@ -5,6 +5,10 @@
       <path d="M6 10v9h12v-9" />
       <path d="M10 19v-6h4v6" />
     </g>
+    <g id="icon-app" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.5 10.5 12 3.5l8.5 7V20a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1z" />
+      <path d="M8.5 14.5l2.5 2.5 4.5-4.5" />
+    </g>
     <g id="icon-chores" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
       <rect x="5" y="4" width="14" height="17" rx="2" />
       <path d="M9 2.5h6" />

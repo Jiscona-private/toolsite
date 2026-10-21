@@ -48,16 +48,6 @@ def chores_page(
     members = {m.id: m for m in db.scalars(select(Member))}
     my_member_id = request.state.member_id
 
-    upcoming = [
-        {
-            "week": current_week + timedelta(weeks=offset),
-            "rows": rota.rows_in_chore_order(
-                db, chores, current_week + timedelta(weeks=offset), members, my_member_id
-            ),
-        }
-        for offset in (1, 2, 3)
-    ]
-
     context = base_context(request, db, active_nav="chores")
     context.update(
         {
@@ -66,9 +56,7 @@ def chores_page(
             "prev_week": current_week - timedelta(weeks=1),
             "next_week": current_week + timedelta(weeks=1),
             "is_current_week": current_week == week_start(berlin_today()),
-            "chores": chores,
             "rows": rota.rows_for_week(db, chores, current_week, members, my_member_id),
-            "upcoming": upcoming,
             "error": error,
         }
     )

@@ -17,6 +17,7 @@ from app.models import Chore, ExpenseCategory, InfoPage, Member, RotaConfig, Set
 from app.services.activity import run_daily_purge
 from app.services.backup import run_backup
 from app.services.members import create_member
+from app.timezone import week_start
 
 
 def _get_setting(db: Session, key: str) -> str:
@@ -149,6 +150,63 @@ def cmd_purge_trash() -> None:
     print(f"{result['purged']} Einträge endgültig aus dem Papierkorb gelöscht.")
 
 
+def cmd_reorder_chores(keys: list[str]) -> None:
+    """Changes the fixed rotation order (spec.md §3.1) itself - every
+    future rota rebuild uses this order from now on. Does not touch any
+    existing rota_config row; use set-rota for that."""
+    with SessionLocal() as db:
+        chores = {c.key: c for c in db.scalars(select(Chore))}
+        unknown = [key for key in keys if key not in chores]
+        if unknown:
+            raise RuntimeError(f"Unbekannte Aufgaben-Keys: {', '.join(unknown)}")
+        missing = [key for key in chores if key not in keys]
+        if missing:
+            raise RuntimeError(f"Diese Aufgaben fehlen in der Liste: {', '.join(missing)}")
+        for position, key in enumerate(keys):
+            chores[key].position = position
+        db.commit()
+    print("Neue Reihenfolge: " + " → ".join(keys))
+
+
+def cmd_set_rota(week_raw: str, assignments_raw: list[str]) -> None:
+    """One explicit chore=member mapping for the week starting `week_raw`
+    (and, per the normal rotation algorithm, every week after it until a
+    newer rota_config is added) - for correcting a wrong assignment
+    without going through "Rotation neu festlegen"'s continuity logic."""
+    week = week_start(date.fromisoformat(week_raw))
+    with SessionLocal() as db:
+        ordered_chores = list(
+            db.scalars(select(Chore).where(Chore.active.is_(True)).order_by(Chore.position))
+        )
+        members_by_name = {m.name: m for m in db.scalars(select(Member))}
+
+        pairs: list[tuple[str, str]] = []
+        for item in assignments_raw:
+            key, _, name = item.partition("=")
+            if not name:
+                raise RuntimeError(f"Erwarte 'aufgabe=name', bekam: '{item}'")
+            pairs.append((key, name))
+
+        name_by_key = dict(pairs)
+        chore_keys = {c.key for c in ordered_chores}
+        given_keys = set(name_by_key)
+        if given_keys != chore_keys:
+            missing = chore_keys - given_keys
+            unknown = given_keys - chore_keys
+            if missing:
+                raise RuntimeError(f"Diese Aufgaben fehlen: {', '.join(sorted(missing))}")
+            raise RuntimeError(f"Unbekannte Aufgaben-Keys: {', '.join(sorted(unknown))}")
+        unknown_members = set(name_by_key.values()) - set(members_by_name)
+        if unknown_members:
+            raise RuntimeError(f"Unbekannte Mitglieder: {', '.join(sorted(unknown_members))}")
+
+        chore_ids = [c.id for c in ordered_chores]
+        slots = [members_by_name[name_by_key[c.key]].id for c in ordered_chores]
+        db.add(RotaConfig(valid_from=week, chore_ids=chore_ids, slots=slots, created_by=None))
+        db.commit()
+    print(f"Rotation ab {week.isoformat()} gesetzt: " + ", ".join(f"{k}={v}" for k, v in pairs))
+
+
 def cmd_add_member(name: str) -> None:
     with SessionLocal() as db:
         existing_positions = db.scalars(select(Member.position)).all()
@@ -181,6 +239,21 @@ def main(argv: list[str] | None = None) -> None:
     add_member_parser = subparsers.add_parser("add-member", help="Notfall-Werkzeug")
     add_member_parser.add_argument("name")
 
+    reorder_parser = subparsers.add_parser(
+        "reorder-chores",
+        help="Feste Rotationsreihenfolge ändern (alle Aufgaben-Keys, in Reihenfolge)",
+    )
+    reorder_parser.add_argument("keys", nargs="+")
+
+    set_rota_parser = subparsers.add_parser(
+        "set-rota",
+        help="Zuteilung ab einer Woche explizit setzen (z.B. floor=Jakob kitchen=Clara ...)",
+    )
+    set_rota_parser.add_argument("week", help="YYYY-MM-DD, ein beliebiger Tag der Woche")
+    set_rota_parser.add_argument(
+        "assignments", nargs="+", help="aufgabe=name, eine pro aktiver Aufgabe"
+    )
+
     args = parser.parse_args(argv)
 
     if args.command == "init":
@@ -197,6 +270,10 @@ def main(argv: list[str] | None = None) -> None:
         cmd_purge_trash()
     elif args.command == "add-member":
         cmd_add_member(args.name)
+    elif args.command == "reorder-chores":
+        cmd_reorder_chores(args.keys)
+    elif args.command == "set-rota":
+        cmd_set_rota(args.week, args.assignments)
 
 
 if __name__ == "__main__":

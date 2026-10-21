@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app import cli
 from app.models import Chore, ExpenseCategory, InfoPage, Member, RotaConfig, Setting
+from app.services import rota
 
 SEED_TOML = """
 [wg]
@@ -131,3 +132,61 @@ def test_add_member_appends_next_position(seed_path: Path, session_local: sessio
         members = db.scalars(select(Member).order_by(Member.position)).all()
         assert [m.name for m in members] == ["Jakob", "Clara", "Eva"]
         assert members[-1].position == 2
+
+
+def test_reorder_chores_changes_the_position_order(
+    seed_path: Path, session_local: sessionmaker
+) -> None:
+    cli.cmd_init(seed_path)
+
+    cli.cmd_reorder_chores(["kitchen", "floor"])
+
+    with session_local() as db:
+        chores = db.scalars(select(Chore).order_by(Chore.position)).all()
+        assert [c.key for c in chores] == ["kitchen", "floor"]
+
+
+def test_reorder_chores_rejects_an_unknown_key(
+    seed_path: Path, session_local: sessionmaker
+) -> None:
+    cli.cmd_init(seed_path)
+    with pytest.raises(RuntimeError, match="Unbekannte"):
+        cli.cmd_reorder_chores(["kitchen", "floor", "bathroom"])
+
+
+def test_reorder_chores_rejects_a_missing_key(seed_path: Path, session_local: sessionmaker) -> None:
+    cli.cmd_init(seed_path)
+    with pytest.raises(RuntimeError, match="fehlen"):
+        cli.cmd_reorder_chores(["kitchen"])
+
+
+def test_set_rota_creates_an_explicit_mapping_without_touching_earlier_weeks(
+    seed_path: Path, session_local: sessionmaker
+) -> None:
+    cli.cmd_init(seed_path)  # seed: KW43 (2026-10-19) floor=Clara, kitchen=Jakob
+
+    cli.cmd_set_rota("2026-10-26", ["floor=Jakob", "kitchen=Clara"])
+
+    with session_local() as db:
+        members = {m.name: m.id for m in db.scalars(select(Member))}
+        chores = {c.key: c.id for c in db.scalars(select(Chore))}
+
+        earlier_week = rota.assignment(db, date(2026, 10, 19))
+        assert earlier_week[chores["floor"]] == members["Clara"]
+        assert earlier_week[chores["kitchen"]] == members["Jakob"]
+
+        corrected_week = rota.assignment(db, date(2026, 10, 26))
+        assert corrected_week[chores["floor"]] == members["Jakob"]
+        assert corrected_week[chores["kitchen"]] == members["Clara"]
+
+
+def test_set_rota_rejects_an_unknown_member(seed_path: Path, session_local: sessionmaker) -> None:
+    cli.cmd_init(seed_path)
+    with pytest.raises(RuntimeError, match="Unbekannte Mitglieder"):
+        cli.cmd_set_rota("2026-10-26", ["floor=Jakob", "kitchen=Nemo"])
+
+
+def test_set_rota_rejects_a_missing_chore(seed_path: Path, session_local: sessionmaker) -> None:
+    cli.cmd_init(seed_path)
+    with pytest.raises(RuntimeError, match="fehlen"):
+        cli.cmd_set_rota("2026-10-26", ["floor=Jakob"])

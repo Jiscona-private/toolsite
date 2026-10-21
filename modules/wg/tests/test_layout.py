@@ -53,6 +53,23 @@ def test_static_assets_are_behind_the_access_gate(client: TestClient) -> None:
     assert response.status_code == 404
 
 
+def test_static_assets_load_on_welcome_with_only_the_auth_cookie(client: TestClient) -> None:
+    # Regression test: someone on /welcome has the join-link auth cookie
+    # but, by definition, no member cookie yet (they haven't picked a
+    # member). Before this fix, every static asset request from that page
+    # fell through to the "no member" branch and got redirected back to
+    # /welcome instead of served - the browser silently refused to apply
+    # HTML as CSS, so the page rendered completely unstyled.
+    with client.session_local() as db:
+        db.add(Setting(key="cookie_version", value="1"))
+        db.commit()
+    client.cookies.set(auth.COOKIE_AUTH, auth.sign_auth_cookie(cookie_version=1))
+
+    response = client.get("/wg/static/css/app.css", follow_redirects=False)
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/css")
+
+
 def test_new_page_lists_all_three_sheet_options(client: TestClient) -> None:
     _authenticated_member(client)
     response = client.get("/wg/new")

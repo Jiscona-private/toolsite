@@ -159,7 +159,19 @@ async def access_gate(request: Request, call_next):
         if auth_payload is None or auth_payload.get("v") != cookie_version:
             return _security_headers(NOT_FOUND)
 
-        if path == f"{settings.base_path}/welcome":
+        # /welcome itself, and the static assets it needs (app.css, the
+        # fonts it @font-face's) - someone on /welcome has the join-link
+        # auth cookie but, by definition, no member cookie yet. Without
+        # this, every asset request from that page fell through to the
+        # "no member -> redirect to /welcome" branch below: the browser
+        # got an HTML redirect back instead of CSS and silently dropped
+        # it, so the page rendered as unstyled HTML. Static files carry
+        # no personal data, so gating them on just the auth cookie (same
+        # tier as /welcome, not full member login) is correct, not a
+        # shortcut.
+        if path == f"{settings.base_path}/welcome" or path.startswith(
+            f"{settings.base_path}/static/"
+        ):
             return _security_headers(await call_next(request))
 
         member = None

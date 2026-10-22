@@ -22,7 +22,11 @@
     {
       "id": "LE03",
       "title": "Reelle und komplexe Zahlen",
-      "week": "Woche 3 · 26.10.–01.11."
+      "week": "Woche 3 · 26.10.–01.11.",
+      "file": "le03.html",
+      "sections": 16,
+      "storagePrefix": "homa1-le03-",
+      "updated": "2026-10-22"
     },
     {
       "id": "LE04",

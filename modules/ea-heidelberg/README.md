@@ -1,38 +1,80 @@
 # EA Heidelberg concept draft (`/ea-heidelberg/`)
 
-A content-only skeleton for a possible redesign of
-[eaheidelberg.de](https://eaheidelberg.de) (currently a Squarespace site for
-the Effective Altruism Heidelberg university group). No visual design has
-been applied — plain HTML/CSS, four pages (Home, About, Events, Contact),
-content copied from the live site as of October 2026 so the real design pass
-has something to work from.
+A persuasion-focused redesign concept for [eaheidelberg.de](https://eaheidelberg.de)
+(currently a Squarespace site for the Effective Altruism Heidelberg
+university group), in English and German. The goal of this draft isn't a
+cosmetic refresh — it's a site built to actually get more students to
+attend events, using a mix of real content from the live site, structural
+and visual inspiration from GiveWell/Giving What We Can/80,000 Hours/
+effectivealtruism.org, and persuasion-psychology research. See
+`docs/decisions` in the project history (plan: "EA Heidelberg redesign —
+content, persuasion, visuals & bilingual structure") for the full research
+and rationale.
 
 ```
 modules/ea-heidelberg/
-  public/            # served as-is under https://<DOMAIN>/ea-heidelberg/
-    index.html
-    about.html
-    events.html
-    contact.html
-    style.css        # deliberately bare — layout only, no theme
-  compose.yaml        # caddy:2-alpine file server, ./public bind-mounted
+  public/
+    index.html          # language gate: redirects by navigator.language,
+                         # with manual EN/DE links as fallback
+    style.css            # shared design system (teal/cream/amber, Sora+Inter)
+    script.js             # shared vanilla JS: nav toggle, count-up stats,
+                           # generic reveal-groups (quiz + spending compare),
+                           # birth-lottery-style random luck reveal
+    en/
+      index.html          # Home — hook, proof strip, featured event, CTA
+      what-is-ea.html      # the persuasive core: origin story, cause areas,
+                            # cause-area mini-quiz, luck reveal, spending
+                            # comparison, 80,000-hours time framing
+      about.html           # the Heidelberg chapter itself (who/what/books)
+      events.html           # featured upcoming event + de-emphasized past events
+      contact.html           # address, map link, email
+    de/
+      index.html, was-ist-ea.html, ueber-uns.html, veranstaltungen.html,
+      kontakt.html           # natively written German, not a translation pass
+  compose.yaml            # caddy:2-alpine file server, ./public bind-mounted
   module.json
 ```
 
 No app code and no build: a minimal Caddy file server serves `public/`, same
-pattern as `modules/hoema`.
+pattern as `modules/hoema`. Adding/editing a page is just editing the HTML
+file and `git push` — no rebuild needed once the module is running.
+
+## Design notes
+
+- **Colors**: `#0388a0` teal is EA Heidelberg's own actual accent color
+  (reverse-engineered from their live Squarespace CSS, not guessed) —
+  carried over per the brief to keep "the official EA color scheme." Warm
+  cream background, near-black text, and one amber/terracotta accent for
+  CTAs round it out, echoing the broader effectivealtruism.org/GWWC
+  palette family without copying either site's exact hues.
+- **Structure/visuals** take cues from Giving What We Can's actual brand
+  CSS (pill buttons, rounded cards, alternating color-blocked sections) and
+  its flagship interactive pages (`/birth-lottery`, `/how-rich-am-i`) — but
+  every interactive component here is original content, and the
+  self-relevant-comparison idea was deliberately *not* built as an
+  income-percentile tool, since the audience is students who mostly don't
+  have a real income yet. It's a birth-lottery-style luck framing plus a
+  small-everyday-spending comparison instead.
+- **Persuasion approach**: combines social proof, authority, low-friction
+  CTAs, and personal relevance (per Cialdini + EA Forum message-testing
+  discussion) rather than leaning on one rhetorical trick. Every borrowed
+  statistic is attributed to its real source (GiveWell, GWWC, 80,000 Hours,
+  WHO/UNICEF, World Bank, ILO, UNDP) — nothing is presented as EA
+  Heidelberg's own data.
 
 ## Why it's password-protected
 
-The content on these pages is copied from eaheidelberg.de for internal
-comparison while a new design is worked out — it isn't original content yet,
-so it's gated with HTTP Basic Auth in the root `Caddyfile` (`handle
-/ea-heidelberg*`) rather than left public, and kept out of search engines via
-the site-wide `noindex` header. The Caddyfile only stores a bcrypt hash of
-the password, never the plaintext.
+Still gated with HTTP Basic Auth in the root `Caddyfile` (`handle
+/ea-heidelberg*`) and kept out of search engines via the site-wide
+`noindex` header — this is a draft for internal review, not the live site,
+and some of its content (quotes, cause-area framing) is adapted from other
+organizations' material. The Caddyfile only stores a bcrypt hash of the
+password, never the plaintext.
 
 ## Status
 
-This is intentionally minimal — a skeleton to react to, not a finished
-draft. Next step is a real visual design pass (fonts, colors, layout) once
-that direction is decided.
+Content and interactions are drafted in both languages; no live visual
+QA has been done in a browser from this session (no browser tool
+available here) — preview before treating this as final, especially the
+interactive components (mini-quiz, luck reveal, spending comparison) and
+mobile nav toggle.

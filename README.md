@@ -81,7 +81,8 @@ the household, after which every request without a valid session 404s
 The landing page itself is public.
 
 **EA Heidelberg concept draft** (`modules/ea-heidelberg`, at `/ea-heidelberg/`)
-— a content-only skeleton for a possible redesign of eaheidelberg.de, no
-visual design applied yet. Password-protected with HTTP Basic Auth (see
-`Caddyfile`) since the content is copied from the live site for internal
-comparison. See `modules/ea-heidelberg/README.md`.
+— a persuasion-focused redesign concept for eaheidelberg.de, in English and
+German, with interactive components inspired by GiveWell/Giving What We
+Can/80,000 Hours. Password-protected with HTTP Basic Auth (see
+`Caddyfile`) since it's a draft for internal review, not the live site. See
+`modules/ea-heidelberg/README.md`.

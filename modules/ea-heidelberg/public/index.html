@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>EA Heidelberg</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Sora:wght@700&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+  body{display:flex;min-height:100vh;align-items:center;justify-content:center}
+  .gate{text-align:center;padding:2rem}
+  .gate .choices{display:flex;gap:1rem;justify-content:center;margin-top:1.6rem;flex-wrap:wrap}
+</style>
+<script>
+  (function () {
+    var lang = (navigator.language || "en").slice(0, 2).toLowerCase();
+    if (lang === "de") location.replace("de/index.html");
+    else location.replace("en/index.html");
+  })();
+</script>
+</head>
+<body>
+  <div class="gate">
+    <span class="eyebrow">EA Heidelberg</span>
+    <h1>Choose a language / Sprache w&auml;hlen</h1>
+    <p class="lede">Redirecting automatically&hellip; if nothing happens, pick one below.</p>
+    <div class="choices">
+      <a class="btn btn--primary" href="en/index.html">Continue in English</a>
+      <a class="btn btn--outline" href="de/index.html">Auf Deutsch weiter</a>
+    </div>
+  </div>
+</body>
+</html>

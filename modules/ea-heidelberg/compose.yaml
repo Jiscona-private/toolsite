@@ -1,0 +1,20 @@
+services:
+  ea-heidelberg:
+    # Static files only, same pattern as modules/hoema: a tiny Caddy file
+    # server, no build step. Files are bind-mounted, so publishing changes
+    # only needs `git pull` on the server — no rebuild or restart.
+    image: caddy:2-alpine
+    restart: unless-stopped
+    command: ["caddy", "file-server", "--root", "/srv", "--listen", ":3000"]
+    volumes:
+      # Served under /srv/ea so the /ea prefix that the main Caddy forwards
+      # unchanged (handle, not handle_path) maps onto real paths. Service
+      # name stays ea-heidelberg (internal only — compose service name,
+      # reverse_proxy target) even though the public path is now /ea/.
+      - ./public:/srv/ea:ro
+    networks:
+      - toolsite_net
+
+networks:
+  toolsite_net:
+    name: toolsite_net

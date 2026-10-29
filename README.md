@@ -79,3 +79,10 @@ No accounts or passwords: access is a secret join-link shared only within
 the household, after which every request without a valid session 404s
 (never a login prompt) - see `modules/wg/CLAUDE.md` for the full design.
 The landing page itself is public.
+
+**EA Heidelberg concept draft** (`modules/ea-heidelberg`, at `/ea/`)
+— a persuasion-focused redesign concept for eaheidelberg.de, in English and
+German, with interactive components inspired by GiveWell/Giving What We
+Can/80,000 Hours. Password-protected with HTTP Basic Auth (see
+`Caddyfile`) since it's a draft for internal review, not the live site. See
+`modules/ea-heidelberg/README.md`.

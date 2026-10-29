@@ -6,6 +6,7 @@ include:
   - landing/compose.yaml
   - modules/wg/compose.yaml
   - modules/hoema/compose.yaml
+  - modules/ea-heidelberg/compose.yaml
 
 services:
   caddy:

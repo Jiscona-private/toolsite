@@ -1,4 +1,4 @@
-# EA Heidelberg concept draft (`/ea-heidelberg/`)
+# EA Heidelberg concept draft (`/ea/`)
 
 A persuasion-focused redesign concept for [eaheidelberg.de](https://eaheidelberg.de)
 (currently a Squarespace site for the Effective Altruism Heidelberg
@@ -71,7 +71,7 @@ file and `git push` — no rebuild needed once the module is running.
 ## Why it's password-protected
 
 Still gated with HTTP Basic Auth in the root `Caddyfile` (`handle
-/ea-heidelberg*`) and kept out of search engines via the site-wide
+/ea*`) and kept out of search engines via the site-wide
 `noindex` header — this is a draft for internal review, not the live site,
 and some of its content (quotes, cause-area framing) is adapted from other
 organizations' material. The Caddyfile only stores a bcrypt hash of the

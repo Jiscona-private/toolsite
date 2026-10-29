@@ -34,7 +34,7 @@
 	# with original content. Credentials are shared with the site owner
 	# out-of-band; the value below is a bcrypt hash of the password, not the
 	# password itself. Regenerate with `caddy hash-password` if it changes.
-	handle /ea-heidelberg* {
+	handle /ea* {
 		basic_auth {
 			ea $2b$10$fSkKRysO8YMswtC1ZXbqJ.Q3rbUE.uo6UL4iyOQZJz.QanpV8T/ci
 		}

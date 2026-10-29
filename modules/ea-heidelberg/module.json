@@ -1,7 +1,7 @@
 {
   "id": "ea-heidelberg",
   "name": "EA Heidelberg (concept draft)",
-  "description": "Early content skeleton for a redesigned eaheidelberg.de — password protected, no visual design yet.",
-  "path": "/ea-heidelberg/",
+  "description": "Persuasion-focused redesign concept for eaheidelberg.de, in English and German — password protected.",
+  "path": "/ea/",
   "icon": "🌍"
 }

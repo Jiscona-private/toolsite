@@ -70,18 +70,23 @@
     });
   }
 
-  // Birth-lottery-style luck reveal: a trigger button picks one random
-  // [data-luck-card] inside the same [data-luck-group] and shows it (hiding
-  // the rest). Re-clicking draws again, excluding the card just shown where
-  // possible so it feels like a fresh draw.
+  // Birth-lottery-style luck reveal. A [data-luck-default] card (the draw
+  // the visitor actually got) is visible from the start — self-contained,
+  // not written as a contrast to anything — so the page has real content
+  // at rest with no click needed. The trigger then draws a random
+  // [data-luck-card] from the rest, excluding the one just shown where
+  // possible so re-clicking feels like a fresh draw, and permanently hides
+  // the default card the first time it's clicked.
   function initLuckReveal() {
     document.querySelectorAll("[data-luck-group]").forEach(function (group) {
       var trigger = group.querySelector("[data-luck-trigger]");
+      var defaultCard = group.querySelector("[data-luck-default]");
       var cards = Array.prototype.slice.call(group.querySelectorAll("[data-luck-card]"));
       if (!trigger || !cards.length) return;
       var lastIndex = -1;
 
       trigger.addEventListener("click", function () {
+        if (defaultCard) defaultCard.classList.remove("is-visible");
         var index = Math.floor(Math.random() * cards.length);
         if (cards.length > 1 && index === lastIndex) {
           index = (index + 1) % cards.length;
@@ -123,25 +128,26 @@
     }
   }
 
-  // Chart bars: markup ships with each [data-chart-bar]'s real final width
-  // as its actual width attribute (so a no-JS view shows the correct,
-  // finished chart). When JS runs, we drop it to 0 and animate it back up
-  // the first time its chart scrolls into view.
+  // Chart bars: plain HTML/CSS (not SVG — SVG text scales with its viewBox
+  // and goes illegibly small on a phone). Each [data-chart-bar] ships with
+  // its real final width as a % in data-final (so a no-JS view shows the
+  // correct, finished chart). When JS runs, we drop it to 0% and animate
+  // back up to that same value the first time its chart scrolls into view.
   function initChartBars() {
     var charts = document.querySelectorAll("[data-chart]");
     if (!charts.length) return;
     var done = new WeakSet();
 
-    function animate(svg) {
-      if (done.has(svg)) return;
-      done.add(svg);
-      var bars = svg.querySelectorAll("[data-chart-bar]");
+    function animate(chart) {
+      if (done.has(chart)) return;
+      done.add(chart);
+      var bars = chart.querySelectorAll("[data-chart-bar]");
       bars.forEach(function (bar) {
-        var final = bar.getAttribute("width");
-        bar.style.width = "0px";
+        var final = bar.getAttribute("data-final");
+        bar.style.width = "0%";
         requestAnimationFrame(function () {
           requestAnimationFrame(function () {
-            bar.style.width = final + "px";
+            bar.style.width = final + "%";
           });
         });
       });
@@ -156,7 +162,7 @@
         },
         { threshold: 0.4 }
       );
-      charts.forEach(function (svg) { observer.observe(svg); });
+      charts.forEach(function (chart) { observer.observe(chart); });
     }
   }
 
@@ -164,12 +170,12 @@
   // the visible bar, for an easy hover/tap/keyboard target) swaps the
   // chart's caption text while hovered or focused, reverting on exit.
   function initChartTooltips() {
-    document.querySelectorAll("[data-chart]").forEach(function (svg) {
-      var card = svg.closest(".chart-card");
+    document.querySelectorAll("[data-chart]").forEach(function (chart) {
+      var card = chart.closest(".chart-card");
       var tooltip = card && card.querySelector("[data-chart-tooltip]");
       if (!tooltip) return;
       var defaultText = tooltip.textContent;
-      svg.querySelectorAll("[data-chart-tip]").forEach(function (hit) {
+      chart.querySelectorAll("[data-chart-tip]").forEach(function (hit) {
         function show() { tooltip.textContent = hit.getAttribute("data-chart-tip"); }
         function hide() { tooltip.textContent = defaultText; }
         hit.addEventListener("mouseenter", show);

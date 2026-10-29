@@ -182,9 +182,9 @@ p{margin:0 0 1rem}
 .reveal-group{display:block}
 .reveal-options{display:flex;flex-wrap:wrap;gap:.7rem;margin:1.2rem 0}
 .reveal-btn{
-  font-family:var(--font-head);font-weight:700;font-size:.92rem;padding:.65rem 1.2rem;
-  border-radius:var(--pill);border:2px solid var(--teal);background:transparent;color:var(--teal);
-  cursor:pointer;
+  font-family:var(--font-head);font-weight:700;font-size:.92rem;padding:.8rem 1.3rem;
+  min-height:44px;border-radius:var(--pill);border:2px solid var(--teal);background:transparent;
+  color:var(--teal);cursor:pointer;
 }
 .reveal-btn:hover{background:var(--teal);color:#fff}
 .reveal-btn.is-active{background:var(--teal);color:#fff}
@@ -200,9 +200,16 @@ p{margin:0 0 1rem}
   box-shadow:var(--shadow-sm);padding:1.8rem;text-align:center;
 }
 .luck-card{display:none}
-.luck-card.is-visible{display:block;animation:fade-up .4s ease}
+.luck-card.is-visible{display:block;animation:card-draw .45s cubic-bezier(.2,.8,.2,1)}
 .luck-card__fact{font-family:var(--font-head);font-size:1.3rem;font-weight:700;margin-bottom:.5rem}
 .luck-source{font-size:.78rem;color:var(--ink-soft);margin-top:1rem}
+@keyframes card-draw{
+  from{opacity:0;transform:translateY(10px) scale(.96)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@media (prefers-reduced-motion: reduce){
+  .luck-card.is-visible,.reveal-panel.is-visible{animation:none}
+}
 
 /* ---------- footer ---------- */
 .site-footer{background:var(--teal-900);color:var(--on-dark-soft);padding:2.4rem 0 1.6rem;font-size:.9rem}
@@ -237,13 +244,33 @@ p{margin:0 0 1rem}
 .callout{background:var(--tint);border-left:4px solid var(--teal);border-radius:10px;padding:1rem 1.2rem;font-size:.95rem}
 .callout strong{color:var(--teal-600)}
 
-/* ---------- chart card ---------- */
-.chart-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.7rem;box-shadow:var(--shadow-sm)}
-.chart-card svg{width:100%;height:auto;display:block}
+/* ---------- chart card ----------
+   Plain HTML/CSS, not SVG: an SVG's text scales with its viewBox, which
+   goes illegibly small once the card narrows down to phone width. Percent
+   widths and rem-sized text stay readable at any width instead. */
+.chart-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.4rem;box-shadow:var(--shadow-sm)}
 .chart-caption{font-size:.8rem;color:var(--ink-soft);margin-top:.9rem}
-.chart-row-label{font-family:var(--font-body);font-weight:600;font-size:13px;fill:var(--ink)}
-.chart-value-label{font-family:var(--font-head);font-weight:700;font-size:15px;fill:var(--ink)}
-.chart-tick-label{font-family:var(--font-body);font-size:11px;fill:var(--ink-soft)}
+.chart-plot{position:relative;padding-top:.2rem}
+.chart-grid-line{position:absolute;top:0;bottom:1.6rem;width:1px;background:var(--line)}
+.chart-row{position:relative;margin-bottom:1.5rem}
+.chart-row__label{display:block;font-weight:600;font-size:.82rem;color:var(--ink);margin-bottom:.5rem;padding-right:1.6rem}
+.chart-row__track{position:relative;height:30px}
+.chart-bar{
+  position:absolute;left:0;top:0;height:100%;min-width:2.8rem;border-radius:0 8px 8px 0;
+  display:flex;align-items:center;justify-content:flex-end;padding-right:.6rem;
+  transition:width 1.1s cubic-bezier(.2,.8,.2,1);
+}
+.chart-bar__value{font-family:var(--font-head);font-weight:700;font-size:.95rem;white-space:nowrap}
+.chart-hit{
+  position:absolute;inset:-1.6rem 0 -.3rem;width:100%;background:none;border:none;
+  cursor:pointer;padding:0;
+}
+.chart-hit:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:8px}
+.chart-axis{position:relative;height:1rem;margin-top:.5rem;border-top:1px solid var(--line);padding-top:.4rem}
+.chart-axis span{position:absolute;top:.4rem;font-size:.72rem;color:var(--ink-soft)}
+.chart-axis span:nth-child(1){left:0}
+.chart-axis span:nth-child(2){left:50%;transform:translateX(-50%)}
+.chart-axis span:nth-child(3){left:100%;transform:translateX(-100%)}
 .chart-grid{stroke:var(--line);stroke-width:1}
 .chart-bar{transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
 .chart-tooltip{min-height:1.4em;font-size:.85rem;color:var(--ink-soft);margin-top:.6rem;transition:color .15s ease}
@@ -288,8 +315,12 @@ p{margin:0 0 1rem}
 .accordion{display:flex;flex-direction:column;gap:.7rem}
 .accordion__item{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden}
 .accordion__row{
-  width:100%;display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;background:none;border:none;
-  cursor:pointer;text-align:left;font-family:var(--font-body);color:var(--ink);
+  width:100%;display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;min-height:44px;
+  background:none;border:none;cursor:pointer;text-align:left;font-family:var(--font-body);color:var(--ink);
+}
+@media (max-width:480px){
+  .accordion__row{flex-wrap:wrap;gap:.3rem 1rem}
+  .accordion__amount{min-width:0}
 }
 .accordion__amount{font-family:var(--font-head);font-weight:700;color:var(--teal);flex:0 0 auto;min-width:4.5rem}
 .accordion__label{flex:1;font-weight:600}

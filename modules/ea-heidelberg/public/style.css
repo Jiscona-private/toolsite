@@ -139,8 +139,8 @@ p{margin:0 0 1rem}
 /* ---------- cards ---------- */
 .cards{display:grid;gap:1.3rem;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
 .card{
-  background:var(--white);border-radius:var(--radius);padding:1.6rem;box-shadow:var(--shadow-sm);
-  border:1px solid var(--line);
+  background:var(--white);color:var(--ink);border-radius:var(--radius);padding:1.6rem;
+  box-shadow:var(--shadow-sm);border:1px solid var(--line);
 }
 .card__icon{
   width:2.6rem;height:2.6rem;border-radius:var(--radius-sm);background:var(--tint);
@@ -150,7 +150,7 @@ p{margin:0 0 1rem}
 
 /* ---------- event cards ---------- */
 .event-card{
-  display:flex;gap:1.2rem;background:var(--white);border-radius:var(--radius);
+  display:flex;gap:1.2rem;background:var(--white);color:var(--ink);border-radius:var(--radius);
   padding:1.4rem;box-shadow:var(--shadow-sm);border:1px solid var(--line);align-items:flex-start;
 }
 .event-card.is-featured{
@@ -171,7 +171,7 @@ p{margin:0 0 1rem}
 
 /* ---------- quote ---------- */
 .quote{
-  position:relative;padding:1.6rem 1.8rem 1.6rem 3rem;background:var(--white);
+  position:relative;padding:1.6rem 1.8rem 1.6rem 3rem;background:var(--white);color:var(--ink);
   border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--line);
   font-family:var(--font-head);font-size:1.15rem;
 }
@@ -188,7 +188,7 @@ p{margin:0 0 1rem}
 }
 .reveal-btn:hover{background:var(--teal);color:#fff}
 .reveal-btn.is-active{background:var(--teal);color:#fff}
-.reveal-panel{display:none;background:var(--white);border-radius:var(--radius);padding:1.4rem 1.6rem;
+.reveal-panel{display:none;background:var(--white);color:var(--ink);border-radius:var(--radius);padding:1.4rem 1.6rem;
   border:1px solid var(--line);box-shadow:var(--shadow-sm)}
 .reveal-panel.is-visible{display:block;animation:fade-up .35s ease}
 .reveal-hint{font-size:.88rem;color:var(--ink-soft)}
@@ -196,7 +196,7 @@ p{margin:0 0 1rem}
 
 /* ---------- luck reveal ---------- */
 .luck-box{
-  background:var(--white);border-radius:var(--radius);border:1px solid var(--line);
+  background:var(--white);color:var(--ink);border-radius:var(--radius);border:1px solid var(--line);
   box-shadow:var(--shadow-sm);padding:1.8rem;text-align:center;
 }
 .luck-card{display:none}
@@ -262,7 +262,7 @@ p{margin:0 0 1rem}
    Plain HTML/CSS, not SVG: an SVG's text scales with its viewBox, which
    goes illegibly small once the card narrows down to phone width. Percent
    widths and rem-sized text stay readable at any width instead. */
-.chart-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.4rem;box-shadow:var(--shadow-sm)}
+.chart-card{background:var(--white);color:var(--ink);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.4rem;box-shadow:var(--shadow-sm)}
 .chart-caption{font-size:.8rem;color:var(--ink-soft);margin-top:.9rem}
 .chart-plot{position:relative;padding-top:.2rem}
 .chart-grid-line{position:absolute;top:0;bottom:1.6rem;width:1px;background:var(--line)}
@@ -327,7 +327,7 @@ p{margin:0 0 1rem}
 
 /* ---------- accordion ---------- */
 .accordion{display:flex;flex-direction:column;gap:.7rem}
-.accordion__item{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden}
+.accordion__item{background:var(--white);color:var(--ink);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden}
 .accordion__row{
   width:100%;display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;min-height:44px;
   background:none;border:none;cursor:pointer;text-align:left;font-family:var(--font-body);color:var(--ink);

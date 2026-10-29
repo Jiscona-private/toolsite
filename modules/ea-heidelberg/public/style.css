@@ -239,6 +239,20 @@ p{margin:0 0 1rem}
 }
 .hero__stat-card .big{font-family:var(--font-head);font-weight:700;font-size:clamp(2.6rem,7vw,3.4rem);line-height:1;position:relative}
 .hero__stat-card p{margin:.6rem 0 0;color:var(--on-dark-soft);position:relative;max-width:22rem}
+.hero__stat-card__label{
+  font-family:var(--font-head);font-weight:700;font-size:.78rem;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--on-dark-soft);position:relative;display:block;margin-bottom:.9rem;
+}
+.hero__facts{list-style:none;margin:0;padding:0;position:relative;display:flex;flex-direction:column;gap:.7rem}
+.hero__facts li{
+  display:flex;align-items:baseline;gap:.6rem;padding-bottom:.7rem;
+  border-bottom:1px solid rgba(255,255,255,.18);font-size:.95rem;color:#fff;
+}
+.hero__facts li:last-child{border-bottom:none;padding-bottom:0}
+.hero__facts strong{
+  font-family:var(--font-head);font-weight:700;font-size:1.15rem;flex:0 0 auto;min-width:2.6rem;
+}
+.hero__stat-card__source{margin:.9rem 0 0;font-size:.74rem;color:var(--on-dark-soft);position:relative}
 
 /* ---------- callout box ---------- */
 .callout{background:var(--tint);border-left:4px solid var(--teal);border-radius:10px;padding:1rem 1.2rem;font-size:.95rem}

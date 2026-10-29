@@ -79,3 +79,9 @@ No accounts or passwords: access is a secret join-link shared only within
 the household, after which every request without a valid session 404s
 (never a login prompt) - see `modules/wg/CLAUDE.md` for the full design.
 The landing page itself is public.
+
+**EA Heidelberg concept draft** (`modules/ea-heidelberg`, at `/ea-heidelberg/`)
+— a content-only skeleton for a possible redesign of eaheidelberg.de, no
+visual design applied yet. Password-protected with HTTP Basic Auth (see
+`Caddyfile`) since the content is copied from the live site for internal
+comparison. See `modules/ea-heidelberg/README.md`.

@@ -28,6 +28,19 @@
 		reverse_proxy hoema:3000
 	}
 
+	# EA Heidelberg concept draft — content copied from eaheidelberg.de for an
+	# internal redesign review. Basic Auth keeps it off search engines and
+	# away from casual visitors for copyright reasons until it's replaced
+	# with original content. Credentials are shared with the site owner
+	# out-of-band; the value below is a bcrypt hash of the password, not the
+	# password itself. Regenerate with `caddy hash-password` if it changes.
+	handle /ea-heidelberg* {
+		basic_auth {
+			ea $2b$10$fSkKRysO8YMswtC1ZXbqJ.Q3rbUE.uo6UL4iyOQZJz.QanpV8T/ci
+		}
+		reverse_proxy ea-heidelberg:3000
+	}
+
 	# public landing page — lists every installed module.
 	handle {
 		reverse_proxy landing:3000

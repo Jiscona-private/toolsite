@@ -46,7 +46,7 @@
 
   <section class="section" style="padding-top:0">
     <div class="wrap">
-      <div class="event-card is-featured" style="max-width:40rem;margin:0 auto">
+      <div class="event-card is-featured" data-animate style="max-width:40rem;margin:0 auto">
         <div class="event-date">
           <span class="event-date__day">28</span>
           <span class="event-date__month">Oct</span>
@@ -72,13 +72,21 @@
         <h2>First time coming? Here's what to expect</h2>
       </div>
       <div class="cards">
-        <div class="card"><h3>No prep</h3><p>No reading beforehand, no quiz, nothing to
+        <div class="card" data-animate>
+          <div class="card__icon"><svg class="icon" viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"></polyline></svg></div>
+          <h3>No prep</h3><p>No reading beforehand, no quiz, nothing to
         prepare. Show up as you are.</p></div>
-        <div class="card"><h3>Free snacks</h3><p>We always have something to eat and drink —
+        <div class="card" data-animate style="transition-delay:.1s">
+          <div class="card__icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="22"></line><line x1="2" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="22" y2="12"></line></svg></div>
+          <h3>Free snacks</h3><p>We always have something to eat and drink —
         bring an empty stomach, not a wallet.</p></div>
-        <div class="card"><h3>Come alone or with a friend</h3><p>Most people start out not
+        <div class="card" data-animate style="transition-delay:.2s">
+          <div class="card__icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="12" r="5"></circle><circle cx="15" cy="12" r="5"></circle></svg></div>
+          <h3>Come alone or with a friend</h3><p>Most people start out not
         knowing anyone. That's completely normal here.</p></div>
-        <div class="card"><h3>No obligation</h3><p>Come once, come every week, or never come
+        <div class="card" data-animate style="transition-delay:.3s">
+          <div class="card__icon"><svg class="icon" viewBox="0 0 24 24"><line x1="4" y1="12" x2="20" y2="12"></line><polyline points="8,6 4,12 8,18"></polyline><polyline points="16,6 20,12 16,18"></polyline></svg></div>
+          <h3>No obligation</h3><p>Come once, come every week, or never come
         back — whatever's useful to you.</p></div>
       </div>
     </div>
@@ -92,7 +100,7 @@
       </div>
       <div class="event-grid">
 
-        <div class="event-card is-past">
+        <div class="event-card is-past" data-animate>
           <div class="event-date"><span class="event-date__day">15</span><span class="event-date__month">Jul</span></div>
           <div><h3>EA and Politics</h3>
           <div class="event-meta"><span>2026</span></div>
@@ -101,7 +109,7 @@
           </div>
         </div>
 
-        <div class="event-card is-past">
+        <div class="event-card is-past" data-animate>
           <div class="event-date"><span class="event-date__day">1</span><span class="event-date__month">Jul</span></div>
           <div><h3>Introduction to Ethics</h3>
           <div class="event-meta"><span>2026</span></div>
@@ -110,7 +118,7 @@
           </div>
         </div>
 
-        <div class="event-card is-past">
+        <div class="event-card is-past" data-animate>
           <div class="event-date"><span class="event-date__day">6</span><span class="event-date__month">May</span></div>
           <div><h3>Global Health News</h3>
           <div class="event-meta"><span>2026</span></div>
@@ -119,7 +127,7 @@
           </div>
         </div>
 
-        <div class="event-card is-past">
+        <div class="event-card is-past" data-animate>
           <div class="event-date"><span class="event-date__day">28</span><span class="event-date__month">Jan</span></div>
           <div><h3>AI Safety: Real-World Risks</h3>
           <div class="event-meta"><span>2026 &middot; highlight event of the semester</span></div>
@@ -129,7 +137,7 @@
           </div>
         </div>
 
-        <div class="event-card is-past">
+        <div class="event-card is-past" data-animate>
           <div class="event-date"><span class="event-date__day">17</span><span class="event-date__month">Dec</span></div>
           <div><h3>EA HD's Giving Eve</h3>
           <div class="event-meta"><span>2025</span></div>
@@ -138,7 +146,7 @@
           </div>
         </div>
 
-        <div class="event-card is-past">
+        <div class="event-card is-past" data-animate>
           <div class="event-date"><span class="event-date__day">3</span><span class="event-date__month">Dec</span></div>
           <div><h3>Surviving an Apocalypse</h3>
           <div class="event-meta"><span>2025</span></div>

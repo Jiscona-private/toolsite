@@ -18,13 +18,19 @@ modules/ea-heidelberg/
                          # with manual EN/DE links as fallback
     style.css            # shared design system (teal/cream/amber, Sora+Inter)
     script.js             # shared vanilla JS: nav toggle, count-up stats,
+                           # scroll-reveal, animated/interactive chart,
                            # generic reveal-groups (quiz + spending compare),
-                           # birth-lottery-style random luck reveal
+                           # accordion, lazy video embed, birth-lottery-style
+                           # random luck reveal
     en/
-      index.html          # Home — hook, proof strip, featured event, CTA
-      what-is-ea.html      # the persuasive core: origin story, cause areas,
+      index.html          # Home — hook, 3-line cost-effectiveness list,
+                           # drowning-child video, proof strip, featured
+                           # event, CTA
+      what-is-ea.html      # the persuasive core: origin story, scale/
+                            # neglectedness/tractability, cause areas, a
+                            # mobile-safe HTML/CSS cost-effectiveness chart,
                             # cause-area mini-quiz, luck reveal, spending
-                            # comparison, 80,000-hours time framing
+                            # accordion, 80,000-hours time framing
       about.html           # the Heidelberg chapter itself (who/what/books)
       events.html           # featured upcoming event + de-emphasized past events
       contact.html           # address, map link, email
@@ -71,10 +77,22 @@ and some of its content (quotes, cause-area framing) is adapted from other
 organizations' material. The Caddyfile only stores a bcrypt hash of the
 password, never the plaintext.
 
+## The video
+
+`en/index.html` and `de/index.html` embed The Life You Can Save's
+"Drowning Child" video (a lazy click-to-play facade — nothing loads from
+YouTube until clicked) right after the hero, as the emotional lead-in
+before the proof strip and chart. `what-is-ea.html`/`was-ist-ea.html` keep
+their own written version of the same thought experiment as the fuller
+textual case, so the two aren't redundant — one is the hook, the other is
+the argument.
+
 ## Status
 
-Content and interactions are drafted in both languages; no live visual
-QA has been done in a browser from this session (no browser tool
-available here) — preview before treating this as final, especially the
-interactive components (mini-quiz, luck reveal, spending comparison) and
-mobile nav toggle.
+Content and interactions are drafted and wired up across all 10 pages in
+both languages, iterated against a design-preview Artifact through
+several rounds of feedback (palette brightness, headline tone, mobile
+chart legibility, a birth-lottery logic bug, more concrete/felt phrasing).
+No live visual QA has been done in a real browser from this session (no
+browser tool available here) — worth a real look before calling it final,
+especially on an actual phone.

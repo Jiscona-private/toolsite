@@ -58,6 +58,9 @@
       interventions, studied carefully, turn out to help a hundred times more than others
       aimed at the same problem. That gap is the entire reason this is worth thinking about
       instead of just acting on the first impulse.</p>
+      <p style="text-align:center">
+        <a class="btn btn--outline" href="index.html#main">Watch the 3-minute version of this &rarr;</a>
+      </p>
     </div>
   </section>
 
@@ -68,20 +71,20 @@
         <h2>Three questions, asked about every problem</h2>
       </div>
       <div class="cards">
-        <div class="card">
-          <div class="card__icon">&#127757;</div>
+        <div class="card" data-animate>
+          <div class="card__icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="3" y1="12" x2="21" y2="12"></line><line x1="12" y1="3" x2="12" y2="21"></line></svg></div>
           <h3>Scale</h3>
           <p>How many individuals are affected, and how severely? A problem affecting millions
           beats one affecting dozens, all else equal.</p>
         </div>
-        <div class="card">
-          <div class="card__icon">&#128269;</div>
+        <div class="card" data-animate style="transition-delay:.1s">
+          <div class="card__icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"></circle><line x1="15" y1="15" x2="21" y2="21"></line></svg></div>
           <h3>Neglectedness</h3>
           <p>Is almost no one already working on this? The first serious effort on a neglected
           problem tends to do far more than the thousandth effort on a popular one.</p>
         </div>
-        <div class="card">
-          <div class="card__icon">&#9989;</div>
+        <div class="card" data-animate style="transition-delay:.2s">
+          <div class="card__icon"><svg class="icon" viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"></polyline></svg></div>
           <h3>Tractability</h3>
           <p>Can we actually make progress with realistic effort? Huge and neglected doesn't
           help if nothing we do moves the needle.</p>
@@ -100,19 +103,22 @@
         closely.</p>
       </div>
       <div class="cards">
-        <div class="card">
+        <div class="card" data-animate>
+          <div class="card__icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="7" x2="12" y2="17"></line><line x1="7" y1="12" x2="17" y2="12"></line></svg></div>
           <h3>Global Health &amp; Wellbeing</h3>
           <p>Malaria alone still kills roughly 600,000 people a year, most of them young
           children — and proven tools like insecticide-treated bednets prevent it for just a
           few dollars each. <em>(WHO World Malaria Report; GiveWell research)</em></p>
         </div>
-        <div class="card">
+        <div class="card" data-animate style="transition-delay:.1s">
+          <div class="card__icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="15" r="4" fill="var(--teal)" stroke="none"></circle><circle cx="6" cy="9" r="2.2" fill="var(--teal)" stroke="none"></circle><circle cx="12" cy="6" r="2.2" fill="var(--teal)" stroke="none"></circle><circle cx="18" cy="9" r="2.2" fill="var(--teal)" stroke="none"></circle></svg></div>
           <h3>Animal Welfare</h3>
           <p>Tens of billions of land animals are farmed worldwide every year, most on
           industrial farms — and targeted campaigns have improved conditions for huge numbers
           of them per dollar spent. <em>(FAO; Giving What We Can research)</em></p>
         </div>
-        <div class="card">
+        <div class="card" data-animate style="transition-delay:.2s">
+          <div class="card__icon"><svg class="icon" viewBox="0 0 24 24"><polygon points="12,2 21,6 21,12 12,22 3,12 3,6"></polygon></svg></div>
           <h3>Global Catastrophic Risks</h3>
           <p>From pandemics to nuclear weapons to advanced AI: surveyed experts themselves give
           non-trivial odds to very bad outcomes this century, in fields almost no one is paid
@@ -129,11 +135,53 @@
   <section class="section section--tint">
     <div class="wrap" style="max-width:40rem">
       <div class="section-head center">
+        <span class="eyebrow">Why "which" matters as much as "whether"</span>
+        <h2>Small differences in choice, huge differences in outcome</h2>
+      </div>
+      <div class="chart-card" data-animate>
+        <div class="chart-plot" data-chart role="img" aria-label="A good program in the same cause area is roughly 10 times as cost-effective as a typical one; GiveWell's top-rated charities are roughly 100 times as cost-effective.">
+          <div class="chart-grid-line" style="left:50%"></div>
+          <div class="chart-grid-line" style="left:100%"></div>
+          <div class="chart-row">
+            <span class="chart-row__label">A good program, same cause area</span>
+            <div class="chart-row__track">
+              <div class="chart-bar" data-chart-bar data-final="50" style="width:50%;background:var(--teal)">
+                <span class="chart-bar__value" data-countup="10" data-suffix="&times;" style="color:#fff">10&times;</span>
+              </div>
+            </div>
+            <button class="chart-hit" type="button" data-chart-tip="A good program in the same cause area: roughly 10&#215; as much good per euro as a typical one, by GiveWell's estimates." aria-label="Detail: a good program, 10 times as cost-effective"></button>
+          </div>
+          <div class="chart-row">
+            <span class="chart-row__label">GiveWell's top-rated charities &#9733;</span>
+            <div class="chart-row__track">
+              <div class="chart-bar" data-chart-bar data-final="100" style="width:100%;background:var(--amber)">
+                <span class="chart-bar__value" data-countup="100" data-suffix="&times;" style="color:#201200">100&times;</span>
+              </div>
+            </div>
+            <button class="chart-hit" type="button" data-chart-tip="GiveWell's top-rated charities: roughly 100&#215; a typical program &#8212; the gap that makes &#8216;which&#8217; worth researching." aria-label="Detail: GiveWell's top-rated charities, 100 times as cost-effective"></button>
+          </div>
+          <div class="chart-axis">
+            <span>1&times;</span><span>10&times;</span><span>100&times;</span>
+          </div>
+        </div>
+        <p class="chart-tooltip" data-chart-tooltip>Hover or tap a bar for more detail.</p>
+        <p class="chart-caption">Illustrative multiples, not a specific charity-to-charity
+        comparison — but GiveWell's own research has repeatedly found roughly this order of
+        spread in cost-effectiveness between programs aimed at the very same problem. That gap
+        is the entire reason it's worth a little research before giving, not a reason to give
+        less.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap" style="max-width:40rem">
+      <div class="section-head center">
         <span class="eyebrow">Try it yourself</span>
         <h2>Which cause area speaks to you?</h2>
         <p class="lede">Pick whichever pulls at you most — there's no wrong answer.</p>
       </div>
-      <div class="reveal-group" data-reveal-group>
+      <div class="reveal-group" data-reveal-group data-animate>
         <div class="reveal-options" style="justify-content:center">
           <button class="reveal-btn" type="button" data-reveal="health">Helping people alive today</button>
           <button class="reveal-btn" type="button" data-reveal="animals">Reducing suffering at scale</button>
@@ -172,45 +220,48 @@
         <p class="lede">More than almost anything you'll do afterwards. This isn't about
         income — it's about the starting line.</p>
       </div>
-      <div class="luck-box" data-luck-group>
+      <div class="luck-box" data-luck-group data-animate>
         <p id="luck-intro">Everyone reading this already won a kind of lottery just by being
-        born when and where they were. Draw a card to see one way that lottery could have gone
-        differently.</p>
+        born when and where they were. Here's the draw you got — tap below to see a few of
+        the other ways it could have gone.</p>
+        <div class="luck-card is-visible" data-luck-default>
+          <p class="luck-card__fact">You get to read this somewhere safe and settled enough
+          to actually think it over, instead of spending today just getting by.</p>
+          <p class="luck-source">The draw you actually got.</p>
+        </div>
         <div class="luck-card" data-luck-card>
-          <p class="luck-card__fact">You could have been one of roughly 1 in 4 people
-          worldwide without reliable access to safe drinking water at home.</p>
+          <p class="luck-card__fact">Picture the nearest safe water being a half-hour's walk
+          away — and still not being sure it's clean once you get there. That's daily life
+          for roughly 1 in 4 people worldwide.</p>
           <p class="luck-source">Source: WHO/UNICEF Joint Monitoring Programme</p>
         </div>
         <div class="luck-card" data-luck-card>
-          <p class="luck-card__fact">You could have been born in a country where the average
-          person lives on the rough equivalent of a couple of euros a day.</p>
+          <p class="luck-card__fact">Picture your family's entire day — food, rent,
+          everything — running on less than the price of a coffee here. For hundreds of
+          millions of people, that's not a bad day. It's every day.</p>
           <p class="luck-source">Source: World Bank international poverty line</p>
         </div>
         <div class="luck-card" data-luck-card>
-          <p class="luck-card__fact">You could have been one of an estimated 160 million
-          children worldwide doing child labour instead of sitting in a classroom.</p>
+          <p class="luck-card__fact">Picture being handed a job instead of a backpack at
+          age ten. An estimated 160 million children worldwide grow up doing child labour
+          instead of sitting in a classroom.</p>
           <p class="luck-source">Source: ILO &amp; UNICEF</p>
         </div>
         <div class="luck-card" data-luck-card>
-          <p class="luck-card__fact">You could have been born in one of the countries hit
-          hardest by climate change, despite having contributed almost nothing to the emissions
-          causing it.</p>
+          <p class="luck-card__fact">Picture losing your home to a flood or drought you did
+          almost nothing to cause. That's reality in many of the countries hit hardest by
+          climate change, despite contributing almost nothing to the emissions behind it.</p>
           <p class="luck-source">Source: UNDP Human Development Report</p>
         </div>
         <div class="luck-card" data-luck-card>
-          <p class="luck-card__fact">You could have been born without access to routine
-          childhood vaccines that are simply standard in Germany — diseases they prevent still
-          kill hundreds of thousands of children elsewhere every year.</p>
+          <p class="luck-card__fact">Picture a disease that's barely a concern here —
+          prevented by one routine childhood jab — still being a real danger where you grew
+          up. Vaccine-preventable diseases still kill hundreds of thousands of children a
+          year outside places like Germany.</p>
           <p class="luck-source">Source: WHO immunization data</p>
         </div>
-        <div class="luck-card" data-luck-card>
-          <p class="luck-card__fact">Instead, you landed somewhere safe and stable enough to
-          spend an evening reading this. That's not nothing — it's a real head start most of
-          the world doesn't get, and a reasonable argument for putting it to use.</p>
-          <p class="luck-source">The draw you actually got.</p>
-        </div>
         <p style="margin-top:1.2rem">
-          <button class="btn btn--primary" type="button" data-luck-trigger data-luck-again="Draw again">Draw a card</button>
+          <button class="btn btn--primary" type="button" data-luck-trigger data-luck-again="Draw again">See how it could have gone</button>
         </p>
       </div>
     </div>
@@ -224,27 +275,37 @@
         <p class="lede">This isn't a donation ask — it's a sense of scale. Pick something you'd
         realistically spend money on in a semester.</p>
       </div>
-      <div class="reveal-group" data-reveal-group>
-        <div class="reveal-options" style="justify-content:center">
-          <button class="reveal-btn" type="button" data-reveal="coffee">Skipping coffee-to-go once a week, one semester</button>
-          <button class="reveal-btn" type="button" data-reveal="cinema">Skipping the cinema once a month, one year</button>
-          <button class="reveal-btn" type="button" data-reveal="night">Skipping one night out a month, one year</button>
+      <div class="accordion" data-accordion data-animate>
+        <div class="accordion__item">
+          <button class="accordion__row" type="button" aria-expanded="true">
+            <span class="accordion__amount">&asymp;&euro;60</span>
+            <span class="accordion__label">Skip coffee-to-go once a week, one semester</span>
+            <svg class="accordion__chev" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"></polyline></svg>
+          </button>
+          <div class="accordion__panel"><div class="accordion__panel-inner"><p>A
+          long-lasting insecticide-treated bednet costs about $2&ndash;5 to distribute
+          (AMF/GiveWell figures) — roughly a dozen or more nets, enough to tuck a dozen
+          families in against malaria-carrying mosquitoes, every night, for years.</p></div></div>
         </div>
-        <div class="reveal-panel" data-reveal-panel="coffee">
-          <p><strong>Roughly &euro;60 saved.</strong> A long-lasting insecticide-treated
-          bednet costs about $2&ndash;5 to distribute, per published Against Malaria Foundation
-          and GiveWell figures. That's the rough equivalent of a dozen or more nets — several
-          households protected from malaria-carrying mosquitoes for years.</p>
+        <div class="accordion__item">
+          <button class="accordion__row" type="button" aria-expanded="false">
+            <span class="accordion__amount">&asymp;&euro;120</span>
+            <span class="accordion__label">Skip the cinema once a month, one year</span>
+            <svg class="accordion__chev" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"></polyline></svg>
+          </button>
+          <div class="accordion__panel"><div class="accordion__panel-inner"><p>On the same
+          basis, that's roughly 25&ndash;50 bednets — enough for a small village's worth of
+          households, for years, not weeks.</p></div></div>
         </div>
-        <div class="reveal-panel" data-reveal-panel="cinema">
-          <p><strong>Roughly &euro;120 saved.</strong> On the same $2&ndash;5-per-net basis,
-          that's in the range of 25&ndash;50 bednets — enough for a small village's worth of
-          households, for years, not weeks.</p>
-        </div>
-        <div class="reveal-panel" data-reveal-panel="night">
-          <p><strong>Roughly &euro;180 saved.</strong> Same basis again: somewhere around
-          35&ndash;80 bednets, depending on exact pricing — a genuinely large amount of malaria
-          protection for money most students wouldn't notice losing.</p>
+        <div class="accordion__item">
+          <button class="accordion__row" type="button" aria-expanded="false">
+            <span class="accordion__amount">&asymp;&euro;180</span>
+            <span class="accordion__label">Skip one night out a month, one year</span>
+            <svg class="accordion__chev" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"></polyline></svg>
+          </button>
+          <div class="accordion__panel"><div class="accordion__panel-inner"><p>Roughly
+          35&ndash;80 bednets depending on exact pricing — a genuinely large amount of
+          malaria protection for money most students wouldn't notice losing.</p></div></div>
         </div>
       </div>
       <p class="reveal-hint" style="text-align:center;margin-top:1rem">
